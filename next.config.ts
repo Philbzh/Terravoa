@@ -34,8 +34,9 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 const cspDirectives = [
   "default-src 'self'",
-  // Next.js needs 'unsafe-inline'; add 'unsafe-eval' only in dev (HMR)
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  // Next.js needs 'unsafe-inline'; add 'unsafe-eval' only in dev (HMR).
+  // Vercel Analytics + Speed Insights load from va.vercel-scripts.com.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''} https://va.vercel-scripts.com`,
   "style-src 'self' 'unsafe-inline'",
   // Broad img-src: images come from many CDNs (Sanity, Supabase, Wikimedia…)
   "img-src 'self' data: blob: https:",
@@ -47,6 +48,9 @@ const cspDirectives = [
     'https://api.stripe.com',
     'https://cdn.sanity.io',
     'https://api.mymemory.translated.net',
+    // Vercel Analytics + Speed Insights beacons
+    'https://va.vercel-scripts.com',
+    'https://*.vercel-insights.com',
   ].join(' '),
   // We redirect to Stripe, never embed it in a frame
   "frame-src 'none'",
@@ -56,8 +60,10 @@ const cspDirectives = [
   "base-uri 'self'",
   // Prevent cross-origin form submission hijacking
   "form-action 'self'",
-  // Block mixed content
-  'upgrade-insecure-requests',
+  // Only force HTTPS in production — in dev the server is plain HTTP and
+  // upgrade-insecure-requests would rewrite every image/font/script URL to
+  // https://localhost:3000/… causing ERR_SSL_PROTOCOL_ERROR for all assets.
+  ...(!isDev ? ['upgrade-insecure-requests'] : []),
 ].join('; ')
 
 /** Security headers shared by ALL routes (no CSP — applied separately per route). */
@@ -84,11 +90,13 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   images: {
+    // sharp (the native image optimizer) cannot resolve paths containing
+    // non-ASCII characters (ä, ö, ü …) on Windows in dev. Disable optimization
+    // locally so images are served as plain static files. On Vercel the path
+    // has no special characters, so optimization works correctly in production.
+    unoptimized: process.env.NODE_ENV === 'development',
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 86400,
-    localPatterns: [
-      { pathname: '/images/**' },
-    ],
     remotePatterns: [
       {
         protocol: 'https',

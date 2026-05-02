@@ -26,13 +26,23 @@ function withPathnameHeader(request: NextRequest, path: string): Headers {
   return h
 }
 
+// Static file extensions that must never get a locale prefix injected.
+const STATIC_EXT = /\.(?:svg|png|jpe?g|gif|webp|avif|ico|txt|xml|json|webmanifest|woff2?|ttf|otf|eot|mp4|mp3|pdf)$/i
+
 function skipI18n(pathname: string) {
   return (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/studio') ||
     pathname.startsWith('/admin') ||
-    pathname.startsWith('/login/admin')
+    pathname.startsWith('/login/admin') ||
+    // Public static assets — images, fonts, manifest, etc.
+    // Without this guard the intl middleware re-routes /images/logo.png
+    // to /de/images/logo.png (404) because the matcher config is not
+    // enforced at runtime in Next.js 16 proxy mode.
+    pathname.startsWith('/images/') ||
+    pathname.startsWith('/fonts/') ||
+    STATIC_EXT.test(pathname)
   )
 }
 
