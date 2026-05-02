@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--tv-surface);font-family:var(--tv-font-sans);}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .pill{padding:8px 12px;border-radius:var(--tv-radius-full);font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:500;text-align:center;}
+  .lbl{font-size:9px;color:var(--tv-on-surface-variant);text-transform:uppercase;letter-spacing:.1em;margin-top:6px;text-align:center;}
+  .cell{display:flex;flex-direction:column;}
+</style></head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="pill" style="background:var(--tv-tertiary-fixed);color:var(--tv-tertiary);">Producer</div><div class="lbl">producer</div></div>
+  <div class="cell"><div class="pill" style="background:var(--tv-primary);color:#fff;">Bestseller</div><div class="lbl">bestseller</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(193,68,14,.15);color:#c1440e;border:1px solid rgba(193,68,14,.25);">New</div><div class="lbl">new</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(92,45,110,.15);color:#5c2d6e;border:1px solid rgba(92,45,110,.25);">Limited</div><div class="lbl">limited</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(90,122,82,.15);color:#5a7a52;border:1px solid rgba(90,122,82,.25);">Seasonal</div><div class="lbl">seasonal</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(184,50,50,.15);color:#b83232;border:1px solid rgba(184,50,50,.25);">Sale</div><div class="lbl">sale</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(148,73,37,.15);color:var(--tv-secondary);border:1px solid rgba(148,73,37,.3);">Pre-order</div><div class="lbl">preorder</div></div>
+  <div class="cell"><div class="pill" style="background:rgba(24,42,27,.1);color:var(--tv-primary);border:1px solid rgba(24,42,27,.2);">Subscribe</div><div class="lbl">subscription</div></div>
+</div>
+</body></html>

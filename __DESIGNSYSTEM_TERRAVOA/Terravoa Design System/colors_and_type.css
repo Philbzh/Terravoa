@@ -1,0 +1,218 @@
+/* ──────────────────────────────────────────────────────────
+   TERRAVOA · Colors & Type
+   "Taste the Origin" — editorial boutique marketplace
+   Forest green + terracotta + warm whites · Noto Serif + Manrope
+   ────────────────────────────────────────────────────────── */
+
+/* Local brand font — Noto Serif (variable: weight 100–900, width 62.5–100), upright + italic */
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('fonts/NotoSerif-VariableFont_wdth_wght.ttf') format('truetype-variations'),
+       url('fonts/NotoSerif-VariableFont_wdth_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Serif';
+  src: url('fonts/NotoSerif-Italic-VariableFont_wdth_wght.ttf') format('truetype-variations'),
+       url('fonts/NotoSerif-Italic-VariableFont_wdth_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Local brand font — Manrope (static weights 200–800) */
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-ExtraLight.ttf') format('truetype'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Light.ttf')      format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Regular.ttf')    format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Medium.ttf')     format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-SemiBold.ttf')   format('truetype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-Bold.ttf')       format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Manrope'; src: url('fonts/Manrope-ExtraBold.ttf')  format('truetype'); font-weight: 800; font-style: normal; font-display: swap; }
+
+:root {
+  /* ── PRIMARY · Forest Green (authority, depth) ── */
+  --tv-primary: #182a1b;
+  --tv-primary-container: #2d4030;
+  --tv-on-primary: #ffffff;
+  --tv-on-primary-container: #96ab97;
+  --tv-primary-fixed: #d2e8d2;
+  --tv-primary-fixed-dim: #b6ccb6;
+  --tv-inverse-primary: #b6ccb6;
+
+  /* ── SECONDARY · Terracotta (warmth, CTA, links) ── */
+  --tv-secondary: #944925;
+  --tv-secondary-container: #fe9e72;
+  --tv-on-secondary: #ffffff;
+  --tv-on-secondary-container: #773310;
+  --tv-secondary-fixed: #ffdbcd;
+  --tv-secondary-fixed-dim: #ffb596;
+
+  /* ── TERTIARY · Warm Dark / Charcoal (rich text, badges) ── */
+  --tv-tertiary: #342306;
+  --tv-tertiary-container: #4c381a;
+  --tv-on-tertiary: #ffffff;
+  --tv-on-tertiary-container: #bea17b;
+  --tv-tertiary-fixed: #feddb3;        /* cream — producer badges */
+  --tv-tertiary-fixed-dim: #e1c299;
+
+  /* ── SURFACES · Stacked paper hierarchy ── */
+  --tv-surface: #faf9f6;                       /* base canvas */
+  --tv-surface-dim: #dbdad7;
+  --tv-surface-bright: #faf9f6;
+  --tv-surface-container-lowest: #ffffff;      /* most-elevated (search bar, product image bg) */
+  --tv-surface-container-low: #f4f3f1;         /* section shift */
+  --tv-surface-container: #efeeeb;
+  --tv-surface-container-high: #e9e8e5;
+  --tv-surface-container-highest: #e3e2e0;
+  --tv-surface-variant: #e3e2e0;
+
+  /* ── ON SURFACE · Text on light ── */
+  --tv-on-surface: #1a1c1a;            /* body text */
+  --tv-on-surface-variant: #434842;    /* secondary text */
+  --tv-on-background: #1a1c1a;
+  --tv-background: #faf9f6;
+  --tv-inverse-surface: #2f312f;
+  --tv-inverse-on-surface: #f2f1ee;
+  --tv-surface-tint: #4f6351;
+
+  /* ── OUTLINE (used sparingly — at low opacity) ── */
+  --tv-outline: #737872;
+  --tv-outline-variant: #c3c8c0;       /* "ghost border" base — use at 15-30% opacity */
+
+  /* ── ERROR ── */
+  --tv-error: #ba1a1a;
+  --tv-error-container: #ffdad6;
+  --tv-on-error: #ffffff;
+  --tv-on-error-container: #93000a;
+
+  /* ── BADGE ACCENTS (hand-mixed, used for product badges only) ── */
+  --tv-badge-new-fg: #c1440e;          /* sealing-wax orange */
+  --tv-badge-limited-fg: #5c2d6e;      /* deep plum */
+  --tv-badge-seasonal-fg: #5a7a52;     /* sage */
+  --tv-badge-sale-fg: #b83232;         /* warm red */
+
+  /* ────────────────────────────────────────────
+     TYPOGRAPHY · Editorial pairing
+     Display/headline: Noto Serif (the curator)
+     Body/UI/labels:   Manrope    (functional clarity)
+     ──────────────────────────────────────────── */
+  --tv-font-serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  --tv-font-sans:  'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Scale (boutique editorial — high contrast between display & label) */
+  --tv-display-lg:  3.5rem;    /* 56px — hero */
+  --tv-display-md:  2.75rem;   /* 44px — secondary hero */
+  --tv-headline-lg: 2rem;      /* 32px — section H2 */
+  --tv-headline-md: 1.75rem;   /* 28px */
+  --tv-title-lg:    1.375rem;  /* 22px — card title */
+  --tv-title-md:    1rem;      /* 16px */
+  --tv-body-lg:     1rem;      /* 16px */
+  --tv-body-md:     0.875rem;  /* 14px */
+  --tv-label-lg:    0.875rem;  /* 14px */
+  --tv-label-md:    0.75rem;   /* 12px — folio caps */
+  --tv-label-sm:    0.6875rem; /* 11px */
+
+  /* Line heights — generous, "boutique feel" */
+  --tv-lh-display: 1.1;
+  --tv-lh-headline: 1.2;
+  --tv-lh-title: 1.35;
+  --tv-lh-body: 1.6;
+  --tv-lh-label: 1.4;
+
+  /* Letter spacing — tight on display, wide on labels */
+  --tv-ls-display: -0.01em;
+  --tv-ls-body: 0;
+  --tv-ls-label: 0.15em;       /* default for uppercase labels */
+  --tv-ls-label-wide: 0.25em;  /* eyebrows, kickers */
+  --tv-ls-label-extra: 0.35em; /* hero kicker */
+
+  /* ── SPACING (4px base, generous boutique scale) ── */
+  --tv-space-1: 4px;
+  --tv-space-2: 8px;
+  --tv-space-3: 12px;
+  --tv-space-4: 16px;
+  --tv-space-5: 24px;
+  --tv-space-6: 32px;
+  --tv-space-8: 48px;
+  --tv-space-10: 64px;
+  --tv-space-12: 96px;        /* signature section padding (py-24) */
+  --tv-space-16: 128px;
+
+  /* ── RADII (no sharp corners — "human, approachable") ── */
+  --tv-radius-sm: 6px;
+  --tv-radius-md: 12px;        /* primary buttons */
+  --tv-radius-lg: 16px;        /* product images */
+  --tv-radius-xl: 24px;        /* hero cards / CTAs */
+  --tv-radius-full: 9999px;    /* pills, buttons, badges */
+
+  /* ── SHADOWS · ambient, not heavy. Tinted, never pure black. ── */
+  --tv-shadow-sm: 0 2px 6px rgba(26, 28, 26, 0.04);
+  --tv-shadow-md: 0 8px 30px rgba(26, 28, 26, 0.05);
+  --tv-shadow-lg: 0 20px 50px rgba(26, 28, 26, 0.06);
+  --tv-shadow-image: 0 30px 60px rgba(26, 28, 26, 0.12);  /* hero / story-of-the-week */
+
+  /* ── GRADIENTS · primary CTA "weight" + image protection ── */
+  --tv-gradient-primary: linear-gradient(180deg, #182a1b 0%, #2d4030 100%);
+  --tv-gradient-image-protection: linear-gradient(180deg, rgba(24,42,27,0.4) 0%, rgba(24,42,27,0.2) 50%, rgba(24,42,27,0.6) 100%);
+
+  /* ── MOTION ── */
+  --tv-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --tv-duration-quick: 200ms;
+  --tv-duration-base: 300ms;
+  --tv-duration-slow: 600ms;
+  --tv-duration-image: 700ms;          /* image hover scale */
+}
+
+/* ──────────────────────────────────────────────────────────
+   SEMANTIC ELEMENT STYLES
+   ────────────────────────────────────────────────────────── */
+
+html, body {
+  background: var(--tv-surface);
+  color: var(--tv-on-surface);
+  font-family: var(--tv-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--tv-font-serif);
+  font-weight: 400;
+  color: var(--tv-primary);
+  letter-spacing: var(--tv-ls-display);
+}
+
+h1 { font-size: var(--tv-display-lg);  line-height: var(--tv-lh-display); }
+h2 { font-size: var(--tv-headline-lg); line-height: var(--tv-lh-headline); }
+h3 { font-size: var(--tv-title-lg);    line-height: var(--tv-lh-title); }
+h4 { font-size: var(--tv-title-md);    line-height: var(--tv-lh-title); }
+
+p  { font-size: var(--tv-body-lg); line-height: var(--tv-lh-body); color: var(--tv-on-surface); }
+
+/* Folio-style label — uppercase, tracked-out Manrope */
+.tv-label,
+.tv-eyebrow {
+  font-family: var(--tv-font-sans);
+  font-size: var(--tv-label-md);
+  text-transform: uppercase;
+  letter-spacing: var(--tv-ls-label);
+  font-weight: 500;
+  color: var(--tv-secondary);
+}
+.tv-eyebrow { letter-spacing: var(--tv-ls-label-wide); font-size: var(--tv-label-sm); }
+
+/* Editorial italic caption — Noto Serif italic */
+.tv-caption {
+  font-family: var(--tv-font-serif);
+  font-style: italic;
+  color: var(--tv-on-surface-variant);
+}
+
+::selection {
+  background: rgba(255, 219, 205, 0.4);  /* secondary-fixed @ 40% */
+  color: var(--tv-on-surface);
+}

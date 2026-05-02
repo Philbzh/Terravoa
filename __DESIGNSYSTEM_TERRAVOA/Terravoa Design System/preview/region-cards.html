@@ -1,0 +1,19 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--tv-surface);font-family:var(--tv-font-sans);}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .card{position:relative;height:170px;border-radius:var(--tv-radius-xl);overflow:hidden;color:#fff;background-size:cover;background-position:center;}
+  .card::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.3);}
+  .body{position:absolute;inset:auto auto 18px 18px;z-index:2;}
+  .title{font-family:var(--tv-font-serif);font-size:22px;line-height:1.1;}
+  .spec{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.85);margin-top:4px;}
+  .it{background-image:url('../assets/regions/italy.jpg');}
+  .de{background-image:url('../assets/regions/germany.jpg');}
+</style></head>
+<body>
+<div class="grid">
+  <div class="card it"><div class="body"><div class="title">Tuscany</div><div class="spec">Olive Oil · Truffles</div></div></div>
+  <div class="card de"><div class="body"><div class="title">Black Forest</div><div class="spec">Wildflower Honey</div></div></div>
+</div>
+</body></html>

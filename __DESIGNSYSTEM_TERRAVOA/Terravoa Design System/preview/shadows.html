@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:32px;background:var(--tv-surface-container-low);font-family:var(--tv-font-sans);}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .box{width:90px;height:60px;background:var(--tv-surface-container-lowest);border-radius:12px;}
+  .sm{box-shadow:var(--tv-shadow-sm);}
+  .md{box-shadow:var(--tv-shadow-md);}
+  .lg{box-shadow:var(--tv-shadow-lg);}
+  .img{box-shadow:var(--tv-shadow-image);}
+  .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--tv-on-surface-variant);}
+</style></head>
+<body>
+<div class="grid">
+  <div class="cell"><div class="box sm"></div><div class="lbl">shadow-sm</div></div>
+  <div class="cell"><div class="box md"></div><div class="lbl">shadow-md</div></div>
+  <div class="cell"><div class="box lg"></div><div class="lbl">shadow-lg</div></div>
+  <div class="cell"><div class="box img"></div><div class="lbl">shadow-image</div></div>
+</div>
+</body></html>

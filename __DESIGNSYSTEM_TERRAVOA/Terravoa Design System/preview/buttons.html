@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px;background:var(--tv-surface);font-family:var(--tv-font-sans);}
+  .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:500;font-size:14px;transition:all .3s;cursor:pointer;border:none;}
+  .pri{background:linear-gradient(180deg,#182a1b,#2d4030);color:#fff;padding:14px 28px;border-radius:9999px;}
+  .sec{background:var(--tv-surface-container-high);color:var(--tv-on-surface);padding:14px 28px;border-radius:9999px;}
+  .ter{color:var(--tv-secondary);text-decoration:underline;text-underline-offset:6px;text-decoration-color:rgba(148,73,37,.4);background:transparent;padding:0;}
+  .ghost{border:1px solid rgba(255,255,255,0);background:transparent;color:var(--tv-primary);padding:14px 28px;border:1px solid rgba(24,42,27,.25);border-radius:9999px;}
+  .meta{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--tv-on-surface-variant);margin-top:14px;}
+  svg{width:14px;height:14px;}
+</style></head>
+<body>
+<div class="row">
+  <button class="btn pri">Shop products <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+  <button class="btn sec">Discover producers</button>
+  <button class="btn ghost">Sign in</button>
+  <a class="btn ter">Read the guide →</a>
+</div>
+<div class="meta">Primary (gradient) · Secondary (surface-high) · Outline ghost · Tertiary text-only</div>
+</body></html>

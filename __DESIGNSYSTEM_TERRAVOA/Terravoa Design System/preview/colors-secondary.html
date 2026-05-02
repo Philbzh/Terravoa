@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--tv-surface);}
+  .row{display:flex;gap:0;border-radius:var(--tv-radius-md);overflow:hidden;height:88px;box-shadow:var(--tv-shadow-sm);}
+  .sw{flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px;font-family:var(--tv-font-sans);font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+  .hex{font-size:9px;opacity:.75;letter-spacing:.05em;text-transform:none;}
+</style></head>
+<body>
+<div class="row">
+  <div class="sw" style="background:var(--tv-secondary);color:#fff;">Secondary<span class="hex">#944925</span></div>
+  <div class="sw" style="background:var(--tv-secondary-container);color:var(--tv-on-secondary-container);">Container<span class="hex">#fe9e72</span></div>
+  <div class="sw" style="background:var(--tv-secondary-fixed);color:var(--tv-secondary);">Fixed<span class="hex">#ffdbcd</span></div>
+  <div class="sw" style="background:var(--tv-secondary-fixed-dim);color:var(--tv-secondary);">Fixed-dim<span class="hex">#ffb596</span></div>
+  <div class="sw" style="background:var(--tv-on-secondary-container);color:#fff;">On-container<span class="hex">#773310</span></div>
+</div>
+</body></html>

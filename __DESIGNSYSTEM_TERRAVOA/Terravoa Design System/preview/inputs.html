@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--tv-surface);font-family:var(--tv-font-sans);}
+  .row{display:flex;flex-direction:column;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--tv-on-surface-variant);font-weight:500;}
+  .input{background:var(--tv-surface-container-low);border:none;border-bottom:1px solid rgba(195,200,192,.6);padding:10px 4px;font-family:var(--tv-font-sans);font-size:14px;color:var(--tv-on-surface);outline:none;}
+  .input:focus{background:var(--tv-surface-container-highest);border-bottom-color:var(--tv-primary);border-bottom-width:2px;padding-bottom:9px;}
+  .news{display:flex;border-bottom:1px solid rgba(24,42,27,.2);padding-bottom:8px;}
+  .news input{flex:1;background:transparent;border:none;outline:none;font-family:var(--tv-font-sans);font-size:14px;}
+  .news button{background:transparent;border:none;color:var(--tv-secondary);font-size:18px;cursor:pointer;}
+</style></head>
+<body>
+<div class="row">
+  <div class="field"><div class="lbl">Email Address</div><input class="input" value="you@example.com"></div>
+  <div class="field"><div class="lbl">Region / City</div><input class="input" placeholder="e.g. Tuscany, Provence"></div>
+  <div class="news"><input placeholder="Email Address"><button>→</button></div>
+</div>
+</body></html>
