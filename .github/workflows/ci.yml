@@ -39,8 +39,10 @@ jobs:
         run: npx tsc --noEmit
 
       # ── Lint ────────────────────────────────────────────────────────────────
+      # Use `next lint` (Next.js wrapper) — it handles the FlatCompat/React
+      # plugin circular-reference issue that breaks bare `eslint` in this setup.
       - name: ESLint
-        run: npx next lint
+        run: npx next lint --file src
 
       # ── Build ───────────────────────────────────────────────────────────────
       - name: Build
