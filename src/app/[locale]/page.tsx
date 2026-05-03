@@ -8,7 +8,7 @@ import { CuratedCollection } from '@/components/home/CuratedCollection'
 import { CuratorsPromise } from '@/components/home/CuratorsPromise'
 import { ProducerCTA } from '@/components/home/ProducerCTA'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
-import { getJournalStories, getHomepageProducts } from '@/lib/content'
+import { getJournalStories, getHomepageProducts, getAllRegions } from '@/lib/content'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 
 /** Homepage title/description tuned for search while matching brand positioning. */
@@ -24,23 +24,24 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [journal, homepage] = await Promise.all([
+  const [journal, homepage, regions] = await Promise.all([
     getJournalStories(),
     getHomepageProducts(),
+    getAllRegions(),
   ])
   const journalHighlight = journal[0]
 
   return (
     <>
       <Hero />
-      <EuropeStrip />
-      <HowItWorks />
-      {journalHighlight ? <StoryOfTheWeek story={journalHighlight} /> : null}
-      <RegionalArchives />
       <CuratedCollection
         products={homepage.products}
         subtitleOverride={homepage.subtitleOverride}
       />
+      <EuropeStrip />
+      <HowItWorks />
+      {journalHighlight ? <StoryOfTheWeek story={journalHighlight} /> : null}
+      <RegionalArchives regions={regions} />
       <TestimonialsSection />
       <CuratorsPromise />
       <ProducerCTA />

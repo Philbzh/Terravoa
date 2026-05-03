@@ -119,7 +119,7 @@ export function Hero() {
           </MagneticWrapper>
           <MagneticWrapper strength={0.28}>
             <Link
-              href="/producers"
+              href="/collection"
               className="font-sans text-[11px] uppercase tracking-[0.2em] font-medium border border-white/35 hover:border-white/65 hover:bg-white/8 transition-all duration-300 px-8 py-4 rounded-full text-white"
             >
               {t('producersCta')}

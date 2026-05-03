@@ -84,12 +84,12 @@
       "readCta": "Lire la note"
     },
     "hero": {
-      "kicker": "Artisans européens sélectionnés",
+      "kicker": "Produits artisanaux européens · Boutique en ligne",
       "title": "Le goût de l’origine",
-      "subtitle": "Découvrez des produits d’exception des meilleurs producteurs européens — soigneusement sélectionnés et livrés directement à la source.",
+      "subtitle": "Une boutique en ligne de produits authentiques chez les petits producteurs européens. Huiles d’olive, miels, sels, charcuteries et bien plus.",
       "tagline": "— Des marais salants de Bretagne à la Forêt-Noire, des Alpes aux côtes atlantiques. —",
       "shopCta": "Découvrir la boutique",
-      "producersCta": "Découvrir les producteurs",
+      "producersCta": "Idées cadeaux",
       "imageAlt": "Table rustique avec produits artisanaux et vignes toscanes au coucher du soleil"
     },
     "curatedCollection": {

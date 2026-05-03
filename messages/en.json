@@ -84,12 +84,12 @@
       "readCta": "Read the guide"
     },
     "hero": {
-      "kicker": "Curated European Artisans",
+      "kicker": "European Artisan Food · Online Shop",
       "title": "Taste the Origin",
-      "subtitle": "Discover exceptional foods from Europe's finest producers — carefully selected and delivered directly from their source.",
+      "subtitle": "An online shop for authentic food and drinks from European small producers. Browse olive oils, honeys, salts, charcuterie and more.",
       "tagline": "— From Brittany's salt marshes to the Black Forest, from the Alps to the Atlantic coast. —",
       "shopCta": "Shop Products",
-      "producersCta": "Discover Producers",
+      "producersCta": "Gift Ideas",
       "imageAlt": "Rustic table with artisan products overlooking Tuscan vineyards at golden hour"
     },
     "curatedCollection": {

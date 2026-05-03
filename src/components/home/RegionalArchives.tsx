@@ -5,54 +5,26 @@ import { Link } from '@/i18n/navigation'
 import { RegionCard } from '@/components/ui/RegionCard'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
+import type { Region } from '@/data/demo'
 
-const regions = [
-  {
-    slug: 'brittany',
-    name: 'Brittany',
-    specialty: 'Fleur de Sel · Salted Caramel · Butter Biscuits',
-    imageSrc: '/images/regions/brittany/coast.jpg',
-    imageAlt: 'Rocky Atlantic coastline of Brittany with salt marshes at low tide',
-  },
-  {
-    slug: 'tuscany',
-    name: 'Tuscany',
-    specialty: 'Olive Oil · Truffles · Pasta',
-    imageSrc: '/images/regions/italy.jpg',
-    imageAlt: 'Rolling Tuscan hills with cypress trees and terracotta farmhouses',
-  },
-  {
-    slug: 'black-forest',
-    name: 'Black Forest',
-    specialty: 'Wildflower Honey · Smoked Ham · Spiced Cakes',
-    imageSrc: '/images/regions/germany.jpg',
-    imageAlt: 'Dense Black Forest pine canopy with morning mist',
-  },
-  {
-    slug: 'andalusia',
-    name: 'Andalusia',
-    specialty: 'Paprika · Saffron · Preserves',
-    imageSrc: '/images/regions/spain-seville.jpg',
-    imageAlt: 'Sun-drenched Andalusian village with whitewashed walls',
-  },
-  {
-    slug: 'alentejo',
-    name: 'Alentejo',
-    specialty: 'Cork · Wine · Sheep Cheese',
-    imageSrc: '/images/regions/portugal.jpg',
-    imageAlt: 'Golden wheat plains of Alentejo at harvest time',
-  },
-  {
-    slug: 'alsace',
-    name: 'Alsace',
-    specialty: 'Charcuterie · Mustard · Christmas Spices',
-    imageSrc: 'https://picsum.photos/seed/alsace-colmar/800/600',
-    imageAlt: 'Colourful half-timbered houses along a canal in Colmar',
-  },
-]
-
-export function RegionalArchives() {
+/**
+ * Homepage "Regional Archives" section.
+ *
+ * Regions are passed in from the server component parent (`src/app/[locale]/page.tsx`)
+ * via `getAllRegions()` so the homepage automatically stays in sync with the
+ * Journal filter bar and the `/regions` index. Previously this component kept
+ * a hardcoded array of 6 regions and silently drifted when a new region was
+ * added in Sanity / demo data.
+ *
+ * Layout: the first region becomes the double-height hero card on desktop;
+ * the rest flow into a masonry grid underneath.
+ */
+export function RegionalArchives({ regions }: { regions: Region[] }) {
   const t = useTranslations('home.regionalArchives')
+
+  if (regions.length === 0) return null
+
+  const [heroRegion, ...restRegions] = regions
 
   return (
     <section className="py-24 md:py-32 px-6 md:px-16 bg-surface-container-low">
@@ -95,16 +67,20 @@ export function RegionalArchives() {
           transition={{ duration: 0.8 }}
         >
           <RegionCard
-            {...regions[0]}
-            href={`/regions/${regions[0].slug}`}
+            slug={heroRegion.slug}
+            name={heroRegion.name}
+            specialty={heroRegion.specialty}
+            imageSrc={heroRegion.imageSrc}
+            imageAlt={heroRegion.imageAlt}
+            href={`/regions/${heroRegion.slug}`}
             className="h-full"
           />
         </motion.div>
 
         {/* Remaining cards — staggered reveal */}
-        {regions.slice(1).map((region, i) => (
+        {restRegions.map((region, i) => (
           <motion.div
-            key={region.name}
+            key={region.slug}
             className="h-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -112,7 +88,11 @@ export function RegionalArchives() {
             transition={{ duration: 0.6, delay: (i % 2) * 0.12 }}
           >
             <RegionCard
-              {...region}
+              slug={region.slug}
+              name={region.name}
+              specialty={region.specialty}
+              imageSrc={region.imageSrc}
+              imageAlt={region.imageAlt}
               href={`/regions/${region.slug}`}
               className="h-full"
             />
