@@ -92,6 +92,37 @@
       "producersCta": "Geschenkideen",
       "imageAlt": "Rustikaler Tisch mit handwerklichen Produkten vor toskanischen Weinbergen im goldenen Abendlicht"
     },
+    "trustStrip": {
+      "directFromProducers": "Direkt vom Produzenten",
+      "handSelected": "Handverlesen von uns",
+      "shipsFromOrigin": "Versand aus dem Ursprungsland",
+      "notInSupermarkets": "Nicht im Supermarkt erhältlich"
+    },
+    "fastPaths": {
+      "eyebrow": "Finden Sie Ihren Einstieg",
+      "title": "Drei Türen. Wählen Sie Ihre.",
+      "byCountry": {
+        "title": "Nach Land einkaufen",
+        "subtitle": "Wählen Sie eine Region, die Sie lieben — Toskana, Bretagne, Schwarzwald und mehr.",
+        "cta": "Regionen entdecken"
+      },
+      "giftSets": {
+        "title": "Geschenksets",
+        "subtitle": "Kuratierte Boxen für Gastgeber, Kunden und Genießer — sorgfältig zusammengestellt für jeden Anlass.",
+        "cta": "Geschenk finden"
+      },
+      "bestSellers": {
+        "title": "Bestseller",
+        "subtitle": "Was unsere Kunden am liebsten kaufen. Die klarste Antwort auf: einfach zeigen, was funktioniert.",
+        "cta": "Top-Auswahl ansehen"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "Am beliebtesten diese Saison",
+      "title": "Bestseller",
+      "subtitle": "Was unsere Kunden am meisten lieben",
+      "viewAll": "Alle Bestseller ansehen"
+    },
     "curatedCollection": {
       "title": "Kuratierte Kollektion",
       "subtitle": "Außergewöhnliche Produkte, verantwortungsvoll beschafft.",

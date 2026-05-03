@@ -92,6 +92,37 @@
       "producersCta": "Idées cadeaux",
       "imageAlt": "Table rustique avec produits artisanaux et vignes toscanes au coucher du soleil"
     },
+    "trustStrip": {
+      "directFromProducers": "Direct du producteur",
+      "handSelected": "Sélectionné à la main",
+      "shipsFromOrigin": "Expédié depuis l'origine",
+      "notInSupermarkets": "Pas en grande surface"
+    },
+    "fastPaths": {
+      "eyebrow": "Trouvez votre entrée",
+      "title": "Trois portes. À vous de choisir.",
+      "byCountry": {
+        "title": "Acheter par pays",
+        "subtitle": "Choisissez une région que vous aimez — Toscane, Bretagne, Forêt-Noire et plus encore.",
+        "cta": "Explorer les régions"
+      },
+      "giftSets": {
+        "title": "Coffrets cadeaux",
+        "subtitle": "Coffrets curatés pour vos hôtes, clients et gourmets — soigneusement choisis pour chaque occasion.",
+        "cta": "Trouver un cadeau"
+      },
+      "bestSellers": {
+        "title": "Meilleures ventes",
+        "subtitle": "Ce que nos clients choisissent en premier. La réponse à « montrez-moi ce qui marche ».",
+        "cta": "Voir les coups de cœur"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "Les plus aimés cette saison",
+      "title": "Meilleures ventes",
+      "subtitle": "Ce que nos clients préfèrent",
+      "viewAll": "Voir toutes les meilleures ventes"
+    },
     "curatedCollection": {
       "title": "Collection curatée",
       "subtitle": "Des produits d'exception, sourcés responsablement.",

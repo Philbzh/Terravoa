@@ -92,6 +92,37 @@
       "producersCta": "Ideias de presente",
       "imageAlt": "Mesa rústica com produtos artesanais e vinhas toscanas ao pôr do sol"
     },
+    "trustStrip": {
+      "directFromProducers": "Direto do produtor",
+      "handSelected": "Selecionado à mão",
+      "shipsFromOrigin": "Enviado da origem",
+      "notInSupermarkets": "Não disponível em supermercados"
+    },
+    "fastPaths": {
+      "eyebrow": "Encontre o seu caminho",
+      "title": "Três portas. Escolha a sua.",
+      "byCountry": {
+        "title": "Comprar por país",
+        "subtitle": "Escolha uma região que ame — Toscana, Bretanha, Floresta Negra e mais.",
+        "cta": "Explorar regiões"
+      },
+      "giftSets": {
+        "title": "Caixas de presente",
+        "subtitle": "Caixas selecionadas para anfitriões, clientes e amantes da boa mesa — pensadas para cada ocasião.",
+        "cta": "Encontrar um presente"
+      },
+      "bestSellers": {
+        "title": "Mais vendidos",
+        "subtitle": "O que os nossos clientes escolhem primeiro. A resposta a «mostre-me o que funciona».",
+        "cta": "Ver favoritos"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "Mais amados esta estação",
+      "title": "Mais vendidos",
+      "subtitle": "O que os nossos clientes mais adoram",
+      "viewAll": "Ver todos os mais vendidos"
+    },
     "curatedCollection": {
       "title": "Coleção curada",
       "subtitle": "Produtos excecionais, obtidos de forma responsável.",

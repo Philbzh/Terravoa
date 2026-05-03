@@ -92,6 +92,37 @@
       "producersCta": "Gift Ideas",
       "imageAlt": "Rustic table with artisan products overlooking Tuscan vineyards at golden hour"
     },
+    "trustStrip": {
+      "directFromProducers": "Direct from producers",
+      "handSelected": "Hand-selected by us",
+      "shipsFromOrigin": "Ships from origin",
+      "notInSupermarkets": "Not in supermarkets"
+    },
+    "fastPaths": {
+      "eyebrow": "Find your way in",
+      "title": "Three doors. Pick yours.",
+      "byCountry": {
+        "title": "Shop by Country",
+        "subtitle": "Pick a region you love and meet its makers — Tuscany, Brittany, the Black Forest and beyond.",
+        "cta": "Browse regions"
+      },
+      "giftSets": {
+        "title": "Gift Sets",
+        "subtitle": "Curated boxes for hosts, clients, and food lovers — carefully chosen for any occasion.",
+        "cta": "Find a gift"
+      },
+      "bestSellers": {
+        "title": "Best Sellers",
+        "subtitle": "What our customers reach for first. The clearest answer to \"just show me what works\".",
+        "cta": "See top picks"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "Most loved this season",
+      "title": "Best Sellers",
+      "subtitle": "What our customers love most",
+      "viewAll": "Shop all bestsellers"
+    },
     "curatedCollection": {
       "title": "Curated Collection",
       "subtitle": "Exceptional goods, responsibly sourced.",

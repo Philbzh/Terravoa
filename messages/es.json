@@ -92,6 +92,37 @@
       "producersCta": "Ideas de regalo",
       "imageAlt": "Mesa rústica con productos artesanales y viñedos toscanos al atardecer"
     },
+    "trustStrip": {
+      "directFromProducers": "Directo del productor",
+      "handSelected": "Seleccionado a mano",
+      "shipsFromOrigin": "Enviado desde el origen",
+      "notInSupermarkets": "No disponible en supermercados"
+    },
+    "fastPaths": {
+      "eyebrow": "Encuentra tu camino",
+      "title": "Tres puertas. Elige la tuya.",
+      "byCountry": {
+        "title": "Comprar por país",
+        "subtitle": "Elige una región que ames — Toscana, Bretaña, Selva Negra y más.",
+        "cta": "Explorar regiones"
+      },
+      "giftSets": {
+        "title": "Sets de regalo",
+        "subtitle": "Cajas seleccionadas para anfitriones, clientes y amantes de la buena mesa — pensadas para cada ocasión.",
+        "cta": "Encontrar un regalo"
+      },
+      "bestSellers": {
+        "title": "Más vendidos",
+        "subtitle": "Lo que nuestros clientes eligen primero. La respuesta a «muéstrame lo que funciona».",
+        "cta": "Ver los favoritos"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "Lo más querido esta temporada",
+      "title": "Más vendidos",
+      "subtitle": "Lo que más aman nuestros clientes",
+      "viewAll": "Ver todos los más vendidos"
+    },
     "curatedCollection": {
       "title": "Colección curada",
       "subtitle": "Productos excepcionales, obtenidos de forma responsable.",

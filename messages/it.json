@@ -92,6 +92,37 @@
       "producersCta": "Idee regalo",
       "imageAlt": "Tavolo rustico con prodotti artigianali e vigneti toscani al tramonto"
     },
+    "trustStrip": {
+      "directFromProducers": "Direttamente dal produttore",
+      "handSelected": "Selezionato a mano",
+      "shipsFromOrigin": "Spedito dall'origine",
+      "notInSupermarkets": "Non al supermercato"
+    },
+    "fastPaths": {
+      "eyebrow": "Trova il tuo ingresso",
+      "title": "Tre porte. Scegli la tua.",
+      "byCountry": {
+        "title": "Acquista per paese",
+        "subtitle": "Scegli una regione che ami — Toscana, Bretagna, Foresta Nera e oltre.",
+        "cta": "Esplora le regioni"
+      },
+      "giftSets": {
+        "title": "Idee regalo",
+        "subtitle": "Cofanetti curati per ospiti, clienti e appassionati — pensati per ogni occasione.",
+        "cta": "Trova un regalo"
+      },
+      "bestSellers": {
+        "title": "I più venduti",
+        "subtitle": "Quello che i nostri clienti scelgono per primo. La risposta a \"mostrami cosa funziona\".",
+        "cta": "Scopri i preferiti"
+      }
+    },
+    "bestSellers": {
+      "eyebrow": "I più amati di stagione",
+      "title": "I più venduti",
+      "subtitle": "Quello che i nostri clienti amano di più",
+      "viewAll": "Vedi tutti i più venduti"
+    },
     "curatedCollection": {
       "title": "Collezione curata",
       "subtitle": "Prodotti eccezionali, approvvigionati responsabilmente.",

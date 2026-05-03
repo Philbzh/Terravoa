@@ -247,6 +247,7 @@ export const products: Product[] = [
     details: ['350g glass jar', 'Raw & unfiltered', 'Single-origin meadow', 'Summer 2025'],
     imageSrc: '/images/products/honey.jpg',
     imageAlt: 'Artisanal dark honey jar with honeycomb',
+    badge: { label: 'Bestseller', variant: 'bestseller' },
     category: 'Honey',
   },
   {
@@ -301,6 +302,7 @@ export const products: Product[] = [
     details: ['75g tin', 'Oak-smoked', 'Hand-crushed', 'Single origin'],
     imageSrc: '/images/products/paprika.jpg',
     imageAlt: 'Tin of smoked paprika flakes',
+    badge: { label: 'Bestseller', variant: 'bestseller' },
     category: 'Spices',
   },
   {
@@ -327,6 +329,7 @@ export const products: Product[] = [
     details: ['500g glass jar', 'Single-varietal', 'Raw', 'Spring harvest'],
     imageSrc: '/images/products/acacia-honey.jpg',
     imageAlt: 'Clear glass jar of light acacia honey',
+    badge: { label: 'Bestseller', variant: 'bestseller' },
     category: 'Honey',
   },
 ]

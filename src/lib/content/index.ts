@@ -239,6 +239,16 @@ export async function getHomepageProducts(): Promise<HomepageCollection> {
   return { products: all.slice(0, 4) }
 }
 
+/**
+ * Returns products flagged as bestsellers (badge.variant === 'bestseller').
+ * Used by the homepage BestSellers section to give first-time visitors
+ * a clear "show me what works" entry point.
+ */
+export async function getBestSellers(): Promise<Product[]> {
+  const all = await getAllProducts()
+  return all.filter((p) => p.badge?.variant === 'bestseller')
+}
+
 export async function getProductsByRegion(regionName: string): Promise<Product[]> {
   const products = await getAllProducts()
   return products.filter((p) => p.origin === regionName)
