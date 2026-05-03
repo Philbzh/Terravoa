@@ -185,6 +185,16 @@
       "story": "Geschichte",
       "shipping": "Versand"
     },
+    "draft": {
+      "restoredTitle": "Ihr gespeicherter Fortschritt wurde wiederhergestellt",
+      "restoredBody": "Zuletzt gespeichert {age} — Sie können dort weitermachen, wo Sie aufgehört haben.",
+      "discard": "Neu beginnen",
+      "autosaveNote": "Ihr Fortschritt wird während des Tippens automatisch gespeichert.",
+      "momentsAgo": "vor einem Moment",
+      "minutesAgo": "{n, plural, =1 {vor 1 Minute} other {vor # Minuten}}",
+      "hoursAgo": "{n, plural, =1 {vor 1 Stunde} other {vor # Stunden}}",
+      "daysAgo": "{n, plural, =1 {vor 1 Tag} other {vor # Tagen}}"
+    },
     "step1": {
       "sectionTitle": "Über Sie",
       "regionTitle": "Ihre Region",
@@ -203,7 +213,14 @@
       "region": "Region / Stadt",
       "regionPlaceholder": "z. B. Bayern, Toskana, Provence",
       "productionLocation": "Wo werden Ihre Produkte hergestellt?",
-      "productionLocationPlaceholder": "Eine kurze Beschreibung Ihres Produktionsstandorts"
+      "productionLocationPlaceholder": "Eine kurze Beschreibung Ihres Produktionsstandorts",
+      "desiredPlanLabel": "Bevorzugtes Partnerschaftsmodell",
+      "desiredPlanHint": "Das hilft uns, die Prüfung anzupassen. Die endgültige Zuweisung bestätigt das Admin-Team.",
+      "desiredPlans": {
+        "founding": "Founding — 0 €/Monat — 15 % Kommission",
+        "growth": "Growth — 39 €/Monat — 12 % Kommission",
+        "premium": "Premium — 89 €/Monat — 8 % Kommission"
+      }
     },
     "step2": {
       "sectionTitle": "Ihre Produkte",
@@ -217,9 +234,18 @@
       "differentiatorLabel": "Was macht Ihre Produkte einzigartig?",
       "differentiatorHint": "Ihr Ansatz, Ihre Tradition oder Ihr Verfahren, das sonst niemand hat",
       "differentiatorPlaceholder": "Erzählen Sie uns von Ihren besonderen Methoden, Traditionen oder Ihrer Philosophie …",
-      "pricingRangeLabel": "Ungefähre Preisspanne pro Einheit",
-      "pricingRangeHint": "Optional — hilft uns, Ihre Positionierung zu verstehen",
-      "pricingRangePlaceholder": "z. B. 5–15 € pro Glas, 20–40 € pro Flasche",
+      "pricingRangeLabel": "Grobe Preisspanne über Ihre Produkte",
+      "pricingRangeHint": "Optional — eine typische Spanne über Ihr gesamtes Sortiment, nicht pro Artikel. Das €-Zeichen wird automatisch angezeigt.",
+      "pricingRangePlaceholder": "z. B. 5 – 80 für Ihr gesamtes Sortiment",
+      "categoryGroups": {
+        "pantry": "Speisekammer & Gewürze",
+        "dairyMeatsFresh": "Käse, Fleisch & Frisches",
+        "sweetsHoney": "Süßes & Honig",
+        "artisan": "Handwerksprodukte"
+      },
+      "otherCategoryLabel": "Wie sollen wir Ihre Kategorie nennen?",
+      "otherCategoryHint": "Wir prüfen Ihren Vorschlag, um ihn gegebenenfalls in unsere Liste aufzunehmen",
+      "otherCategoryPlaceholder": "z. B. Meersalz aus der Bretagne",
       "categories": {
         "oliveOil": "Olivenöl & Oliven",
         "honey": "Honig & Bienenprodukte",
@@ -300,6 +326,9 @@
       "environmentRegion": "Umgebung / Region",
       "environmentRegionUpload": "Landschaft, Terroir oder Ort, der Ihre Arbeit prägt",
       "uploadNote": "Nur authentische Bilder — JPG, PNG, WebP bis 10 MB pro Datei",
+      "photosDraftWarning": "Hinweis: Foto-Auswahl kann nicht gespeichert werden, wenn Sie die Seite verlassen — Textantworten werden automatisch gesichert.",
+      "filesSelected": "{n, plural, =1 {1 Foto ausgewählt} other {# Fotos ausgewählt}}",
+      "clearSelection": "Entfernen",
       "onlinePresenceTitle": "Online-Präsenz",
       "onlinePresenceSubtitle": "Teilen Sie Ihre Website oder Social-Media-Profile, damit wir Sie besser kennenlernen.",
       "website": "Website",

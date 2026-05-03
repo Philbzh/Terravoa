@@ -1,23 +1,233 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Upload, Check, Loader2, AlertTriangle } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Upload,
+  Check,
+  Loader2,
+  AlertTriangle,
+  ExternalLink,
+  FileImage,
+  X,
+} from 'lucide-react'
 import { submitApplication } from './actions'
 import { useTranslations, useLocale } from 'next-intl'
 
 const totalSteps = 5
 
+// ---------------------------------------------------------------------------
+// Draft persistence
+// ---------------------------------------------------------------------------
+// The producer application takes 5-10 minutes to fill. A single accidental
+// back-button, page refresh, or click on an inline link (e.g. "quality
+// standards") previously wiped everything. We now snapshot every text / choice
+// field to sessionStorage on input, and restore on mount. File inputs cannot
+// be restored from storage (File blobs aren't serialisable), so those still
+// need to be re-selected; we warn users about that at the relevant step.
+
+const DRAFT_KEY = 'terravoa:apply-draft:v1'
+const DRAFT_TTL_MS = 48 * 60 * 60 * 1000 // 48h
+
+type DraftValues = Record<string, string | string[]>
+
+type ApplyDraft = {
+  step: number
+  values: DraftValues
+  savedAt: number
+}
+
+function readDraft(): ApplyDraft | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as ApplyDraft
+    if (
+      !parsed ||
+      typeof parsed.step !== 'number' ||
+      typeof parsed.savedAt !== 'number' ||
+      !parsed.values
+    ) {
+      return null
+    }
+    if (Date.now() - parsed.savedAt > DRAFT_TTL_MS) {
+      sessionStorage.removeItem(DRAFT_KEY)
+      return null
+    }
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+function writeDraft(draft: ApplyDraft) {
+  try {
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+  } catch {
+    // Quota exceeded or storage unavailable — silently ignore. The user will
+    // lose their draft if they navigate away, but the form still works.
+  }
+}
+
+function clearDraft() {
+  try {
+    sessionStorage.removeItem(DRAFT_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+function draftValue(
+  draft: ApplyDraft | null,
+  name: string,
+  fallback = '',
+): string {
+  if (!draft) return fallback
+  const v = draft.values[name]
+  if (typeof v === 'string') return v
+  return fallback
+}
+
+function draftChecked(
+  draft: ApplyDraft | null,
+  name: string,
+  value: string,
+): boolean {
+  if (!draft) return false
+  const v = draft.values[name]
+  if (Array.isArray(v)) return v.includes(value)
+  if (typeof v === 'string') return v === value
+  return false
+}
+
+function formatAge(savedAt: number, t: (k: string, v?: Record<string, string | number>) => string): string {
+  const ms = Date.now() - savedAt
+  const mins = Math.floor(ms / 60000)
+  if (mins < 1) return t('draft.momentsAgo')
+  if (mins < 60) return t('draft.minutesAgo', { n: mins })
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return t('draft.hoursAgo', { n: hours })
+  const days = Math.floor(hours / 24)
+  return t('draft.daysAgo', { n: days })
+}
+
+// ---------------------------------------------------------------------------
+// Category grouping
+// ---------------------------------------------------------------------------
+// Instead of 16 chips wrapping in an unstructured pile, group them into four
+// clear themes so producers can scan quickly. "Other" stays standalone and
+// reveals a free-text field when ticked (so producers can ask us to add a new
+// category without leaving the form).
+
+type CategoryKey =
+  | 'oliveOil' | 'vinegars' | 'preserves' | 'pastaGrains' | 'spices' | 'teas'
+  | 'cheese' | 'curedMeats' | 'truffles' | 'freshProduce'
+  | 'honey' | 'chocolateSweets'
+  | 'ceramics' | 'textiles' | 'bodyCare'
+  | 'other'
+
+const categoryGroups: ReadonlyArray<{ groupKey: string; items: CategoryKey[] }> = [
+  { groupKey: 'pantry',           items: ['oliveOil', 'vinegars', 'preserves', 'pastaGrains', 'spices', 'teas'] },
+  { groupKey: 'dairyMeatsFresh',  items: ['cheese', 'curedMeats', 'truffles', 'freshProduce'] },
+  { groupKey: 'sweetsHoney',      items: ['honey', 'chocolateSweets'] },
+  { groupKey: 'artisan',          items: ['ceramics', 'textiles', 'bodyCare'] },
+]
+
 export function ApplyClient() {
   const t = useTranslations('producerApply')
   const locale = useLocale()
 
+  // `draft` starts as undefined (not yet hydrated), becomes null (no draft)
+  // or a draft object after the first client-side tick. We don't render the
+  // form until this is resolved, so `defaultValue`/`defaultChecked` get the
+  // correct initial values on first render. This avoids SSR/CSR hydration
+  // mismatch (sessionStorage is unavailable on the server).
+  const [draft, setDraft] = useState<ApplyDraft | null | undefined>(undefined)
+  const [draftRestored, setDraftRestored] = useState(false)
+
   const [step, setStep] = useState(1)
+  const [formKey, setFormKey] = useState(0)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const stepRef = useRef(step)
+  useEffect(() => { stepRef.current = step }, [step])
+
+  // Mount: read draft and (if valid) seed the step.
+  useEffect(() => {
+    const found = readDraft()
+    if (found) {
+      setStep(Math.min(Math.max(found.step, 1), totalSteps))
+      setDraftRestored(true)
+      setDraft(found)
+    } else {
+      setDraft(null)
+    }
+  }, [])
+
+  // Auto-save: debounced input/change listener on the form.
+  useEffect(() => {
+    if (draft === undefined) return
+    const form = formRef.current
+    if (!form) return
+
+    let timer: ReturnType<typeof setTimeout> | null = null
+    const save = () => {
+      try {
+        const fd = new FormData(form)
+        const values: DraftValues = {}
+        const keys = new Set<string>()
+        for (const key of fd.keys()) keys.add(key)
+        for (const key of keys) {
+          const all = fd
+            .getAll(key)
+            .filter((v): v is string => typeof v === 'string')
+          if (all.length === 0) continue
+          values[key] = all.length > 1 ? all : all[0]
+        }
+        writeDraft({ step: stepRef.current, values, savedAt: Date.now() })
+      } catch {
+        /* ignore */
+      }
+    }
+    const onEvent = () => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(save, 400)
+    }
+
+    form.addEventListener('input', onEvent)
+    form.addEventListener('change', onEvent)
+    return () => {
+      if (timer) clearTimeout(timer)
+      form.removeEventListener('input', onEvent)
+      form.removeEventListener('change', onEvent)
+    }
+  }, [draft, formKey])
+
+  // Whenever `step` changes, update the stored step eagerly so a back-nav
+  // from step 3 comes back to step 3 (not step 1) even if no field was edited.
+  useEffect(() => {
+    if (draft === undefined) return
+    const existing = readDraft()
+    if (!existing) return
+    writeDraft({ ...existing, step, savedAt: Date.now() })
+  }, [step, draft])
+
+  function discardDraft() {
+    clearDraft()
+    setDraft(null)
+    setDraftRestored(false)
+    setStep(1)
+    setError(null)
+    // Force a remount of the form so every uncontrolled input picks up its
+    // new empty defaultValue.
+    setFormKey((k) => k + 1)
+  }
 
   const stepLabels = [
     t('stepLabels.aboutYou'),
@@ -25,26 +235,6 @@ export function ApplyClient() {
     t('stepLabels.quality'),
     t('stepLabels.story'),
     t('stepLabels.shipping'),
-  ]
-
-  // ── Step 2: Product categories (no alcohol) ──
-  const productCategories = [
-    { key: 'oliveOil',       label: t('step2.categories.oliveOil') },
-    { key: 'honey',          label: t('step2.categories.honey') },
-    { key: 'cheese',         label: t('step2.categories.cheese') },
-    { key: 'curedMeats',     label: t('step2.categories.curedMeats') },
-    { key: 'truffles',       label: t('step2.categories.truffles') },
-    { key: 'pastaGrains',    label: t('step2.categories.pastaGrains') },
-    { key: 'preserves',      label: t('step2.categories.preserves') },
-    { key: 'vinegars',       label: t('step2.categories.vinegars') },
-    { key: 'chocolateSweets',label: t('step2.categories.chocolateSweets') },
-    { key: 'spices',         label: t('step2.categories.spices') },
-    { key: 'teas',           label: t('step2.categories.teas') },
-    { key: 'freshProduce',   label: t('step2.categories.freshProduce') },
-    { key: 'ceramics',       label: t('step2.categories.ceramics') },
-    { key: 'textiles',       label: t('step2.categories.textiles') },
-    { key: 'bodyCare',       label: t('step2.categories.bodyCare') },
-    { key: 'other',          label: t('step2.categories.other') },
   ]
 
   // ── Step 3: Certifications ──
@@ -120,6 +310,7 @@ export function ApplyClient() {
     const formData = new FormData(formRef.current)
     const result = await submitApplication(formData)
     if (result.success) {
+      clearDraft()
       setSubmitted(true)
     } else {
       setError(result.error ?? t('errors.genericError'))
@@ -149,6 +340,12 @@ export function ApplyClient() {
     )
   }
 
+  // Hold back the form until we know whether a draft exists, so uncontrolled
+  // inputs receive the right initial values on first render.
+  if (draft === undefined) {
+    return <div className="pt-32 pb-24 px-6 md:px-16 max-w-5xl mx-auto" aria-hidden="true" />
+  }
+
   return (
     <div className="pt-32 pb-24 px-6 md:px-16 max-w-5xl mx-auto">
       <Link
@@ -167,6 +364,31 @@ export function ApplyClient() {
           <p className="text-on-surface/80">{t('intro3')}</p>
         </div>
       </motion.div>
+
+      {draftRestored && draft && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 rounded-xl border border-secondary/30 bg-secondary/5 px-5 py-4 flex items-start gap-3"
+        >
+          <Check size={18} strokeWidth={1.8} className="text-secondary shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="font-sans text-sm font-semibold text-primary mb-0.5">
+              {t('draft.restoredTitle')}
+            </p>
+            <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
+              {t('draft.restoredBody', { age: formatAge(draft.savedAt, t) })}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={discardDraft}
+            className="font-sans text-xs uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors shrink-0 self-start"
+          >
+            {t('draft.discard')}
+          </button>
+        </motion.div>
+      )}
 
       {/* Progress bar */}
       <div className="mb-12">
@@ -192,7 +414,7 @@ export function ApplyClient() {
         </div>
       </div>
 
-      <form ref={formRef} noValidate onSubmit={(e) => e.preventDefault()}>
+      <form key={formKey} ref={formRef} noValidate onSubmit={(e) => e.preventDefault()}>
         <input type="hidden" name="locale" value={locale} />
 
         {/* ── Step 1: About You ── */}
@@ -201,31 +423,57 @@ export function ApplyClient() {
             <SectionTitle>{t('step1.sectionTitle')}</SectionTitle>
 
             <FormField label={t('step1.fullName')} required>
-              <input name="full_name" type="text" required className={inputClasses} placeholder={t('step1.fullNamePlaceholder')} />
+              <input
+                name="full_name"
+                type="text"
+                required
+                defaultValue={draftValue(draft, 'full_name')}
+                className={inputClasses}
+                placeholder={t('step1.fullNamePlaceholder')}
+              />
             </FormField>
             <FormField label={t('step1.businessName')} hint={t('step1.businessNameHint')}>
-              <input name="business_name" type="text" className={inputClasses} placeholder={t('step1.businessNamePlaceholder')} />
+              <input
+                name="business_name"
+                type="text"
+                defaultValue={draftValue(draft, 'business_name')}
+                className={inputClasses}
+                placeholder={t('step1.businessNamePlaceholder')}
+              />
             </FormField>
 
             <FormField
-              label="Preferred partnership plan"
-              hint="This helps us tailor the review. Final assignment is confirmed by admin."
+              label={t('step1.desiredPlanLabel')}
+              hint={t('step1.desiredPlanHint')}
             >
               <select
                 name="desired_plan"
-                defaultValue="founding"
+                defaultValue={draftValue(draft, 'desired_plan', 'founding')}
                 className="w-full bg-transparent border-b border-outline-variant/50 focus:border-primary py-3 font-sans text-sm text-on-surface focus:outline-none transition-colors"
               >
-                <option value="founding">Founding - EUR0/mo - 15% commission</option>
-                <option value="growth">Growth - EUR39/mo - 12% commission</option>
-                <option value="premium">Premium - EUR89/mo - 8% commission</option>
+                <option value="founding">{t('step1.desiredPlans.founding')}</option>
+                <option value="growth">{t('step1.desiredPlans.growth')}</option>
+                <option value="premium">{t('step1.desiredPlans.premium')}</option>
               </select>
             </FormField>
             <FormField label={t('step1.email')} required>
-              <input name="email" type="email" required className={inputClasses} placeholder={t('step1.emailPlaceholder')} />
+              <input
+                name="email"
+                type="email"
+                required
+                defaultValue={draftValue(draft, 'email')}
+                className={inputClasses}
+                placeholder={t('step1.emailPlaceholder')}
+              />
             </FormField>
             <FormField label={t('step1.phone')} hint={t('step1.phoneHint')}>
-              <input name="phone" type="tel" className={inputClasses} placeholder={t('step1.phonePlaceholder')} />
+              <input
+                name="phone"
+                type="tel"
+                defaultValue={draftValue(draft, 'phone')}
+                className={inputClasses}
+                placeholder={t('step1.phonePlaceholder')}
+              />
             </FormField>
 
             <div className="border-t border-outline-variant/15 pt-8">
@@ -233,13 +481,33 @@ export function ApplyClient() {
             </div>
 
             <FormField label={t('step1.country')} required>
-              <input name="country" type="text" required className={inputClasses} placeholder={t('step1.countryPlaceholder')} />
+              <input
+                name="country"
+                type="text"
+                required
+                defaultValue={draftValue(draft, 'country')}
+                className={inputClasses}
+                placeholder={t('step1.countryPlaceholder')}
+              />
             </FormField>
             <FormField label={t('step1.region')} required>
-              <input name="region" type="text" required className={inputClasses} placeholder={t('step1.regionPlaceholder')} />
+              <input
+                name="region"
+                type="text"
+                required
+                defaultValue={draftValue(draft, 'region')}
+                className={inputClasses}
+                placeholder={t('step1.regionPlaceholder')}
+              />
             </FormField>
             <FormField label={t('step1.productionLocation')}>
-              <input name="production_location" type="text" className={inputClasses} placeholder={t('step1.productionLocationPlaceholder')} />
+              <input
+                name="production_location"
+                type="text"
+                defaultValue={draftValue(draft, 'production_location')}
+                className={inputClasses}
+                placeholder={t('step1.productionLocationPlaceholder')}
+              />
             </FormField>
           </motion.div>
         </div>
@@ -259,34 +527,89 @@ export function ApplyClient() {
             </div>
 
             <FormField label={t('step2.categoriesLabel')} hint={t('step2.categoriesHint')} required>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {productCategories.map(({ key, label }) => (
-                  <label
-                    key={key}
-                    className="flex items-center gap-2 bg-surface-container-low px-4 py-2.5 rounded-full cursor-pointer hover:bg-surface-container-high transition-colors has-[:checked]:bg-primary has-[:checked]:text-on-primary"
-                  >
-                    <input type="checkbox" name="product_categories" value={key} className="sr-only" />
-                    <span className="font-sans text-xs uppercase tracking-wider">{label}</span>
-                  </label>
+              <div className="space-y-6 mt-2">
+                {categoryGroups.map(({ groupKey, items }) => (
+                  <div key={groupKey}>
+                    <h3 className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant/85 mb-3">
+                      {t(`step2.categoryGroups.${groupKey}`)}
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {items.map((key) => (
+                        <label
+                          key={key}
+                          className="flex items-start gap-3 rounded-lg border border-outline-variant/20 bg-surface-container-low/50 px-4 py-3 cursor-pointer hover:border-secondary/30 transition-colors has-[:checked]:border-secondary/60 has-[:checked]:bg-secondary/5"
+                        >
+                          <input
+                            type="checkbox"
+                            name="product_categories"
+                            value={key}
+                            defaultChecked={draftChecked(draft, 'product_categories', key)}
+                            className="mt-0.5 w-4 h-4 accent-primary shrink-0"
+                          />
+                          <span className="font-sans text-sm text-on-surface/80 leading-snug">
+                            {t(`step2.categories.${key}`)}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 ))}
+
+                {/* "Other" with free-text reveal */}
+                <OtherCategoryBlock
+                  draft={draft}
+                  label={t('step2.categories.other')}
+                  otherLabel={t('step2.otherCategoryLabel')}
+                  otherHint={t('step2.otherCategoryHint')}
+                  otherPlaceholder={t('step2.otherCategoryPlaceholder')}
+                />
               </div>
             </FormField>
 
             <FormField label={t('step2.descriptionLabel')} hint={t('step2.descriptionHint')} required>
-              <textarea name="product_description" required rows={4} className={inputClasses} placeholder={t('step2.descriptionPlaceholder')} />
+              <textarea
+                name="product_description"
+                required
+                rows={4}
+                defaultValue={draftValue(draft, 'product_description')}
+                className={inputClasses}
+                placeholder={t('step2.descriptionPlaceholder')}
+              />
             </FormField>
 
             <FormField label={t('step2.differentiatorLabel')} hint={t('step2.differentiatorHint')}>
-              <textarea name="product_differentiator" rows={3} className={inputClasses} placeholder={t('step2.differentiatorPlaceholder')} />
+              <textarea
+                name="product_differentiator"
+                rows={3}
+                defaultValue={draftValue(draft, 'product_differentiator')}
+                className={inputClasses}
+                placeholder={t('step2.differentiatorPlaceholder')}
+              />
             </FormField>
 
+            {/* Pricing range — reframed as a broad band, with a visible € affordance */}
             <FormField label={t('step2.pricingRangeLabel')} hint={t('step2.pricingRangeHint')}>
-              <input name="pricing_range" type="text" className={inputClasses} placeholder={t('step2.pricingRangePlaceholder')} />
+              <div className="relative">
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 font-sans text-sm text-on-surface-variant/80 pointer-events-none"
+                >
+                  €
+                </span>
+                <input
+                  name="pricing_range"
+                  type="text"
+                  inputMode="text"
+                  defaultValue={draftValue(draft, 'pricing_range')}
+                  className={`${inputClasses} pl-5`}
+                  placeholder={t('step2.pricingRangePlaceholder')}
+                />
+              </div>
             </FormField>
           </motion.div>
         </div>
 
-        {/* ── Step 3: Quality & Craft (NEW) ── */}
+        {/* ── Step 3: Quality & Craft ── */}
         <div className={step === 3 ? '' : 'hidden'}>
           <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="space-y-8">
             <div>
@@ -308,7 +631,13 @@ export function ApplyClient() {
                   ] as [string, string][]
                 ).map(([value, label]) => (
                   <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                    <input type="radio" name="is_organic" value={value} className="w-4 h-4 accent-primary" />
+                    <input
+                      type="radio"
+                      name="is_organic"
+                      value={value}
+                      defaultChecked={draftChecked(draft, 'is_organic', value)}
+                      className="w-4 h-4 accent-primary"
+                    />
                     <span className="font-sans text-sm text-on-surface/80 group-hover:text-primary transition-colors">{label}</span>
                   </label>
                 ))}
@@ -316,7 +645,13 @@ export function ApplyClient() {
             </FormField>
 
             <FormField label={t('step3.organicCertifierLabel')} hint={t('step3.organicCertifierHint')}>
-              <input name="organic_certifier" type="text" className={inputClasses} placeholder={t('step3.organicCertifierPlaceholder')} />
+              <input
+                name="organic_certifier"
+                type="text"
+                defaultValue={draftValue(draft, 'organic_certifier')}
+                className={inputClasses}
+                placeholder={t('step3.organicCertifierPlaceholder')}
+              />
             </FormField>
 
             {/* Certifications */}
@@ -328,7 +663,13 @@ export function ApplyClient() {
                       key={key}
                       className="flex items-start gap-3 rounded-lg border border-outline-variant/20 bg-surface-container-low/50 px-4 py-3 cursor-pointer hover:border-secondary/30 transition-colors has-[:checked]:border-secondary/60 has-[:checked]:bg-secondary/5"
                     >
-                      <input type="checkbox" name="certifications" value={key} className="mt-0.5 w-4 h-4 accent-primary shrink-0" />
+                      <input
+                        type="checkbox"
+                        name="certifications"
+                        value={key}
+                        defaultChecked={draftChecked(draft, 'certifications', key)}
+                        className="mt-0.5 w-4 h-4 accent-primary shrink-0"
+                      />
                       <span className="font-sans text-sm text-on-surface/80 leading-snug">{label}</span>
                     </label>
                   ))}
@@ -337,7 +678,13 @@ export function ApplyClient() {
             </div>
 
             <FormField label={t('step3.certificationBodyLabel')} hint={t('step3.certificationBodyHint')}>
-              <input name="certification_body" type="text" className={inputClasses} placeholder={t('step3.certificationBodyPlaceholder')} />
+              <input
+                name="certification_body"
+                type="text"
+                defaultValue={draftValue(draft, 'certification_body')}
+                className={inputClasses}
+                placeholder={t('step3.certificationBodyPlaceholder')}
+              />
             </FormField>
 
             {/* Production scale */}
@@ -353,7 +700,14 @@ export function ApplyClient() {
                     ] as [string, string][]
                   ).map(([value, label]) => (
                     <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                      <input type="radio" name="production_scale" value={value} required className="w-4 h-4 accent-primary" />
+                      <input
+                        type="radio"
+                        name="production_scale"
+                        value={value}
+                        required
+                        defaultChecked={draftChecked(draft, 'production_scale', value)}
+                        className="w-4 h-4 accent-primary"
+                      />
                       <span className="font-sans text-sm text-on-surface/80 group-hover:text-primary transition-colors">{label}</span>
                     </label>
                   ))}
@@ -362,11 +716,23 @@ export function ApplyClient() {
             </div>
 
             <FormField label={t('step3.annualProductionLabel')} hint={t('step3.annualProductionHint')}>
-              <input name="annual_production" type="text" className={inputClasses} placeholder={t('step3.annualProductionPlaceholder')} />
+              <input
+                name="annual_production"
+                type="text"
+                defaultValue={draftValue(draft, 'annual_production')}
+                className={inputClasses}
+                placeholder={t('step3.annualProductionPlaceholder')}
+              />
             </FormField>
 
             <FormField label={t('step3.shelfLifeLabel')} hint={t('step3.shelfLifeHint')}>
-              <input name="shelf_life" type="text" className={inputClasses} placeholder={t('step3.shelfLifePlaceholder')} />
+              <input
+                name="shelf_life"
+                type="text"
+                defaultValue={draftValue(draft, 'shelf_life')}
+                className={inputClasses}
+                placeholder={t('step3.shelfLifePlaceholder')}
+              />
             </FormField>
 
             {/* Packaging readiness */}
@@ -381,7 +747,13 @@ export function ApplyClient() {
                     ] as [string, string][]
                   ).map(([value, label]) => (
                     <label key={value} className="flex items-center gap-3 cursor-pointer group">
-                      <input type="radio" name="packaging_ready" value={value} className="w-4 h-4 accent-primary" />
+                      <input
+                        type="radio"
+                        name="packaging_ready"
+                        value={value}
+                        defaultChecked={draftChecked(draft, 'packaging_ready', value)}
+                        className="w-4 h-4 accent-primary"
+                      />
                       <span className="font-sans text-sm text-on-surface/80 group-hover:text-primary transition-colors">{label}</span>
                     </label>
                   ))}
@@ -397,22 +769,51 @@ export function ApplyClient() {
             <SectionTitle>{t('step4.sectionTitle')}</SectionTitle>
 
             <FormField label={t('step4.storyLabel')} required hint={t('step4.storyHint')}>
-              <textarea name="story" required rows={7} className={inputClasses} placeholder={t('step4.storyPlaceholder')} />
+              <textarea
+                name="story"
+                required
+                rows={7}
+                defaultValue={draftValue(draft, 'story')}
+                className={inputClasses}
+                placeholder={t('step4.storyPlaceholder')}
+              />
             </FormField>
 
             <div className="border-t border-outline-variant/15 pt-8">
               <SectionTitle>{t('step4.glimpseTitle')}</SectionTitle>
-              <p className="text-on-surface-variant font-sans text-sm mt-2 mb-6">{t('step4.glimpseSubtitle')}</p>
+              <p className="text-on-surface-variant font-sans text-sm mt-2 mb-1">{t('step4.glimpseSubtitle')}</p>
+              <p className="text-on-surface-variant/80 font-sans text-xs italic mb-6">{t('step4.photosDraftWarning')}</p>
             </div>
 
             <FormField label={t('step4.productPhotos')}>
-              <UploadArea id="product_photos" name="product_photos" text={t('step4.productPhotosUpload')} uploadNote={t('step4.uploadNote')} />
+              <UploadArea
+                id="product_photos"
+                name="product_photos"
+                text={t('step4.productPhotosUpload')}
+                uploadNote={t('step4.uploadNote')}
+                selectedLabel={(n) => t('step4.filesSelected', { n })}
+                clearLabel={t('step4.clearSelection')}
+              />
             </FormField>
             <FormField label={t('step4.productionProcess')}>
-              <UploadArea id="production_photos" name="production_photos" text={t('step4.productionProcessUpload')} uploadNote={t('step4.uploadNote')} />
+              <UploadArea
+                id="production_photos"
+                name="production_photos"
+                text={t('step4.productionProcessUpload')}
+                uploadNote={t('step4.uploadNote')}
+                selectedLabel={(n) => t('step4.filesSelected', { n })}
+                clearLabel={t('step4.clearSelection')}
+              />
             </FormField>
             <FormField label={t('step4.environmentRegion')}>
-              <UploadArea id="environment_photos" name="environment_photos" text={t('step4.environmentRegionUpload')} uploadNote={t('step4.uploadNote')} />
+              <UploadArea
+                id="environment_photos"
+                name="environment_photos"
+                text={t('step4.environmentRegionUpload')}
+                uploadNote={t('step4.uploadNote')}
+                selectedLabel={(n) => t('step4.filesSelected', { n })}
+                clearLabel={t('step4.clearSelection')}
+              />
             </FormField>
 
             <div className="border-t border-outline-variant/15 pt-8">
@@ -421,13 +822,31 @@ export function ApplyClient() {
             </div>
 
             <FormField label={t('step4.website')} hint={t('step4.websiteHint')}>
-              <input name="website" type="url" className={inputClasses} placeholder={t('step4.websitePlaceholder')} />
+              <input
+                name="website"
+                type="url"
+                defaultValue={draftValue(draft, 'website')}
+                className={inputClasses}
+                placeholder={t('step4.websitePlaceholder')}
+              />
             </FormField>
             <FormField label={t('step4.instagram')}>
-              <input name="instagram" type="text" className={inputClasses} placeholder={t('step4.instagramPlaceholder')} />
+              <input
+                name="instagram"
+                type="text"
+                defaultValue={draftValue(draft, 'instagram')}
+                className={inputClasses}
+                placeholder={t('step4.instagramPlaceholder')}
+              />
             </FormField>
             <FormField label={t('step4.otherLinks')} hint={t('step4.otherLinksHint')}>
-              <input name="other_links" type="text" className={inputClasses} placeholder={t('step4.otherLinksPlaceholder')} />
+              <input
+                name="other_links"
+                type="text"
+                defaultValue={draftValue(draft, 'other_links')}
+                className={inputClasses}
+                placeholder={t('step4.otherLinksPlaceholder')}
+              />
             </FormField>
           </motion.div>
         </div>
@@ -438,14 +857,27 @@ export function ApplyClient() {
             <SectionTitle>{t('step5.sectionTitle')}</SectionTitle>
 
             <FormField label={t('step5.shippingCountries')}>
-              <input name="shipping_countries" type="text" className={inputClasses} placeholder={t('step5.shippingCountriesPlaceholder')} />
+              <input
+                name="shipping_countries"
+                type="text"
+                defaultValue={draftValue(draft, 'shipping_countries')}
+                className={inputClasses}
+                placeholder={t('step5.shippingCountriesPlaceholder')}
+              />
             </FormField>
 
             <FormField label={t('step5.shippingSpeed')} required>
               <div className="space-y-3">
                 {shippingTimes.map((time) => (
                   <label key={time} className="flex items-center gap-3 cursor-pointer group">
-                    <input type="radio" name="shipping_speed" value={time} required className="w-4 h-4 accent-primary" />
+                    <input
+                      type="radio"
+                      name="shipping_speed"
+                      value={time}
+                      required
+                      defaultChecked={draftChecked(draft, 'shipping_speed', time)}
+                      className="w-4 h-4 accent-primary"
+                    />
                     <span className="font-sans text-sm text-on-surface/80 group-hover:text-primary transition-colors">{time}</span>
                   </label>
                 ))}
@@ -456,7 +888,13 @@ export function ApplyClient() {
               <div className="flex gap-6">
                 {[t('step5.yes'), t('step5.no')].map((opt) => (
                   <label key={opt} className="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" name="shipping_experience" value={opt} className="w-4 h-4 accent-primary" />
+                    <input
+                      type="radio"
+                      name="shipping_experience"
+                      value={opt}
+                      defaultChecked={draftChecked(draft, 'shipping_experience', opt)}
+                      className="w-4 h-4 accent-primary"
+                    />
                     <span className="font-sans text-sm text-on-surface/80">{opt}</span>
                   </label>
                 ))}
@@ -469,21 +907,54 @@ export function ApplyClient() {
 
             {/* Three confirmations */}
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" name="confirm_no_alcohol" value="on" required className="mt-1 w-4 h-4 accent-primary shrink-0" />
+              <input
+                type="checkbox"
+                name="confirm_no_alcohol"
+                value="on"
+                required
+                defaultChecked={draftChecked(draft, 'confirm_no_alcohol', 'on')}
+                className="mt-1 w-4 h-4 accent-primary shrink-0"
+              />
               <span className="font-sans text-sm text-on-surface/80 leading-relaxed">{t('step5.confirmNoAlcohol')}</span>
             </label>
 
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" name="confirm_local" value="on" required className="mt-1 w-4 h-4 accent-primary shrink-0" />
+              <input
+                type="checkbox"
+                name="confirm_local"
+                value="on"
+                required
+                defaultChecked={draftChecked(draft, 'confirm_local', 'on')}
+                className="mt-1 w-4 h-4 accent-primary shrink-0"
+              />
               <span className="font-sans text-sm text-on-surface/80 leading-relaxed">{t('step5.confirmLocal')}</span>
             </label>
 
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" name="confirm_quality" value="on" required className="mt-1 w-4 h-4 accent-primary shrink-0" />
+              <input
+                type="checkbox"
+                name="confirm_quality"
+                value="on"
+                required
+                defaultChecked={draftChecked(draft, 'confirm_quality', 'on')}
+                className="mt-1 w-4 h-4 accent-primary shrink-0"
+              />
               <span className="font-sans text-sm text-on-surface/80 leading-relaxed">
                 {t.rich('step5.confirmQuality', {
                   link: (chunks) => (
-                    <Link href="/terms" className="text-secondary underline underline-offset-2">{chunks}</Link>
+                    // Open in a new tab so filling out the application isn't
+                    // interrupted. This uses a native anchor (not the next-intl
+                    // Link) because target="_blank" + locale-aware routing is
+                    // still honoured via the /terms path.
+                    <a
+                      href={`/${locale}/terms`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-secondary underline underline-offset-2 hover:opacity-80"
+                    >
+                      {chunks}
+                      <ExternalLink size={12} strokeWidth={1.8} aria-hidden="true" />
+                    </a>
                   ),
                 })}
               </span>
@@ -518,12 +989,19 @@ export function ApplyClient() {
             )}
           </button>
         </div>
+
+        {/* Subtle auto-save indicator */}
+        <p className="mt-6 text-center font-sans text-xs text-on-surface-variant/70">
+          {t('draft.autosaveNote')}
+        </p>
       </form>
     </div>
   )
 }
 
-// ── Shared sub-components ──
+// ---------------------------------------------------------------------------
+// Sub-components
+// ---------------------------------------------------------------------------
 
 const inputClasses =
   'w-full bg-transparent border-b border-outline-variant/50 focus:border-primary py-3 font-sans text-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none transition-colors'
@@ -551,13 +1029,148 @@ function FormField({
   )
 }
 
-function UploadArea({ id, name, text, uploadNote }: { id: string; name: string; text: string; uploadNote: string }) {
+// Free-text reveal for the "Other" category.
+function OtherCategoryBlock({
+  draft,
+  label,
+  otherLabel,
+  otherHint,
+  otherPlaceholder,
+}: {
+  draft: ApplyDraft | null
+  label: string
+  otherLabel: string
+  otherHint: string
+  otherPlaceholder: string
+}) {
+  const [checked, setChecked] = useState<boolean>(() =>
+    draftChecked(draft, 'product_categories', 'other'),
+  )
+
   return (
-    <label htmlFor={id} className="block border-2 border-dashed border-outline-variant/30 rounded-xl p-8 text-center hover:border-secondary/40 transition-colors cursor-pointer">
-      <input id={id} name={name} type="file" multiple accept="image/jpeg,image/png,image/webp" className="sr-only" />
-      <Upload size={24} strokeWidth={1.2} className="text-on-surface-variant/70 mx-auto mb-3" />
-      <p className="font-sans text-sm text-on-surface-variant">{text}</p>
-      <p className="font-sans text-xs text-on-surface-variant/75 mt-1">{uploadNote}</p>
-    </label>
+    <div className="rounded-lg border border-dashed border-outline-variant/30 bg-surface-container-low/30 p-4">
+      <label className="flex items-start gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          name="product_categories"
+          value="other"
+          checked={checked}
+          onChange={(e) => setChecked(e.target.checked)}
+          className="mt-0.5 w-4 h-4 accent-primary shrink-0"
+        />
+        <span className="font-sans text-sm text-on-surface/80 leading-snug">
+          {label}
+        </span>
+      </label>
+
+      {checked && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="mt-4 pl-7"
+        >
+          <label className="block mb-1.5">
+            <span className="font-sans text-xs uppercase tracking-wider text-on-surface/85">
+              {otherLabel}
+            </span>
+            <span className="block font-sans text-xs text-on-surface-variant/85 mt-0.5">
+              {otherHint}
+            </span>
+          </label>
+          <input
+            name="other_category_label"
+            type="text"
+            defaultValue={draftValue(draft, 'other_category_label')}
+            maxLength={80}
+            className={inputClasses}
+            placeholder={otherPlaceholder}
+          />
+        </motion.div>
+      )}
+    </div>
+  )
+}
+
+function UploadArea({
+  id,
+  name,
+  text,
+  uploadNote,
+  selectedLabel,
+  clearLabel,
+}: {
+  id: string
+  name: string
+  text: string
+  uploadNote: string
+  selectedLabel: (n: number) => string
+  clearLabel: string
+}) {
+  const [files, setFiles] = useState<File[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFiles(Array.from(e.target.files ?? []))
+  }, [])
+
+  const clear = useCallback(() => {
+    setFiles([])
+    if (inputRef.current) inputRef.current.value = ''
+  }, [])
+
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="block border-2 border-dashed border-outline-variant/30 rounded-xl p-8 text-center hover:border-secondary/40 transition-colors cursor-pointer"
+      >
+        <input
+          id={id}
+          ref={inputRef}
+          name={name}
+          type="file"
+          multiple
+          accept="image/jpeg,image/png,image/webp"
+          className="sr-only"
+          onChange={handleChange}
+        />
+        <Upload size={24} strokeWidth={1.2} className="text-on-surface-variant/70 mx-auto mb-3" />
+        <p className="font-sans text-sm text-on-surface-variant">{text}</p>
+        <p className="font-sans text-xs text-on-surface-variant/75 mt-1">{uploadNote}</p>
+      </label>
+
+      {files.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-3 rounded-lg border border-secondary/30 bg-secondary/5 px-4 py-3"
+        >
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <p className="font-sans text-xs font-semibold uppercase tracking-wider text-secondary">
+              {selectedLabel(files.length)}
+            </p>
+            <button
+              type="button"
+              onClick={clear}
+              className="inline-flex items-center gap-1 font-sans text-xs uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <X size={12} strokeWidth={2} />
+              {clearLabel}
+            </button>
+          </div>
+          <ul className="space-y-1">
+            {files.map((f, i) => (
+              <li key={`${f.name}-${i}`} className="flex items-center gap-2 font-sans text-xs text-on-surface/85">
+                <FileImage size={12} strokeWidth={1.8} className="shrink-0 text-on-surface-variant" />
+                <span className="truncate flex-1 min-w-0">{f.name}</span>
+                <span className="text-on-surface-variant shrink-0">
+                  {(f.size / 1024).toFixed(0)} KB
+                </span>
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      )}
+    </div>
   )
 }

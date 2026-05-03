@@ -185,6 +185,16 @@
       "story": "Storia",
       "shipping": "Spedizione"
     },
+    "draft": {
+      "restoredTitle": "Abbiamo recuperato il suo progresso salvato",
+      "restoredBody": "Ultimo salvataggio {age} — può riprendere da dove si era fermato.",
+      "discard": "Ricomincia",
+      "autosaveNote": "Il suo progresso viene salvato automaticamente mentre scrive.",
+      "momentsAgo": "un momento fa",
+      "minutesAgo": "{n, plural, =1 {1 minuto fa} other {# minuti fa}}",
+      "hoursAgo": "{n, plural, =1 {1 ora fa} other {# ore fa}}",
+      "daysAgo": "{n, plural, =1 {1 giorno fa} other {# giorni fa}}"
+    },
     "step1": {
       "sectionTitle": "Chi sei",
       "regionTitle": "La tua regione",
@@ -203,7 +213,14 @@
       "region": "Regione / Città",
       "regionPlaceholder": "es. Toscana, Provenza, Alentejo",
       "productionLocation": "Dove vengono prodotti i suoi prodotti?",
-      "productionLocationPlaceholder": "Una breve descrizione del luogo di produzione"
+      "productionLocationPlaceholder": "Una breve descrizione del luogo di produzione",
+      "desiredPlanLabel": "Piano di partnership preferito",
+      "desiredPlanHint": "Ci aiuta a personalizzare la valutazione. L’assegnazione finale è confermata dal team.",
+      "desiredPlans": {
+        "founding": "Founding — 0 €/mese — 15 % di commissione",
+        "growth": "Growth — 39 €/mese — 12 % di commissione",
+        "premium": "Premium — 89 €/mese — 8 % di commissione"
+      }
     },
     "step2": {
       "sectionTitle": "I suoi prodotti",
@@ -217,9 +234,18 @@
       "differentiatorLabel": "Cosa rende i suoi prodotti unici?",
       "differentiatorHint": "Il suo approccio, tradizione o processo che nessun altro possiede",
       "differentiatorPlaceholder": "Ci parli dei suoi metodi particolari, delle tradizioni o della sua filosofia…",
-      "pricingRangeLabel": "Fascia di prezzo approssimativa per unità",
-      "pricingRangeHint": "Opzionale — ci aiuta a capire il suo posizionamento",
-      "pricingRangePlaceholder": "es. 5–15 € al barattolo, 20–40 € a bottiglia",
+      "pricingRangeLabel": "Ampia fascia di prezzo sui suoi prodotti",
+      "pricingRangeHint": "Opzionale — una fascia tipica sull’intera gamma, non per articolo. Il simbolo € viene mostrato automaticamente.",
+      "pricingRangePlaceholder": "es. 5 – 80 per l’intera gamma",
+      "categoryGroups": {
+        "pantry": "Dispensa e condimenti",
+        "dairyMeatsFresh": "Latticini, carni e freschi",
+        "sweetsHoney": "Dolci e miele",
+        "artisan": "Prodotti artigianali"
+      },
+      "otherCategoryLabel": "Come dovremmo chiamare la sua categoria?",
+      "otherCategoryHint": "Esamineremo il suo suggerimento e valuteremo di aggiungerlo alla nostra lista",
+      "otherCategoryPlaceholder": "es. Sale marino di Bretagna",
       "categories": {
         "oliveOil": "Olio d'oliva & olive",
         "honey": "Miele & prodotti dell'alveare",
@@ -300,6 +326,9 @@
       "environmentRegion": "Ambiente / regione",
       "environmentRegionUpload": "Paesaggio, terroir o luogo che definisce il suo lavoro",
       "uploadNote": "Solo immagini autentiche — JPG, PNG, WebP fino a 10 MB ciascuna",
+      "photosDraftWarning": "Nota: le foto selezionate non possono essere conservate se lascia questa pagina — le risposte testuali vengono salvate automaticamente.",
+      "filesSelected": "{n, plural, =1 {# foto selezionata} other {# foto selezionate}}",
+      "clearSelection": "Rimuovi",
       "onlinePresenceTitle": "Presenza online",
       "onlinePresenceSubtitle": "Condivida il suo sito o i suoi profili social per aiutarci a conoscerla meglio.",
       "website": "Sito web",

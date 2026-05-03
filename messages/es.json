@@ -185,6 +185,16 @@
       "story": "Historia",
       "shipping": "Envío"
     },
+    "draft": {
+      "restoredTitle": "Hemos restaurado su progreso guardado",
+      "restoredBody": "Última vez guardado {age} — puede continuar donde lo dejó.",
+      "discard": "Empezar de nuevo",
+      "autosaveNote": "Su progreso se guarda automáticamente mientras escribe.",
+      "momentsAgo": "hace un momento",
+      "minutesAgo": "{n, plural, =1 {hace 1 minuto} other {hace # minutos}}",
+      "hoursAgo": "{n, plural, =1 {hace 1 hora} other {hace # horas}}",
+      "daysAgo": "{n, plural, =1 {hace 1 día} other {hace # días}}"
+    },
     "step1": {
       "sectionTitle": "Sobre usted",
       "regionTitle": "Su región",
@@ -203,7 +213,14 @@
       "region": "Región / Ciudad",
       "regionPlaceholder": "ej. Andalucía, Toscana, Provence",
       "productionLocation": "¿Dónde se elaboran sus productos?",
-      "productionLocationPlaceholder": "Una breve descripción de su lugar de producción"
+      "productionLocationPlaceholder": "Una breve descripción de su lugar de producción",
+      "desiredPlanLabel": "Plan de asociación preferido",
+      "desiredPlanHint": "Esto nos ayuda a adaptar la revisión. La asignación final la confirma el equipo.",
+      "desiredPlans": {
+        "founding": "Founding — 0 €/mes — 15 % de comisión",
+        "growth": "Growth — 39 €/mes — 12 % de comisión",
+        "premium": "Premium — 89 €/mes — 8 % de comisión"
+      }
     },
     "step2": {
       "sectionTitle": "Sus productos",
@@ -217,9 +234,18 @@
       "differentiatorLabel": "¿Qué hace únicos a sus productos?",
       "differentiatorHint": "Su enfoque, tradición o proceso que nadie más tiene",
       "differentiatorPlaceholder": "Cuéntenos sobre sus métodos únicos, tradiciones o filosofía...",
-      "pricingRangeLabel": "Rango de precio aproximado por unidad",
-      "pricingRangeHint": "Opcional — nos ayuda a entender su posicionamiento",
-      "pricingRangePlaceholder": "ej. 5–15 € por tarro, 20–40 € por botella",
+      "pricingRangeLabel": "Horquilla amplia de precios en sus productos",
+      "pricingRangeHint": "Opcional — una horquilla típica en todo su catálogo, no por artículo. El símbolo € se muestra automáticamente.",
+      "pricingRangePlaceholder": "ej. 5 – 80 en todo su catálogo",
+      "categoryGroups": {
+        "pantry": "Despensa y condimentos",
+        "dairyMeatsFresh": "Lácteos, carnes y frescos",
+        "sweetsHoney": "Dulces y miel",
+        "artisan": "Productos artesanales"
+      },
+      "otherCategoryLabel": "¿Cómo deberíamos llamar a su categoría?",
+      "otherCategoryHint": "Revisaremos su sugerencia para valorar si la añadimos a nuestra lista",
+      "otherCategoryPlaceholder": "ej. Sal marina de Bretaña",
       "categories": {
         "oliveOil": "Aceite de oliva & aceitunas",
         "honey": "Miel & productos de la colmena",
@@ -300,6 +326,9 @@
       "environmentRegion": "Entorno / región",
       "environmentRegionUpload": "Paisaje, terruño o lugar que define su trabajo",
       "uploadNote": "Solo imágenes auténticas — JPG, PNG, WebP hasta 10 MB cada una",
+      "photosDraftWarning": "Nota: la selección de fotos no puede conservarse si sale de esta página — las respuestas de texto se guardan automáticamente.",
+      "filesSelected": "{n, plural, =1 {# foto seleccionada} other {# fotos seleccionadas}}",
+      "clearSelection": "Quitar",
       "onlinePresenceTitle": "Presencia en línea",
       "onlinePresenceSubtitle": "Comparta su sitio web o perfiles en redes sociales para que podamos conocerle mejor.",
       "website": "Sitio web",

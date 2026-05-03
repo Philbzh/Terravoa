@@ -128,6 +128,16 @@ export async function submitApplication(
     }
   }
 
+  // If the applicant selected "Other" and filled in a free-text label,
+  // replace the generic "other" tag with "other:<label>" so admins can see
+  // exactly what category was requested. Cap at 80 chars defensively.
+  const otherLabelRaw = optionalString(formData.get('other_category_label'))
+  if (otherLabelRaw && product_categories.includes('other')) {
+    const cleaned = otherLabelRaw.replace(/\s+/g, ' ').slice(0, 80)
+    const idx = product_categories.indexOf('other')
+    product_categories[idx] = `other:${cleaned}`
+  }
+
   const admin = createAdminClient()
   const sourceLanguage = (formData.get('locale') as string) || 'en'
 

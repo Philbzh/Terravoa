@@ -185,6 +185,16 @@
       "story": "Story",
       "shipping": "Shipping"
     },
+    "draft": {
+      "restoredTitle": "We restored your saved progress",
+      "restoredBody": "Last saved {age} — you can pick up where you left off.",
+      "discard": "Start fresh",
+      "autosaveNote": "Your progress is saved automatically while you type.",
+      "momentsAgo": "a moment ago",
+      "minutesAgo": "{n, plural, =1 {1 minute ago} other {# minutes ago}}",
+      "hoursAgo": "{n, plural, =1 {1 hour ago} other {# hours ago}}",
+      "daysAgo": "{n, plural, =1 {1 day ago} other {# days ago}}"
+    },
     "step1": {
       "sectionTitle": "About You",
       "regionTitle": "Your Region",
@@ -203,7 +213,14 @@
       "region": "Region / City",
       "regionPlaceholder": "e.g. Tuscany, Provence, Alentejo",
       "productionLocation": "Where are your products made?",
-      "productionLocationPlaceholder": "A brief description of your production location"
+      "productionLocationPlaceholder": "A brief description of your production location",
+      "desiredPlanLabel": "Preferred partnership plan",
+      "desiredPlanHint": "This helps us tailor the review. Final assignment is confirmed by admin.",
+      "desiredPlans": {
+        "founding": "Founding — €0/mo — 15% commission",
+        "growth": "Growth — €39/mo — 12% commission",
+        "premium": "Premium — €89/mo — 8% commission"
+      }
     },
     "step2": {
       "sectionTitle": "Your Products",
@@ -217,9 +234,18 @@
       "differentiatorLabel": "What makes your products unique?",
       "differentiatorHint": "Your approach, tradition, or process that no one else has",
       "differentiatorPlaceholder": "Tell us about your unique methods, traditions, or philosophy...",
-      "pricingRangeLabel": "Approximate price range per unit",
-      "pricingRangeHint": "Optional — helps us understand your positioning",
-      "pricingRangePlaceholder": "e.g. €5–€15 per jar, €20–€40 per bottle",
+      "pricingRangeLabel": "Broad price range across your products",
+      "pricingRangeHint": "Optional — a typical band across your whole catalog, not per item. Type freely, the € symbol is shown for you.",
+      "pricingRangePlaceholder": "e.g. 5 – 80 across your catalog",
+      "categoryGroups": {
+        "pantry": "Pantry & Condiments",
+        "dairyMeatsFresh": "Dairy, Meats & Fresh",
+        "sweetsHoney": "Sweets & Honey",
+        "artisan": "Artisan Goods"
+      },
+      "otherCategoryLabel": "Tell us what to call your category",
+      "otherCategoryHint": "We'll review your suggestion and consider adding it to our list",
+      "otherCategoryPlaceholder": "e.g. Sea salt from Brittany",
       "categories": {
         "oliveOil": "Olive Oil & Olives",
         "honey": "Honey & Bee Products",
@@ -300,6 +326,9 @@
       "environmentRegion": "Environment / region",
       "environmentRegionUpload": "Landscape, terroir, or place that defines your work",
       "uploadNote": "Authentic images only — JPG, PNG, WebP up to 10MB each",
+      "photosDraftWarning": "Note: photo selections cannot be preserved if you leave this page — text answers are saved automatically.",
+      "filesSelected": "{n, plural, =1 {# photo selected} other {# photos selected}}",
+      "clearSelection": "Clear",
       "onlinePresenceTitle": "Online presence",
       "onlinePresenceSubtitle": "Share your website or social profiles so we can get to know you better.",
       "website": "Website",
