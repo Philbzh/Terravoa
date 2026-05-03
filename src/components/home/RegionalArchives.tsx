@@ -67,7 +67,6 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           transition={{ duration: 0.8 }}
         >
           <RegionCard
-            slug={heroRegion.slug}
             name={heroRegion.name}
             specialty={heroRegion.specialty}
             imageSrc={heroRegion.imageSrc}
@@ -88,7 +87,6 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
             transition={{ duration: 0.6, delay: (i % 2) * 0.12 }}
           >
             <RegionCard
-              slug={region.slug}
               name={region.name}
               specialty={region.specialty}
               imageSrc={region.imageSrc}
