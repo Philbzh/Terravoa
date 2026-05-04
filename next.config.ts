@@ -14,6 +14,18 @@ function resolvePublicSiteUrl(): string {
   if (explicit) return explicit.replace(/\/$/, "")
   const vercel = process.env.VERCEL_URL?.trim()
   if (vercel) return `https://${vercel.replace(/\/$/, "")}`
+
+  // In production, falling back to localhost silently breaks email confirmation
+  // links and password-reset flows — fail the build instead so the missing env
+  // var is impossible to ignore.
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "[next.config] NEXT_PUBLIC_SITE_URL is not set in production. " +
+        "Set it on Vercel → Project → Settings → Environment Variables " +
+        "(e.g. https://terravoa.com), then redeploy.",
+    )
+  }
+
   return "http://localhost:3000"
 }
 

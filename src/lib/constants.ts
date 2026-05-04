@@ -60,8 +60,31 @@ export const COMPANY_HOSTING_PROVIDER =
 export const SITE_DESCRIPTION =
   'Terravoa connects discerning customers with Europe\'s most authentic producers, offering products defined by origin, craftsmanship, and taste. Discover exceptional foods — carefully curated and delivered directly from the source.'
 
-/** Public origin (no trailing slash). Set via env; `next.config` fills from VERCEL_URL when unset. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(
-  /\/$/,
-  '',
-)
+/**
+ * Public origin (no trailing slash).
+ * Mirrors `resolvePublicSiteUrl` in `next.config.ts` so server-only code (emails,
+ * redirects) resolves correctly even outside the Next env injection path.
+ *
+ * In production, falling back to localhost would silently break registration
+ * confirmation emails and password-reset links — users would get a clickable
+ * URL pointing to their own machine. We refuse to start in that state.
+ */
+function resolvePublicSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (explicit) return explicit.replace(/\/$/, '')
+  const vercel = process.env.VERCEL_URL?.trim()
+  if (vercel) return `https://${vercel.replace(/\/$/, '')}`
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      '[constants] NEXT_PUBLIC_SITE_URL is not set in production. ' +
+        'Set it on Vercel → Project → Settings → Environment Variables ' +
+        '(e.g. https://terravoa.com), then redeploy. Without it, ' +
+        'registration emails will point to localhost.',
+    )
+  }
+
+  return 'http://localhost:3000'
+}
+
+export const SITE_URL = resolvePublicSiteUrl()
