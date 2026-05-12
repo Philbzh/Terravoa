@@ -177,7 +177,7 @@ export default function CustomerLoginPage() {
             type="password"
             autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
             required
-            minLength={mode === 'signup' ? 8 : undefined}
+            minLength={mode === 'register' ? 8 : undefined}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3 font-sans text-sm focus:outline-none focus:border-primary"
