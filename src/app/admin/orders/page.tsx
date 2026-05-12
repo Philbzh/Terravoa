@@ -143,6 +143,12 @@ export default async function AdminOrdersPage({
       <AdminPageHeader
         title="Orders"
         description="Marketplace-wide order overview. Advance each order through: new → processing → shipped → delivered."
+        metrics={[
+          { label: 'new', value: statusCounts.new },
+          { label: 'processing', value: statusCounts.processing },
+          { label: 'shipped', value: statusCounts.shipped },
+          { label: 'delivered', value: statusCounts.delivered },
+        ]}
       />
       <form method="get" className="admin-toolbar">
         <input

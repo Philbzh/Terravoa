@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
+import { AdminPageTransition } from '@/components/admin/AdminPageTransition'
 import { requireAdminSession } from '@/lib/auth/require-admin'
 import { getAdminNavCounts } from '@/lib/admin/navigation'
 import './admin-theme.css'
@@ -22,7 +23,9 @@ export default async function AdminLayout({
       <div className="w-full max-w-[1600px] mx-auto flex flex-col gap-6">
         <AdminSidebar counts={counts} access={access} />
         <div className="admin-content flex-1 min-w-0 rounded-2xl border border-outline-variant/20 bg-surface px-4 md:px-6 lg:px-7 py-5 md:py-6 shadow-sm">
-          {children}
+          <AdminPageTransition>
+            {children}
+          </AdminPageTransition>
         </div>
       </div>
     </div>

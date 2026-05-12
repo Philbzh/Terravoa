@@ -218,13 +218,13 @@ export async function getProductsByProducer(producerSlug: string): Promise<Produ
  *
  * Resolution order:
  *   1. Sanity products with isFeatured == true, ordered by featuredOrder then updatedAt
- *   2. Sanity singleton (homepageCollection) — legacy fallback if no products are ticked
+ *   2. Supabase products with is_featured == true, ordered by featured_rank
  *   3. First 4 products from the active data source (Supabase or demo)
  *
- * To feature a product: open it in Sanity Studio, tick "Featured on homepage", publish.
- * To remove it: untick and publish.
+ * To feature a product: use Sanity Studio or toggle the star in the admin dashboard.
  */
 export async function getHomepageProducts(): Promise<HomepageCollection> {
+  // 1. Try Sanity
   if (isSanityConfigured()) {
     try {
       const featured = await fetchFeaturedProducts()
@@ -234,9 +234,51 @@ export async function getHomepageProducts(): Promise<HomepageCollection> {
     }
   }
 
+  // 2. Try Supabase featured products (admin-toggled)
+  try {
+    const supabaseFeatured = await loadFeaturedProducts()
+    if (supabaseFeatured.length > 0) return { products: supabaseFeatured }
+  } catch {
+    // fall through
+  }
+
   // 3. No Sanity or nothing published yet — first 4 from Supabase / demo
   const all = await getAllProducts()
   return { products: all.slice(0, 4) }
+}
+
+async function loadFeaturedProducts(): Promise<Product[]> {
+  const admin = createAdminClient()
+  const { data, error } = await admin
+    .from('products')
+    .select(`
+      id, slug, name, price, origin, description, details,
+      image_src, image_alt, badge_label, badge_variant, category,
+      producers ( slug, name, region, country )
+    `)
+    .eq('status', 'approved')
+    .eq('is_featured', true)
+    .order('featured_rank', { ascending: true, nullsFirst: false })
+    .limit(8)
+
+  if (error || !data || data.length === 0) return []
+
+  return data.map((p: any) => ({
+    slug: p.slug,
+    name: p.name,
+    price: p.price,
+    origin: p.origin,
+    producerSlug: p.producers?.slug ?? '',
+    producerName: p.producers?.name ?? '',
+    description: p.description ?? '',
+    details: Array.isArray(p.details) ? p.details : [],
+    imageSrc: p.image_src,
+    imageAlt: p.image_alt ?? p.name,
+    badge: p.badge_label
+      ? { label: p.badge_label, variant: p.badge_variant ?? 'producer' }
+      : undefined,
+    category: p.category,
+  }))
 }
 
 /**

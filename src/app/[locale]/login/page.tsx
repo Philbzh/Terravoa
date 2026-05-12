@@ -5,7 +5,9 @@ import { Link } from '@/i18n/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from '@/i18n/navigation'
 import { Loader2 } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
+import { SITE_URL } from '@/lib/constants'
 import { Button } from '@/components/ui/Button'
 import { sanitizeCustomerNextPath } from '@/lib/auth/customer-login'
 
@@ -13,6 +15,8 @@ type Mode = 'signin' | 'register'
 
 export default function CustomerLoginPage() {
   const router = useRouter()
+  const locale = useLocale()
+  const tAuth = useTranslations('customerAuth')
   const searchParams = useSearchParams()
   // HIGH-6 fix: never trust `next` unfiltered — sanitize against open redirect
   const next = useMemo(
@@ -20,6 +24,7 @@ export default function CustomerLoginPage() {
     [searchParams],
   )
   const initialTab = searchParams.get('tab') === 'register' ? 'register' : 'signin'
+  const emailJustConfirmed = searchParams.get('confirmed') === '1'
 
   const [mode, setMode] = useState<Mode>(initialTab)
   const [name, setName] = useState('')
@@ -43,11 +48,13 @@ export default function CustomerLoginPage() {
       router.push(next)
       router.refresh()
     } else {
+      const emailRedirectTo = `${SITE_URL}/${locale}/confirmation`
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { full_name: name, role: 'customer' },
+          emailRedirectTo,
         },
       })
       setLoading(false)
@@ -118,6 +125,11 @@ export default function CustomerLoginPage() {
             {error}
           </p>
         )}
+        {emailJustConfirmed && (
+          <p className="text-primary font-sans text-sm bg-primary-fixed/20 px-4 py-3 rounded-lg" role="status">
+            {tAuth('emailConfirmed')}
+          </p>
+        )}
         {success && (
           <p className="text-primary font-sans text-sm bg-primary-fixed/20 px-4 py-3 rounded-lg">
             {success}
@@ -165,7 +177,7 @@ export default function CustomerLoginPage() {
             type="password"
             autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
             required
-            minLength={8}
+            minLength={mode === 'signup' ? 8 : undefined}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full rounded-lg border border-outline-variant/30 bg-surface-container-lowest px-4 py-3 font-sans text-sm focus:outline-none focus:border-primary"

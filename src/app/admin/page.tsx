@@ -1,9 +1,20 @@
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getAdminNavCounts } from '@/lib/admin/navigation'
 import Link from 'next/link'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { RevenueTrendChart } from '@/components/admin/RevenueTrendChart'
 import { OrderStatusFunnel } from '@/components/admin/OrderStatusFunnel'
 import { AnimatedKpiCard } from '@/components/ui/AnimatedKpiCard'
+import {
+  AlertTriangle,
+  ClipboardList,
+  Package,
+  RotateCcw,
+  Star,
+  MessageSquare,
+  ArrowUpCircle,
+  CheckCircle2,
+} from 'lucide-react'
 
 async function getMetrics() {
   const admin = createAdminClient()
@@ -191,7 +202,7 @@ const cards = [
 ]
 
 export default async function AdminOverviewPage() {
-  const [metrics, recent, trendDays, statusCounts, growth, topProducers, recentOrders] = await Promise.all([
+  const [metrics, recent, trendDays, statusCounts, growth, topProducers, recentOrders, navCounts] = await Promise.all([
     getMetrics(),
     getRecentApplications(),
     getRevenueTrend(),
@@ -199,7 +210,56 @@ export default async function AdminOverviewPage() {
     getMonthlyGrowth(),
     getTopProducers(),
     getRecentOrders(),
+    getAdminNavCounts(),
   ])
+
+  const actionItems = [
+    {
+      count: navCounts.pendingApplications,
+      label: 'Pending applications',
+      href: '/admin/applications',
+      icon: ClipboardList,
+      tone: 'warning' as const,
+    },
+    {
+      count: navCounts.pendingProducts,
+      label: 'Products awaiting approval',
+      href: '/admin/products?status=pending',
+      icon: Package,
+      tone: 'warning' as const,
+    },
+    {
+      count: navCounts.pendingReturns,
+      label: 'Return requests',
+      href: '/admin/returns',
+      icon: RotateCcw,
+      tone: 'critical' as const,
+    },
+    {
+      count: navCounts.ratingAlerts,
+      label: 'Rating alerts',
+      href: '/admin/producers',
+      icon: Star,
+      tone: 'critical' as const,
+    },
+    {
+      count: navCounts.pendingReviews,
+      label: 'Reviews to moderate',
+      href: '/admin/reviews',
+      icon: MessageSquare,
+      tone: 'info' as const,
+    },
+    {
+      count: navCounts.pendingPlanRequests,
+      label: 'Plan upgrade requests',
+      href: '/admin/plan-requests',
+      icon: ArrowUpCircle,
+      tone: 'info' as const,
+    },
+  ]
+
+  const activeItems = actionItems.filter((item) => item.count > 0)
+  const totalActionItems = activeItems.reduce((sum, item) => sum + item.count, 0)
 
   return (
     <div>
@@ -220,6 +280,70 @@ export default async function AdminOverviewPage() {
             index={i}
           />
         ))}
+      </div>
+
+      {/* ── Action Items ── */}
+      <div className="mb-8 rounded-xl border border-outline-variant/20 bg-surface-container-lowest overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/10 bg-surface-container-low/30">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-tertiary" />
+            <h2 className="font-sans text-xs uppercase tracking-wider text-on-surface-variant font-medium">
+              Needs attention
+            </h2>
+            {totalActionItems > 0 && (
+              <span className="font-sans text-[10px] font-semibold tabular-nums px-1.5 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary">
+                {totalActionItems}
+              </span>
+            )}
+          </div>
+        </div>
+        {activeItems.length === 0 ? (
+          <div className="flex items-center gap-3 px-5 py-6 text-center justify-center">
+            <CheckCircle2 className="h-5 w-5 text-primary/60" />
+            <p className="font-sans text-sm text-on-surface-variant">All clear — nothing requires your attention right now.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-outline-variant/10">
+            {activeItems.map((item) => {
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low/40 transition-colors group"
+                >
+                  <div
+                    className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${
+                      item.tone === 'critical'
+                        ? 'bg-error-container/20 text-error'
+                        : item.tone === 'warning'
+                          ? 'bg-tertiary-fixed/30 text-tertiary'
+                          : 'bg-primary-fixed/30 text-primary'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans text-sm text-on-surface group-hover:text-primary transition-colors">
+                      {item.label}
+                    </p>
+                  </div>
+                  <span
+                    className={`font-sans text-sm font-semibold tabular-nums ${
+                      item.tone === 'critical'
+                        ? 'text-error'
+                        : item.tone === 'warning'
+                          ? 'text-tertiary'
+                          : 'text-primary'
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </div>
 
       {/* ── Revenue trend + Order funnel ── */}

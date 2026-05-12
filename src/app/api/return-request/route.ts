@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabase } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import {
   sendReturnRequestConfirmation,
   sendReturnRequestAdminNotification,
@@ -9,8 +10,14 @@ import {
 const VALID_REASONS = ['withdrawal', 'damaged', 'wrong_item', 'quality'] as const
 type ReturnReason = (typeof VALID_REASONS)[number]
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const ip = getClientIp(req)
+    const rl = await rateLimit(`return:${ip}`, 5, 60 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
     // ── Auth ────────────────────────────────────────────────────────────────
     const supabase = await createServerSupabase()
     const {

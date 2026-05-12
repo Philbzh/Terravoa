@@ -72,6 +72,8 @@ const cspDirectives = [
   "base-uri 'self'",
   // Prevent cross-origin form submission hijacking
   "form-action 'self'",
+  // Prevent framing by any origin (clickjacking defense)
+  "frame-ancestors 'none'",
   // Only force HTTPS in production — in dev the server is plain HTTP and
   // upgrade-insecure-requests would rewrite every image/font/script URL to
   // https://localhost:3000/… causing ERR_SSL_PROTOCOL_ERROR for all assets.

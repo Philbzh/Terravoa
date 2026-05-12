@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { setProductStatus } from './actions'
 import { CheckCircle, XCircle, X } from 'lucide-react'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
+import { FeaturedToggle } from '@/components/admin/FeaturedToggle'
 import Link from 'next/link'
 import { getProductLimit, isPlanId } from '@/lib/partnership-plans'
 
@@ -14,6 +15,8 @@ type ProductRow = {
   status: 'pending' | 'approved' | 'rejected'
   created_at: string
   producer_id: string
+  is_featured: boolean
+  featured_rank: number | null
 }
 
 type ProducerLookup = {
@@ -121,7 +124,7 @@ export default async function AdminProductsPage({
   const base = applyProducerFilter(
     (admin as any)
       .from('products')
-      .select('id, name, slug, price, category, status, created_at, producer_id')
+      .select('id, name, slug, price, category, status, created_at, producer_id, is_featured, featured_rank')
       .order('status', { ascending: true }) // pending first
       .order('created_at', { ascending: false })
       .range(from, to),
@@ -180,6 +183,12 @@ export default async function AdminProductsPage({
       <AdminPageHeader
         title="Product approval"
         description="Quality gate before products appear in the collection. Approve to publish, reject to send back to the producer."
+        metrics={[
+          { label: 'pending', value: pending },
+          { label: 'approved', value: approved },
+          { label: 'rejected', value: rejected },
+          { label: 'featured', value: list.filter((p) => p.is_featured).length },
+        ]}
       />
 
       {/* When we arrived here via a producer deep-link, show a clear banner
@@ -260,13 +269,6 @@ export default async function AdminProductsPage({
         </div>
       ) : (
         <div className="space-y-8">
-          {/* Summary */}
-          <div className="flex gap-6 font-sans text-sm text-on-surface-variant">
-            <span><strong className="text-tertiary">{pending}</strong> pending</span>
-            <span><strong className="text-primary">{approved}</strong> approved</span>
-            <span><strong className="text-error">{rejected}</strong> rejected</span>
-          </div>
-
           <div className="admin-table-wrap overflow-x-auto">
             <table className="w-full text-left min-w-[960px]">
               <thead>
@@ -277,6 +279,7 @@ export default async function AdminProductsPage({
                   <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">Price</th>
                   <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">Submitted</th>
                   <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3">Status</th>
+                  <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">Featured</th>
                   <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -346,6 +349,17 @@ export default async function AdminProductsPage({
                       }`}>
                         {p.status}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 hidden md:table-cell">
+                      {p.status === 'approved' ? (
+                        <FeaturedToggle
+                          productId={p.id}
+                          isFeatured={p.is_featured}
+                          rank={p.featured_rank}
+                        />
+                      ) : (
+                        <span className="font-sans text-[11px] text-on-surface-variant/40">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex items-center gap-2">

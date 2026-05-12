@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sanityClient, isSanityConfigured } from '@/sanity/lib/client'
 import { createImageUrlBuilder } from '@sanity/image-url'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
 
 const imgBuilder = createImageUrlBuilder(sanityClient)
 
@@ -25,6 +26,12 @@ function thumb(source: unknown): string | null {
 const Q_MAX = 64
 
 export async function GET(req: NextRequest) {
+  const ip = getClientIp(req)
+  const rl = await rateLimit(`search:${ip}`, 30, 60 * 1000)
+  if (!rl.allowed) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const raw = req.nextUrl.searchParams.get('q')?.trim() ?? ''
   // Strip GROQ meta-characters that aren't useful in a user query but can
   // break the match operator. Values are parameterised so injection isn't

@@ -9,6 +9,7 @@ import { StoryOfTheWeek } from '@/components/home/StoryOfTheWeek'
 import { RegionalArchives } from '@/components/home/RegionalArchives'
 import { CuratedCollection } from '@/components/home/CuratedCollection'
 import { CuratorsPromise } from '@/components/home/CuratorsPromise'
+import { NewsletterCTA } from '@/components/home/NewsletterCTA'
 import { ProducerCTA } from '@/components/home/ProducerCTA'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
 import {
@@ -56,6 +57,7 @@ export default async function HomePage() {
       <RegionalArchives regions={regions} />
       <TestimonialsSection />
       <CuratorsPromise />
+      <NewsletterCTA />
       <ProducerCTA />
     </>
   )

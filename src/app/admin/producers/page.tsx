@@ -118,6 +118,11 @@ export default async function AdminProducersPage({
       <AdminPageHeader
         title="Producers"
         description="All registered producer accounts. Approve pending profiles, or suspend to hide their storefront and products."
+        metrics={[
+          { label: 'pending', value: pending },
+          { label: 'approved', value: approved },
+          { label: 'suspended', value: suspended },
+        ]}
       />
       <form method="get" className="admin-toolbar">
         <input
