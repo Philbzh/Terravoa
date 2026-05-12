@@ -28,7 +28,7 @@ const Q_MAX = 64
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req)
   const rl = await rateLimit(`search:${ip}`, 30, 60 * 1000)
-  if (!rl.allowed) {
+  if (!rl.success) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }
 
