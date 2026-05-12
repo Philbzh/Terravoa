@@ -7,6 +7,7 @@ import { OrderStatusFunnel } from '@/components/admin/OrderStatusFunnel'
 import { AnimatedKpiCard } from '@/components/ui/AnimatedKpiCard'
 import {
   AlertTriangle,
+  ArrowRight,
   ClipboardList,
   Package,
   RotateCcw,
@@ -19,11 +20,7 @@ import {
 async function getMetrics() {
   const admin = createAdminClient()
 
-  const [applications, producers, products, orders, ordersRevenue, customersRes, subsRes] = await Promise.all([
-    (admin as any)
-      .from('producer_applications')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'pending'),
+  const [producers, products, orders, ordersRevenue, customersRes] = await Promise.all([
     (admin as any)
       .from('producers')
       .select('id', { count: 'exact', head: true })
@@ -41,9 +38,6 @@ async function getMetrics() {
     (admin as any)
       .from('orders')
       .select('customer_email'),
-    (admin as any)
-      .from('newsletter_subscribers')
-      .select('id', { count: 'exact', head: true }),
   ])
 
   const customerCount = new Set(
@@ -52,18 +46,13 @@ async function getMetrics() {
 
   const allTotals = (ordersRevenue.data ?? []).map((r: { total: number }) => r.total ?? 0)
   const totalRevenueCents = allTotals.reduce((sum: number, t: number) => sum + t, 0)
-  const orderCount = orders.count ?? 0
-  const avgOrderCents = orderCount > 0 ? Math.round(totalRevenueCents / orderCount) : 0
 
   return {
-    pendingApplications: applications.count ?? 0,
     activeProducers: producers.count ?? 0,
     liveProducts: products.count ?? 0,
-    totalOrders: orderCount,
+    totalOrders: orders.count ?? 0,
     customers: customerCount,
-    subscribers: subsRes.count ?? 0,
     totalRevenue: `€${(totalRevenueCents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-    avgOrder: avgOrderCents > 0 ? `€${(avgOrderCents / 100).toFixed(2)}` : '—',
   }
 }
 
@@ -78,7 +67,6 @@ async function getRevenueTrend() {
     .select('created_at, total')
     .gte('created_at', since.toISOString())
 
-  // Build a full 30-day map (fills missing days with 0)
   const byDay = new Map<string, number>()
   for (let i = 0; i < 30; i++) {
     const d = new Date()
@@ -110,68 +98,6 @@ async function getOrderStatusCounts() {
   return counts
 }
 
-async function getRecentApplications() {
-  const admin = createAdminClient()
-  const { data } = await (admin as any)
-    .from('producer_applications')
-    .select('id, full_name, business_name, email, country, region, status, created_at')
-    .order('created_at', { ascending: false })
-    .limit(5)
-  return data ?? []
-}
-
-async function getMonthlyGrowth() {
-  const admin = createAdminClient()
-  const now = new Date()
-
-  // This month: 1st of current month → now
-  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
-  // Last month: 1st → last day
-  const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString()
-  const lastMonthEnd   = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString()
-
-  const [thisRes, lastRes] = await Promise.all([
-    (admin as any).from('orders').select('total').gte('created_at', thisMonthStart),
-    (admin as any).from('orders').select('total').gte('created_at', lastMonthStart).lte('created_at', lastMonthEnd),
-  ])
-
-  const sum = (rows: { total: number }[]) => rows.reduce((s, r) => s + (r.total ?? 0), 0)
-  const thisCents = sum((thisRes.data ?? []) as { total: number }[])
-  const lastCents = sum((lastRes.data ?? []) as { total: number }[])
-  const pct = lastCents === 0 ? null : Math.round(((thisCents - lastCents) / lastCents) * 100)
-
-  return { thisCents, lastCents, pct }
-}
-
-type TopProducerRow = { producer_id: string; name: string; revenue: number; orders: number }
-
-async function getTopProducers(): Promise<TopProducerRow[]> {
-  const admin = createAdminClient()
-  // Sum order_items grouped by producer, joined with producer name
-  const { data } = await (admin as any)
-    .from('order_items')
-    .select('producer_id, price, quantity, producers(name)')
-
-  if (!data) return []
-
-  type RawRow = { producer_id: string; price: number; quantity: number; producers: { name: string } | null }
-  const map = new Map<string, TopProducerRow>()
-
-  for (const row of data as RawRow[]) {
-    const id   = row.producer_id
-    const name = row.producers?.name ?? 'Unknown'
-    const rev  = (row.price ?? 0) * (row.quantity ?? 1)
-    if (!map.has(id)) map.set(id, { producer_id: id, name, revenue: 0, orders: 0 })
-    const p = map.get(id)!
-    p.revenue += rev
-    p.orders  += 1
-  }
-
-  return [...map.values()]
-    .sort((a, b) => b.revenue - a.revenue)
-    .slice(0, 5)
-}
-
 type RecentOrderRow = {
   id: string
   customer_name: string
@@ -190,72 +116,48 @@ async function getRecentOrders(): Promise<RecentOrderRow[]> {
   return (data ?? []) as RecentOrderRow[]
 }
 
+type RecentApplicationRow = {
+  id: string
+  full_name: string
+  business_name: string | null
+  status: string
+  created_at: string
+}
+
+async function getRecentApplications(): Promise<RecentApplicationRow[]> {
+  const admin = createAdminClient()
+  const { data } = await (admin as any)
+    .from('producer_applications')
+    .select('id, full_name, business_name, status, created_at')
+    .order('created_at', { ascending: false })
+    .limit(5)
+  return (data ?? []) as RecentApplicationRow[]
+}
+
 const cards = [
-  { key: 'pendingApplications', label: 'Pending applications',   iconName: 'ClipboardList' as const, href: '/admin/applications' },
-  { key: 'activeProducers',     label: 'Active producers',       iconName: 'Users'         as const, href: '/admin/producers' },
-  { key: 'liveProducts',        label: 'Live products',          iconName: 'Package'       as const, href: '/admin/products' },
-  { key: 'totalOrders',         label: 'Total orders',           iconName: 'ShoppingCart'  as const, href: '/admin/orders' },
-  { key: 'totalRevenue',        label: 'Total revenue',          iconName: 'Euro'          as const, href: '/admin/orders' },
-  { key: 'avgOrder',            label: 'Avg. order value',       iconName: 'TrendingUp'    as const, href: '/admin/orders' },
-  { key: 'customers',           label: 'Customers',              iconName: 'UserCheck'     as const, href: '/admin/customers' },
-  { key: 'subscribers',         label: 'Newsletter subscribers', iconName: 'Mail'          as const, href: '/admin/subscribers' },
+  { key: 'activeProducers', label: 'Active producers', iconName: 'Users'        as const, href: '/admin/producers' },
+  { key: 'liveProducts',    label: 'Live products',    iconName: 'Package'      as const, href: '/admin/products' },
+  { key: 'totalOrders',     label: 'Total orders',     iconName: 'ShoppingCart' as const, href: '/admin/orders' },
+  { key: 'totalRevenue',    label: 'Total revenue',    iconName: 'Euro'         as const, href: '/admin/orders' },
 ]
 
 export default async function AdminOverviewPage() {
-  const [metrics, recent, trendDays, statusCounts, growth, topProducers, recentOrders, navCounts] = await Promise.all([
+  const [metrics, trendDays, statusCounts, recentOrders, recentApps, navCounts] = await Promise.all([
     getMetrics(),
-    getRecentApplications(),
     getRevenueTrend(),
     getOrderStatusCounts(),
-    getMonthlyGrowth(),
-    getTopProducers(),
     getRecentOrders(),
+    getRecentApplications(),
     getAdminNavCounts(),
   ])
 
   const actionItems = [
-    {
-      count: navCounts.pendingApplications,
-      label: 'Pending applications',
-      href: '/admin/applications',
-      icon: ClipboardList,
-      tone: 'warning' as const,
-    },
-    {
-      count: navCounts.pendingProducts,
-      label: 'Products awaiting approval',
-      href: '/admin/products?status=pending',
-      icon: Package,
-      tone: 'warning' as const,
-    },
-    {
-      count: navCounts.pendingReturns,
-      label: 'Return requests',
-      href: '/admin/returns',
-      icon: RotateCcw,
-      tone: 'critical' as const,
-    },
-    {
-      count: navCounts.ratingAlerts,
-      label: 'Rating alerts',
-      href: '/admin/producers',
-      icon: Star,
-      tone: 'critical' as const,
-    },
-    {
-      count: navCounts.pendingReviews,
-      label: 'Reviews to moderate',
-      href: '/admin/reviews',
-      icon: MessageSquare,
-      tone: 'info' as const,
-    },
-    {
-      count: navCounts.pendingPlanRequests,
-      label: 'Plan upgrade requests',
-      href: '/admin/plan-requests',
-      icon: ArrowUpCircle,
-      tone: 'info' as const,
-    },
+    { count: navCounts.pendingApplications, label: 'Pending applications',    href: '/admin/applications',             icon: ClipboardList, tone: 'warning'  as const },
+    { count: navCounts.pendingProducts,     label: 'Products awaiting review', href: '/admin/products?status=pending', icon: Package,       tone: 'warning'  as const },
+    { count: navCounts.pendingReturns,      label: 'Return requests',          href: '/admin/returns',                 icon: RotateCcw,     tone: 'critical' as const },
+    { count: navCounts.ratingAlerts,        label: 'Rating alerts',            href: '/admin/ratings',                 icon: Star,          tone: 'critical' as const },
+    { count: navCounts.pendingReviews,      label: 'Reviews to moderate',      href: '/admin/reviews',                 icon: MessageSquare, tone: 'info'     as const },
+    { count: navCounts.pendingPlanRequests, label: 'Plan upgrade requests',    href: '/admin/plan-requests',           icon: ArrowUpCircle, tone: 'info'     as const },
   ]
 
   const activeItems = actionItems.filter((item) => item.count > 0)
@@ -265,297 +167,216 @@ export default async function AdminOverviewPage() {
     <div>
       <AdminPageHeader
         title="Overview"
-        description="Control centre for applications, producers, products, orders, customers, and newsletter subscribers."
+        description="Control centre for the Terravoa marketplace."
       />
 
-      {/* ── Metric cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {cards.map(({ key, label, iconName, href }, i) => (
-          <AnimatedKpiCard
-            key={key}
-            label={label}
-            value={String(metrics[key as keyof typeof metrics])}
-            iconName={iconName}
-            href={href}
-            index={i}
-          />
-        ))}
+      {/* ── Snapshot KPIs ── */}
+      <div className="mb-6">
+        <p className="font-sans text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant mb-2">
+          Snapshot
+        </p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {cards.map(({ key, label, iconName, href }, i) => (
+            <AnimatedKpiCard
+              key={key}
+              label={label}
+              value={String(metrics[key as keyof typeof metrics])}
+              iconName={iconName}
+              href={href}
+              index={i}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* ── Action Items ── */}
-      <div className="mb-8 rounded-xl border border-outline-variant/20 bg-surface-container-lowest overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/10 bg-surface-container-low/30">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-tertiary" />
+      {/* ── Two-column: recent activity + action items ── */}
+      <div className="grid xl:grid-cols-3 gap-4 mb-8">
+
+        {/* Recent activity (2/3) */}
+        <div className="xl:col-span-2 rounded-xl border border-outline-variant/20 bg-surface-container-lowest overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/10 bg-surface-container-low/30">
             <h2 className="font-sans text-xs uppercase tracking-wider text-on-surface-variant font-medium">
-              Needs attention
+              Recent orders
             </h2>
+            <Link
+              href="/admin/orders"
+              className="inline-flex items-center gap-1 font-sans text-xs text-secondary hover:text-primary transition-colors"
+            >
+              View all <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          {recentOrders.length === 0 ? (
+            <div className="px-5 py-8 text-center">
+              <p className="font-sans text-sm text-on-surface-variant">No orders yet.</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-outline-variant/10">
+              {recentOrders.map((o) => (
+                <Link
+                  key={o.id}
+                  href={`/admin/orders/${o.id}`}
+                  className="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low/40 transition-colors group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans text-sm text-on-surface group-hover:text-primary transition-colors truncate">
+                      {o.customer_name}
+                    </p>
+                    <p className="font-sans text-[11px] text-on-surface-variant">
+                      {new Date(o.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                    </p>
+                  </div>
+                  <span className={`font-sans text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                    o.status === 'new'        ? 'bg-tertiary-fixed/30 text-tertiary'
+                    : o.status === 'shipped'  ? 'bg-primary-fixed/40 text-primary'
+                    : o.status === 'delivered'? 'bg-primary-fixed/30 text-primary'
+                    : 'bg-secondary-container/50 text-secondary'
+                  }`}>
+                    {o.status}
+                  </span>
+                  <span className="font-serif text-sm text-primary tabular-nums shrink-0">
+                    €{(o.total / 100).toFixed(2)}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Recent applications below orders in the same card */}
+          <div className="border-t border-outline-variant/20">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/10 bg-surface-container-low/30">
+              <h2 className="font-sans text-xs uppercase tracking-wider text-on-surface-variant font-medium">
+                Recent applications
+              </h2>
+              <Link
+                href="/admin/applications"
+                className="inline-flex items-center gap-1 font-sans text-xs text-secondary hover:text-primary transition-colors"
+              >
+                View all <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+            {recentApps.length === 0 ? (
+              <div className="px-5 py-6 text-center">
+                <p className="font-sans text-sm text-on-surface-variant">
+                  No applications yet. Share the{' '}
+                  <Link href="/for-producers/apply" className="text-secondary hover:underline">
+                    application form
+                  </Link>{' '}
+                  with producers.
+                </p>
+              </div>
+            ) : (
+              <div className="divide-y divide-outline-variant/10">
+                {recentApps.map((app) => (
+                  <Link
+                    key={app.id}
+                    href={`/admin/applications/${app.id}`}
+                    className="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low/40 transition-colors group"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-sm text-on-surface group-hover:text-primary transition-colors truncate">
+                        {app.full_name}
+                      </p>
+                      {app.business_name && (
+                        <p className="font-sans text-[11px] text-on-surface-variant truncate">{app.business_name}</p>
+                      )}
+                    </div>
+                    <span className={`font-sans text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full ${
+                      app.status === 'pending'
+                        ? 'bg-tertiary-fixed/30 text-tertiary'
+                        : app.status === 'accepted'
+                          ? 'bg-primary-fixed/40 text-primary'
+                          : 'bg-error-container/50 text-error'
+                    }`}>
+                      {app.status}
+                    </span>
+                    <span className="font-sans text-[11px] text-on-surface-variant shrink-0">
+                      {new Date(app.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Action items sidebar (1/3) */}
+        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest overflow-hidden h-fit">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-outline-variant/10 bg-surface-container-low/30">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-tertiary" />
+              <h2 className="font-sans text-xs uppercase tracking-wider text-on-surface-variant font-medium">
+                Needs attention
+              </h2>
+            </div>
             {totalActionItems > 0 && (
               <span className="font-sans text-[10px] font-semibold tabular-nums px-1.5 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary">
                 {totalActionItems}
               </span>
             )}
           </div>
-        </div>
-        {activeItems.length === 0 ? (
-          <div className="flex items-center gap-3 px-5 py-6 text-center justify-center">
-            <CheckCircle2 className="h-5 w-5 text-primary/60" />
-            <p className="font-sans text-sm text-on-surface-variant">All clear — nothing requires your attention right now.</p>
-          </div>
-        ) : (
-          <div className="divide-y divide-outline-variant/10">
-            {activeItems.map((item) => {
-              const Icon = item.icon
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low/40 transition-colors group"
-                >
-                  <div
-                    className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${
-                      item.tone === 'critical'
-                        ? 'bg-error-container/20 text-error'
-                        : item.tone === 'warning'
-                          ? 'bg-tertiary-fixed/30 text-tertiary'
-                          : 'bg-primary-fixed/30 text-primary'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-sans text-sm text-on-surface group-hover:text-primary transition-colors">
-                      {item.label}
-                    </p>
-                  </div>
-                  <span
-                    className={`font-sans text-sm font-semibold tabular-nums ${
-                      item.tone === 'critical'
-                        ? 'text-error'
-                        : item.tone === 'warning'
-                          ? 'text-tertiary'
-                          : 'text-primary'
-                    }`}
-                  >
-                    {item.count}
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* ── Revenue trend + Order funnel ── */}
-      <div className="grid lg:grid-cols-2 gap-4 mb-8">
-        <RevenueTrendChart days={trendDays} />
-        <OrderStatusFunnel counts={statusCounts} />
-      </div>
-
-      {/* ── Monthly growth + Top producers ── */}
-      <div className="grid lg:grid-cols-2 gap-4 mb-8">
-
-        {/* Monthly growth card */}
-        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5">
-          <p className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant mb-1">
-            This month vs last month
-          </p>
-          <div className="flex items-end gap-3 mb-4">
-            <p className="font-serif text-2xl text-primary">
-              €{(growth.thisCents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-            {growth.pct !== null && (
-              <span className={`font-sans text-sm font-semibold mb-0.5 ${growth.pct >= 0 ? 'text-secondary' : 'text-error'}`}>
-                {growth.pct >= 0 ? '+' : ''}{growth.pct}%
-              </span>
-            )}
-          </div>
-          <p className="font-sans text-xs text-on-surface-variant">
-            Last month: €{(growth.lastCents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </p>
-        </div>
-
-        {/* Top 5 producers by revenue */}
-        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5">
-          <p className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant mb-4">
-            Top producers — all time
-          </p>
-          {topProducers.length === 0 ? (
-            <p className="font-sans text-sm text-on-surface-variant/60">No order data yet.</p>
+          {activeItems.length === 0 ? (
+            <div className="px-5 py-8 text-center">
+              <CheckCircle2 className="mx-auto h-6 w-6 text-primary/50 mb-2" />
+              <p className="font-sans text-sm text-on-surface">All clear</p>
+              <p className="font-sans text-xs text-on-surface-variant mt-1">Nothing requires your attention right now.</p>
+              <div className="flex flex-wrap justify-center gap-3 mt-4 text-xs font-sans font-medium">
+                <Link href="/admin/producers" className="text-secondary hover:text-primary hover:underline">Producers</Link>
+                <Link href="/admin/orders" className="text-secondary hover:text-primary hover:underline">Orders</Link>
+                <Link href="/admin/products" className="text-secondary hover:text-primary hover:underline">Products</Link>
+              </div>
+            </div>
           ) : (
-            <ol className="space-y-2.5">
-              {topProducers.map((p, i) => {
-                const maxRev = topProducers[0].revenue
-                const pct = maxRev > 0 ? Math.round((p.revenue / maxRev) * 100) : 0
+            <div className="divide-y divide-outline-variant/10">
+              {activeItems.map((item) => {
+                const Icon = item.icon
                 return (
-                  <li key={p.producer_id} className="grid grid-cols-[1.2rem_1fr_auto] items-center gap-2">
-                    <span className="font-sans text-[10px] text-on-surface-variant/50 tabular-nums">{i + 1}</span>
-                    <div className="min-w-0">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className="font-sans text-xs text-on-surface truncate">{p.name}</span>
-                        <span className="font-sans text-xs text-on-surface-variant ml-2 shrink-0 tabular-nums">
-                          €{(p.revenue / 100).toLocaleString('de-DE', { minimumFractionDigits: 2 })}
-                        </span>
-                      </div>
-                      <div className="h-1 rounded-full bg-surface-container-high overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-secondary/70 transition-all"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low/40 transition-colors group"
+                  >
+                    <div
+                      className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${
+                        item.tone === 'critical'
+                          ? 'bg-error-container/20 text-error'
+                          : item.tone === 'warning'
+                            ? 'bg-tertiary-fixed/30 text-tertiary'
+                            : 'bg-primary-fixed/30 text-primary'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
                     </div>
-                  </li>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans text-sm text-on-surface group-hover:text-primary transition-colors">
+                        {item.label}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span
+                        className={`font-sans text-sm font-semibold tabular-nums ${
+                          item.tone === 'critical'
+                            ? 'text-error'
+                            : item.tone === 'warning'
+                              ? 'text-tertiary'
+                              : 'text-primary'
+                        }`}
+                      >
+                        {item.count}
+                      </span>
+                      <ArrowRight className="h-3.5 w-3.5 text-on-surface-variant/40 group-hover:text-primary transition-colors" />
+                    </div>
+                  </Link>
                 )
               })}
-            </ol>
+            </div>
           )}
         </div>
       </div>
 
-      {/* ── Recent orders feed ── */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-serif text-xl text-primary">Recent orders</h2>
-          <Link
-            href="/admin/orders"
-            className="font-sans text-xs uppercase tracking-wider text-secondary hover:text-primary transition-colors"
-          >
-            View all
-          </Link>
-        </div>
-        {recentOrders.length === 0 ? (
-          <p className="font-sans text-sm text-on-surface-variant">No orders yet.</p>
-        ) : (
-          <div className="rounded-xl border border-outline-variant/20 overflow-hidden">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-surface-container-low/50">
-                  {['Customer', 'Date', 'Total', 'Status'].map((h) => (
-                    <th key={h} className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 first:pl-5">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant/10">
-                {recentOrders.map((o) => (
-                  <tr key={o.id} className="hover:bg-surface-container-low/30 transition-colors">
-                    <td className="px-5 py-3 font-sans text-sm text-on-surface">{o.customer_name}</td>
-                    <td className="px-4 py-3 font-sans text-xs text-on-surface-variant">
-                      {new Date(o.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                    </td>
-                    <td className="px-4 py-3 font-serif text-sm text-primary tabular-nums">
-                      €{(o.total / 100).toFixed(2)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`font-sans text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                        o.status === 'new'        ? 'bg-tertiary-fixed/30 text-tertiary'
-                        : o.status === 'shipped'  ? 'bg-primary-fixed/40 text-primary'
-                        : o.status === 'delivered'? 'bg-primary-fixed/30 text-primary'
-                        : 'bg-secondary-container/50 text-secondary'
-                      }`}>
-                        {o.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* ── Recent applications ── */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-serif text-xl text-primary">Recent applications</h2>
-          <Link
-            href="/admin/applications"
-            className="font-sans text-xs uppercase tracking-wider text-secondary hover:text-primary transition-colors"
-          >
-            View all
-          </Link>
-        </div>
-
-        {recent.length === 0 ? (
-          <p className="text-on-surface-variant font-sans text-sm">
-            No applications yet. Share the{' '}
-            <Link href="/for-producers/apply" className="text-secondary hover:underline">
-              application form
-            </Link>{' '}
-            with producers.
-          </p>
-        ) : (
-          <div className="rounded-xl border border-outline-variant/20 overflow-hidden">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-surface-container-low/50">
-                  <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3">
-                    Name
-                  </th>
-                  <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden sm:table-cell">
-                    Location
-                  </th>
-                  <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">
-                    Date
-                  </th>
-                  <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 text-right">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-outline-variant/10">
-                {recent.map(
-                  (app: {
-                    id: string
-                    full_name: string
-                    business_name: string | null
-                    email: string
-                    country: string
-                    region: string
-                    status: string
-                    created_at: string
-                  }) => (
-                    <tr key={app.id} className="hover:bg-surface-container-low/30 transition-colors">
-                      <td className="px-4 py-3">
-                        <p className="font-sans text-sm text-on-surface">{app.full_name}</p>
-                        {app.business_name && (
-                          <p className="font-sans text-xs text-on-surface-variant">{app.business_name}</p>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 hidden sm:table-cell">
-                        <p className="font-sans text-xs text-on-surface-variant">
-                          {app.region}, {app.country}
-                        </p>
-                      </td>
-                      <td className="px-4 py-3 hidden md:table-cell">
-                        <p className="font-sans text-xs text-on-surface-variant">
-                          {new Date(app.created_at).toLocaleDateString('en-GB', {
-                            day: 'numeric',
-                            month: 'short',
-                          })}
-                        </p>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <span
-                          className={`inline-block font-sans text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                            app.status === 'pending'
-                              ? 'bg-tertiary-fixed/30 text-tertiary'
-                              : app.status === 'accepted'
-                                ? 'bg-primary-fixed/40 text-primary'
-                                : 'bg-error-container/50 text-error'
-                          }`}
-                        >
-                          {app.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ),
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+      {/* ── Charts row ── */}
+      <div className="grid lg:grid-cols-2 gap-4">
+        <RevenueTrendChart days={trendDays} />
+        <OrderStatusFunnel counts={statusCounts} />
       </div>
     </div>
   )
