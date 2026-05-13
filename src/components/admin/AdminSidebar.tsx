@@ -28,6 +28,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  PenTool,
 } from 'lucide-react'
 
 export type AdminNavCounts = {
@@ -83,6 +84,12 @@ const sections: NavSection[] = [
       { href: '/admin/coupons', label: 'Coupons', icon: Tag },
       { href: '/admin/finance', label: 'Finance', icon: LineChart },
       { href: '/admin/payouts', label: 'Payouts', icon: Banknote },
+    ],
+  },
+  {
+    section: 'Content',
+    links: [
+      { href: '/studio', label: 'Content Studio', icon: PenTool },
     ],
   },
   {
