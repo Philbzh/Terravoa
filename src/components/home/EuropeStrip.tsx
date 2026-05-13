@@ -1,64 +1,69 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { MapPin } from 'lucide-react'
 
-const row1 = [
-  { region: 'Brittany', flag: '🇫🇷', products: 'Fleur de sel · Salted caramel · Butter biscuits' },
-  { region: 'Tuscany', flag: '🇮🇹', products: 'Olive oil · Truffles · Pecorino' },
-  { region: 'Andalusia', flag: '🇪🇸', products: 'Paprika · Saffron · Sun-dried preserves' },
-  { region: 'Black Forest', flag: '🇩🇪', products: 'Wildflower honey · Smoked ham · Spiced cakes' },
-  { region: 'Alentejo', flag: '🇵🇹', products: 'Sheep cheese · Cork · Single-estate wine' },
-  { region: 'Basque Country', flag: '🇪🇸', products: "Txakoli · Piment d'Espelette · Anchovies" },
+const regions = [
+  { name: 'Brittany', country: 'France', flag: '🇫🇷', highlight: 'Fleur de sel · Salted caramel' },
+  { name: 'Tuscany', country: 'Italy', flag: '🇮🇹', highlight: 'Olive oil · Truffles' },
+  { name: 'Andalusia', country: 'Spain', flag: '🇪🇸', highlight: 'Paprika · Saffron' },
+  { name: 'Black Forest', country: 'Germany', flag: '🇩🇪', highlight: 'Wildflower honey' },
+  { name: 'Alentejo', country: 'Portugal', flag: '🇵🇹', highlight: 'Sheep cheese · Cork' },
+  { name: 'Provence', country: 'France', flag: '🇫🇷', highlight: 'Lavender · Herbes' },
+  { name: 'Sicily', country: 'Italy', flag: '🇮🇹', highlight: 'Capers · Blood orange' },
+  { name: 'Basque Country', country: 'Spain', flag: '🇪🇸', highlight: "Piment d'Espelette" },
 ]
-
-const row2 = [
-  { region: 'Alsace', flag: '🇫🇷', products: 'Charcuterie · Mustard · Christmas spices' },
-  { region: 'Provence', flag: '🇫🇷', products: 'Lavender honey · Herbes de Provence · Savon' },
-  { region: 'Sicily', flag: '🇮🇹', products: 'Capers · Blood orange · Marsala wine' },
-  { region: 'Asturias', flag: '🇪🇸', products: 'Sidra · Cabrales cheese · Fabada' },
-  { region: 'Douro Valley', flag: '🇵🇹', products: 'Port wine · Olive oil · Almonds' },
-  { region: 'Bavaria', flag: '🇩🇪', products: 'Dark rye · Soft pretzels · Heritage mustard' },
-]
-
-function MarqueeItem({ region, flag, products }: { region: string; flag: string; products: string }) {
-  return (
-    <div className="flex items-center gap-5 px-8 shrink-0">
-      <span className="text-base leading-none">{flag}</span>
-      <div className="border-l border-outline-variant/25 pl-5">
-        <p className="font-serif text-sm text-primary leading-snug">{region}</p>
-        <p className="font-sans text-[10px] text-on-surface-variant mt-0.5 whitespace-nowrap">
-          {products}
-        </p>
-      </div>
-      <span className="ml-3 text-outline-variant/30 text-lg font-light">·</span>
-    </div>
-  )
-}
 
 export function EuropeStrip() {
   const t = useTranslations('home.europeStrip')
 
   return (
-    <section className="py-14 bg-surface-container-low border-y border-outline-variant/10 overflow-hidden">
-      {/* Eyebrow */}
-      <p className="font-sans text-[9px] uppercase tracking-[0.36em] text-secondary text-center mb-10">
-        {t('eyebrow')}
-      </p>
+    <section className="py-20 md:py-28 px-6 md:px-16 bg-surface-container overflow-hidden">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <motion.div
+          className="text-center mb-12 md:mb-16"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <MapPin size={14} strokeWidth={1.5} className="text-secondary" />
+            <p className="font-sans text-[10px] uppercase tracking-[0.32em] text-secondary font-semibold">
+              {t('eyebrow')}
+            </p>
+          </div>
+          <h2
+            className="font-serif text-primary leading-[1]"
+            style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}
+          >
+            Eight countries. Hundreds of artisans. One platform.
+          </h2>
+        </motion.div>
 
-      {/* Row 1 — scrolls left */}
-      <div className="flex mb-5 overflow-hidden">
-        <div className="flex animate-marquee">
-          {[...row1, ...row1].map((item, i) => (
-            <MarqueeItem key={i} {...item} />
-          ))}
-        </div>
-      </div>
-
-      {/* Row 2 — scrolls right (reverse) */}
-      <div className="flex overflow-hidden">
-        <div className="flex animate-marquee-reverse">
-          {[...row2, ...row2].map((item, i) => (
-            <MarqueeItem key={i} {...item} />
+        {/* Region pills grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+          {regions.map((region, i) => (
+            <motion.div
+              key={region.name}
+              className="group relative rounded-2xl border border-outline-variant/20 bg-surface-container-lowest px-5 py-4 hover:border-secondary/30 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: i * 0.06 }}
+            >
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="text-base leading-none">{region.flag}</span>
+                <span className="font-serif text-sm text-primary font-medium leading-tight">
+                  {region.name}
+                </span>
+              </div>
+              <p className="font-sans text-[10px] text-on-surface-variant/70 leading-relaxed">
+                {region.highlight}
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>
