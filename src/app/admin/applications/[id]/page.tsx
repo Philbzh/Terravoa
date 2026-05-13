@@ -236,6 +236,20 @@ export default async function AdminApplicationDetailPage({ params }: Props) {
                   <dd className="text-on-surface">{app.phone}</dd>
                 </div>
               )}
+              {(app.business_name?.trim() ?? '') !== '' && (
+                <div>
+                  <dt className="text-xs text-on-surface-variant">Business name</dt>
+                  <dd className="text-on-surface">{app.business_name}</dd>
+                </div>
+              )}
+              <div>
+                <dt className="text-xs text-on-surface-variant">Registered (company seat)</dt>
+                <dd className="text-on-surface">{app.company_registration_country?.trim() || '—'}</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-on-surface-variant">VAT / tax ID</dt>
+                <dd className="text-on-surface font-mono text-xs">{app.vat_id?.trim() || '—'}</dd>
+              </div>
               <div>
                 <dt className="text-xs text-on-surface-variant">Location</dt>
                 <dd className="text-on-surface">{app.region}, {app.country}</dd>
@@ -425,6 +439,17 @@ export default async function AdminApplicationDetailPage({ params }: Props) {
                 <a href={`mailto:${app.email}`} className="text-secondary hover:underline break-all">{app.email}</a>
               </p>
               {app.phone && <p><span className="text-on-surface-variant">Phone:</span> {app.phone}</p>}
+              {(app.business_name?.trim() ?? '') !== '' && (
+                <p><span className="text-on-surface-variant">Business:</span> {app.business_name}</p>
+              )}
+              <p>
+                <span className="text-on-surface-variant">Registered:</span>{' '}
+                {app.company_registration_country?.trim() || '—'}
+              </p>
+              <p>
+                <span className="text-on-surface-variant">VAT / tax ID:</span>{' '}
+                <span className="font-mono text-xs">{app.vat_id?.trim() || '—'}</span>
+              </p>
               {app.website && (
                 <p>
                   <span className="text-on-surface-variant">Website:</span>{' '}

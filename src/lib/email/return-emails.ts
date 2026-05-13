@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import { SITE_NAME } from '@/lib/constants'
+import { SITE_NAME, SITE_URL } from '@/lib/constants'
 import { escapeHtml } from '@/lib/email/escape-html'
 
 export type ReturnEmailOpts = {
@@ -94,7 +94,7 @@ export async function sendReturnRequestConfirmation(opts: ReturnEmailOpts) {
 export async function sendReturnRequestAdminNotification(opts: ReturnEmailOpts) {
   const adminEmail = process.env.ADMIN_EMAIL ?? 'hello@terravoa.com'
   const reasonLabel = REASON_LABELS[opts.reason] ?? opts.reason
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+  const siteUrl = SITE_URL
 
   const html = `
     <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#1a1c1a;padding:32px 24px;background:#faf9f6">

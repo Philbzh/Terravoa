@@ -103,6 +103,8 @@ where not exists (
 insert into public.producer_applications (
   full_name,
   business_name,
+  company_registration_country,
+  vat_id,
   email,
   country,
   region,
@@ -115,6 +117,8 @@ insert into public.producer_applications (
 select
   'Demo Applicant',
   'Mountain Dairy',
+  'Spain',
+  'ESB12345678',
   'demo.applicant@terravoa.test',
   'Spain',
   'Asturias',

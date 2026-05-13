@@ -44,7 +44,9 @@ const STEPS: Step[] = [
         heading: 'Personal / business details',
         fields: [
           { name: 'full_name',      label: 'Full Name',                type: 'text',  required: true,  placeholder: 'Your full name' },
-          { name: 'business_name',  label: 'Business Name',            type: 'text',                   placeholder: 'Farm, workshop, or brand name', hint: 'Optional' },
+          { name: 'business_name',  label: 'Business Name',            type: 'text',  required: true,  placeholder: 'Legal or trading name for invoicing' },
+          { name: 'company_registration_country', label: 'Country of company registration', type: 'text', required: true, placeholder: 'e.g. Germany, France', hint: 'Where your legal entity is registered' },
+          { name: 'vat_id',         label: 'VAT / tax identification number', type: 'text', required: true, placeholder: 'e.g. DE123456789' },
           { name: 'email',          label: 'Email Address',            type: 'email', required: true,  placeholder: 'you@example.com' },
           { name: 'phone',          label: 'Phone Number',             type: 'tel',                    placeholder: '+00 000 000 000', hint: 'Optional' },
         ],
@@ -221,11 +223,12 @@ const STEPS: Step[] = [
         ],
       },
       {
-        heading: 'Declarations (all three required)',
+        heading: 'Declarations (all four required)',
         fields: [
           { name: 'confirm_no_alcohol', label: 'I confirm that my application does not include wine, beer, spirits, or any other alcohol-based products.',                                        type: 'checkbox-group', required: true, options: ['Confirm'] },
           { name: 'confirm_local',      label: 'I confirm that my products are locally produced and that I represent authentic, artisanal craftsmanship.',                                       type: 'checkbox-group', required: true, options: ['Confirm'] },
           { name: 'confirm_quality',    label: 'I agree to Terravoa\'s quality standards and understand that applications are subject to curation.',                                             type: 'checkbox-group', required: true, options: ['Confirm'] },
+          { name: 'confirm_company_registered', label: 'I confirm we are a legally registered business in the country stated above, with a valid VAT / tax ID for invoicing.', type: 'checkbox-group', required: true, options: ['Confirm'] },
         ],
       },
     ],

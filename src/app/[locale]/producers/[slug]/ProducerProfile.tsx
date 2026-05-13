@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import type { Producer, Product, Story } from '@/data/demo'
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import { Badge } from '@/components/ui/Badge'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { ProducerTrustBadges } from '@/components/ui/ProducerTrustBadges'
@@ -111,6 +112,7 @@ interface ProducerProfileProps {
 }
 
 export function ProducerProfile({ producer, products, featureStory }: ProducerProfileProps) {
+  const tUi = useTranslations('ui')
   const { scrollY } = useScroll()
 
   // Hero parallax
@@ -560,7 +562,7 @@ export function ProducerProfile({ producer, products, featureStory }: ProducerPr
         <div className="absolute inset-0">
           <Image
             src={heroSrc}
-            alt=""
+            alt={tUi('producerBackdropAlt', { name: producer.name })}
             fill
             className="object-cover opacity-25"
             sizes="100vw"

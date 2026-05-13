@@ -163,7 +163,9 @@
   "ui": {
     "shipsFromProducer": "Direkt vom Produzenten versandt",
     "addToWishlist": "Zur Wunschliste hinzufügen",
-    "removeFromWishlist": "Von der Wunschliste entfernen"
+    "removeFromWishlist": "Von der Wunschliste entfernen",
+    "countryFlagAlt": "Flagge von {country}",
+    "producerBackdropAlt": "Hintergrundstimmung — {name}"
   },
   "cookies": {
     "banner": "Wir verwenden notwendige Cookies für den Betrieb der Website und optionale Analyse-Cookies, um zu verstehen, wie Besucher Terravoa nutzen. Es werden keine Daten an Dritte verkauft.",
@@ -172,6 +174,28 @@
     "accept": "Akzeptieren",
     "dialogLabel": "Cookie-Einwilligung"
   },
+  "seo": {
+    "defaultTitle": "Terravoa — Schmecken Sie die Herkunft",
+    "defaultDescription": "Terravoa verbindet anspruchsvolle Kundinnen und Kunden mit den authentischsten Produzenten Europas — Produkte geprägt von Herkunft, Handwerk und Geschmack. Entdecken Sie außergewöhnliche Speisen, kuratiert und direkt von der Quelle geliefert.",
+    "keywords": [
+      "europäische Produzenten",
+      "Feinkost",
+      "Lebensmittel direkt vom Produzenten",
+      "Marktplatz für europäisches Handwerk",
+      "Olivenöl",
+      "Terroir",
+      "traditionelles Handwerk",
+      "Kleinserien-Produzenten",
+      "europäische Delikatessen",
+      "kuratierte Feinkost online"
+    ]
+  },
+  "aboutPage": {
+    "heroImageAlt": "Der Terravoa-Tisch — Olivenöl, Käse aus Handarbeit, Honig und frisches Brot vor einer toskanischen Landschaft."
+  },
+  "customerAuth": {
+    "emailConfirmed": "Ihre E-Mail-Adresse wurde bestätigt. Sie können sich jetzt unten anmelden."
+  },
   "producerApply": {
     "backToProducerInfo": "Zurück zu den Produzenteninformationen",
     "pageTitle": "Teil von Terravoa werden",
@@ -179,7 +203,7 @@
     "intro2": "Bitte nehmen Sie sich ein paar Minuten Zeit, um uns mehr über Ihre Produkte und Ihre Geschichte zu erzählen.",
     "intro3": "Jede Bewerbung wird mit Sorgfalt geprüft.",
     "stepLabels": {
-      "aboutYou": "Über Sie",
+      "aboutYou": "Kontakt & Firma",
       "products": "Produkte",
       "quality": "Qualität & Handwerk",
       "story": "Geschichte",
@@ -196,13 +220,21 @@
       "daysAgo": "{n, plural, =1 {vor 1 Tag} other {vor # Tagen}}"
     },
     "step1": {
-      "sectionTitle": "Über Sie",
+      "sectionTitle": "Ansprechperson & Unternehmen",
+      "contactCompanyIntro": "Bitte geben Sie an, wer diese Bewerbung ausfüllt (Name der Ansprechperson für Rückfragen) und unter welchem Firmen- oder Markennamen Sie produzieren und verkaufen.",
       "regionTitle": "Ihre Region",
-      "fullName": "Vollständiger Name",
-      "fullNamePlaceholder": "Ihr vollständiger Name",
-      "businessName": "Unternehmensname",
-      "businessNameHint": "Optional",
-      "businessNamePlaceholder": "Hof, Werkstatt oder Markenname",
+      "fullName": "Name der Ansprechperson",
+      "fullNameHint": "Die Person, die dieses Formular ausfüllt — wir nutzen diesen Namen in der Korrespondenz zu dieser Bewerbung.",
+      "fullNamePlaceholder": "Vor- und Nachname",
+      "businessName": "Firmen- oder Markenname",
+      "businessNameHint": "Rechtlicher oder handelsüblicher Name für Rechnungen — wie auf offiziellen Unterlagen.",
+      "businessNamePlaceholder": "z. B. Biohof Müller, Atelier du Soleil",
+      "companyRegistrationCountry": "Land der Unternehmensregistrierung",
+      "companyRegistrationCountryHint": "In welchem Land Ihre Rechtsperson eingetragen ist (Handelsregister bzw. nationales Äquivalent). Dies kann mit Ihrem Produktionsland übereinstimmen oder davon abweichen.",
+      "companyRegistrationCountryPlaceholder": "z. B. Deutschland, Frankreich, Italien",
+      "vatId": "USt-IdNr. / Steuer-Identifikationsnummer",
+      "vatIdHint": "EU-USt-IdNr. (z. B. DE123456789, FRXX999999999) oder die für B2B-Rechnungen verwendete nationale Steuernummer.",
+      "vatIdPlaceholder": "z. B. DE123456789",
       "email": "E-Mail-Adresse",
       "emailPlaceholder": "sie@beispiel.de",
       "phone": "Telefonnummer",
@@ -350,6 +382,7 @@
       "confirmNoAlcohol": "Ich bestätige, dass meine Bewerbung keinen Wein, kein Bier, keine Spirituosen oder andere alkoholhaltige Produkte enthält.",
       "confirmLocal": "Ich bestätige, dass meine Produkte lokal hergestellt werden und ich authentisches, handwerkliches Können vertreten.",
       "confirmQuality": "Ich stimme den <link>Qualitätsstandards</link> von Terravoa zu und verstehe, dass Bewerbungen einer Kuration unterliegen.",
+      "confirmCompanyRegistered": "Ich bestätige, dass wir im oben genannten Land rechtsfähig eingetragen sind und die angegebene USt-IdNr. bzw. Steuernummer für Rechnungen und die Zusammenarbeit mit Terravoa gültig ist.",
       "shippingTimes": {
         "within24": "Innerhalb von 24 Stunden",
         "within48": "Innerhalb von 48 Stunden",
@@ -373,7 +406,10 @@
     },
     "errors": {
       "formNotReady": "Das Formular ist nicht bereit.",
-      "fullNameRequired": "Bitte geben Sie Ihren vollständigen Namen ein.",
+      "fullNameRequired": "Bitte geben Sie den Namen der Ansprechperson ein.",
+      "businessNameRequired": "Bitte geben Sie den Firmen- oder Markennamen ein.",
+      "companyRegistrationCountryRequired": "Bitte geben Sie das Land der Unternehmensregistrierung ein.",
+      "vatIdRequired": "Bitte geben Sie Ihre USt-IdNr. bzw. Steuernummer ein.",
       "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
       "countryRequired": "Bitte geben Sie Ihr Land ein.",
       "regionRequired": "Bitte geben Sie Ihre Region ein.",
@@ -382,7 +418,7 @@
       "storyRequired": "Bitte erzählen Sie uns Ihre Geschichte.",
       "productionScaleRequired": "Bitte geben Sie Ihren Produktionsmaßstab an.",
       "shippingSpeedRequired": "Bitte wählen Sie aus, wie schnell Sie Bestellungen versenden können.",
-      "confirmationsRequired": "Bitte bestätigen Sie alle drei Erklärungen vor dem Absenden.",
+      "confirmationsRequired": "Bitte bestätigen Sie alle Erklärungen (einschließlich Registrierung und Steuernummer) vor dem Absenden.",
       "genericError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     }
   },
@@ -462,6 +498,7 @@
       "imageHint": "JPG, PNG, WebP oder GIF — bis 10 MB",
       "imageUploading": "Wird hochgeladen …",
       "imageRemove": "Bild entfernen",
+      "imagePreviewAlt": "Vorschau des hochgeladenen Produktfotos",
       "imageAlt": "Bildbeschreibung (für Barrierefreiheit)",
       "imageAltPlaceholder": "z. B. Flasche goldenes Olivenöl auf einer Marmoroberfläche",
       "imageAltHint": "Eine kurze Beschreibung des Bildinhalts — wird von Screenreadern und bei fehlgeschlagenen Ladezeiten verwendet.",

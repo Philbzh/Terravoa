@@ -98,8 +98,10 @@ create index idx_order_items_producer_id on order_items(producer_id);
 create table producer_applications (
   id                     uuid primary key default gen_random_uuid(),
   created_at             timestamptz default now(),
-  full_name              text not null,
-  business_name          text,
+  full_name                      text not null,
+  business_name                  text,
+  company_registration_country   text,
+  vat_id                         text,
   email                  text not null,
   phone                  text,
   country                text not null,

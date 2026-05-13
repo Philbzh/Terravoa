@@ -231,6 +231,7 @@ export function NewProductForm({
               hintLabel={t('imageHint')}
               uploadingLabel={t('imageUploading')}
               removeLabel={t('imageRemove')}
+              previewImageAlt={t('imagePreviewAlt')}
             />
           </div>
 

@@ -7,6 +7,10 @@ export type ProducerApplicationRow = {
   created_at: string
   full_name: string
   business_name: string | null
+  /** Country where the legal entity is registered (for invoicing / eligibility). */
+  company_registration_country: string | null
+  /** VAT / EU VAT ID / tax ID as supplied by the applicant. */
+  vat_id: string | null
   email: string
   phone: string | null
   country: string

@@ -25,7 +25,9 @@ export function ContactClient() {
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 max-w-5xl mx-auto">
+      {/* items-start: otherwise the form column stretches to match the tall sidebar,
+          leaving a huge empty band under the short “message received” state. */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 max-w-5xl mx-auto items-start">
         <ContactForm />
 
         {/* Sidebar */}

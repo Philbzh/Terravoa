@@ -267,6 +267,11 @@ export function ApplyClient() {
 
     if (current === 1) {
       if (!String(fd.get('full_name') ?? '').trim())  return t('errors.fullNameRequired')
+      if (!String(fd.get('business_name') ?? '').trim()) return t('errors.businessNameRequired')
+      if (!String(fd.get('company_registration_country') ?? '').trim()) {
+        return t('errors.companyRegistrationCountryRequired')
+      }
+      if (!String(fd.get('vat_id') ?? '').trim()) return t('errors.vatIdRequired')
       if (!String(fd.get('email') ?? '').trim())      return t('errors.emailRequired')
       if (!String(fd.get('country') ?? '').trim())    return t('errors.countryRequired')
       if (!String(fd.get('region') ?? '').trim())     return t('errors.regionRequired')
@@ -283,11 +288,12 @@ export function ApplyClient() {
     }
     if (current === 5) {
       if (!String(fd.get('shipping_speed') ?? '').trim()) return t('errors.shippingSpeedRequired')
-      const all3 =
+      const all4 =
         fd.get('confirm_no_alcohol') === 'on' &&
         fd.get('confirm_local') === 'on' &&
-        fd.get('confirm_quality') === 'on'
-      if (!all3) return t('errors.confirmationsRequired')
+        fd.get('confirm_quality') === 'on' &&
+        fd.get('confirm_company_registered') === 'on'
+      if (!all4) return t('errors.confirmationsRequired')
     }
     return null
   }
@@ -421,8 +427,11 @@ export function ApplyClient() {
         <div className={step === 1 ? '' : 'hidden'}>
           <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="space-y-8">
             <SectionTitle>{t('step1.sectionTitle')}</SectionTitle>
+            <p className="font-sans text-sm text-on-surface-variant leading-relaxed max-w-2xl -mt-4">
+              {t('step1.contactCompanyIntro')}
+            </p>
 
-            <FormField label={t('step1.fullName')} required>
+            <FormField label={t('step1.fullName')} hint={t('step1.fullNameHint')} required>
               <input
                 name="full_name"
                 type="text"
@@ -432,13 +441,41 @@ export function ApplyClient() {
                 placeholder={t('step1.fullNamePlaceholder')}
               />
             </FormField>
-            <FormField label={t('step1.businessName')} hint={t('step1.businessNameHint')}>
+            <FormField label={t('step1.businessName')} hint={t('step1.businessNameHint')} required>
               <input
                 name="business_name"
                 type="text"
+                required
                 defaultValue={draftValue(draft, 'business_name')}
                 className={inputClasses}
                 placeholder={t('step1.businessNamePlaceholder')}
+              />
+            </FormField>
+
+            <FormField
+              label={t('step1.companyRegistrationCountry')}
+              hint={t('step1.companyRegistrationCountryHint')}
+              required
+            >
+              <input
+                name="company_registration_country"
+                type="text"
+                required
+                defaultValue={draftValue(draft, 'company_registration_country')}
+                className={inputClasses}
+                placeholder={t('step1.companyRegistrationCountryPlaceholder')}
+              />
+            </FormField>
+
+            <FormField label={t('step1.vatId')} hint={t('step1.vatIdHint')} required>
+              <input
+                name="vat_id"
+                type="text"
+                required
+                defaultValue={draftValue(draft, 'vat_id')}
+                className={inputClasses}
+                placeholder={t('step1.vatIdPlaceholder')}
+                autoComplete="off"
               />
             </FormField>
 
@@ -957,6 +994,20 @@ export function ApplyClient() {
                     </a>
                   ),
                 })}
+              </span>
+            </label>
+
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                name="confirm_company_registered"
+                value="on"
+                required
+                defaultChecked={draftChecked(draft, 'confirm_company_registered', 'on')}
+                className="mt-1 w-4 h-4 accent-primary shrink-0"
+              />
+              <span className="font-sans text-sm text-on-surface/80 leading-relaxed">
+                {t('step5.confirmCompanyRegistered')}
               </span>
             </label>
           </motion.div>

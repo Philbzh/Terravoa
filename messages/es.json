@@ -163,7 +163,9 @@
   "ui": {
     "shipsFromProducer": "Enviado directamente desde el productor",
     "addToWishlist": "Añadir a la lista de deseos",
-    "removeFromWishlist": "Eliminar de la lista de deseos"
+    "removeFromWishlist": "Eliminar de la lista de deseos",
+    "countryFlagAlt": "Bandera de {country}",
+    "producerBackdropAlt": "Ambiente de fondo — {name}"
   },
   "cookies": {
     "banner": "Usamos cookies esenciales para el sitio y cookies analíticas opcionales para entender cómo se usa Terravoa. No vendemos datos a terceros.",
@@ -172,6 +174,28 @@
     "accept": "Aceptar",
     "dialogLabel": "Consentimiento de cookies"
   },
+  "seo": {
+    "defaultTitle": "Terravoa — Saborea el Origen",
+    "defaultDescription": "Terravoa conecta a clientes exigentes con los productores más auténticos de Europa — productos definidos por origen, artesanía y sabor. Descubra una selección excepcional, elaborada con mimo y enviada directamente desde la fuente.",
+    "keywords": [
+      "productores europeos",
+      "alimentación gourmet",
+      "comprar directamente al productor",
+      "marketplace artesanal europea",
+      "aceite de oliva",
+      "terroir",
+      "artesanía tradicional",
+      "pequeños productores",
+      "delicias europeas",
+      "comida seleccionada online"
+    ]
+  },
+  "aboutPage": {
+    "heroImageAlt": "La mesa Terravoa — aceite de oliva, queso artesanal, miel y pan fresco ante un paisaje toscano."
+  },
+  "customerAuth": {
+    "emailConfirmed": "Su dirección de correo está confirmada. Ya puede iniciar sesión abajo."
+  },
   "producerApply": {
     "backToProducerInfo": "Volver a la información para productores",
     "pageTitle": "Forme parte de Terravoa",
@@ -179,7 +203,7 @@
     "intro2": "Dedique unos minutos a contarnos más sobre sus productos y su historia.",
     "intro3": "Cada candidatura se examina con cuidado.",
     "stepLabels": {
-      "aboutYou": "Sobre usted",
+      "aboutYou": "Contacto y empresa",
       "products": "Productos",
       "quality": "Calidad & Artesanía",
       "story": "Historia",
@@ -196,13 +220,21 @@
       "daysAgo": "{n, plural, =1 {hace 1 día} other {hace # días}}"
     },
     "step1": {
-      "sectionTitle": "Sobre usted",
+      "sectionTitle": "Persona de contacto y empresa",
+      "contactCompanyIntro": "Indique quién cumplimenta esta solicitud (nombre de la persona de contacto para consultas) y el nombre de su empresa o marca tal como la conocen sus clientes.",
       "regionTitle": "Su región",
-      "fullName": "Nombre completo",
-      "fullNamePlaceholder": "Su nombre completo",
-      "businessName": "Nombre de la empresa",
-      "businessNameHint": "Opcional",
-      "businessNamePlaceholder": "Granja, taller o nombre de marca",
+      "fullName": "Nombre del contacto",
+      "fullNameHint": "La persona que envía esta solicitud — usamos este nombre cuando respondemos sobre su candidatura.",
+      "fullNamePlaceholder": "Nombre y apellidos",
+      "businessName": "Nombre de la empresa o marca",
+      "businessNameHint": "Denominación legal o comercial para facturación — tal como aparece en documentos oficiales.",
+      "businessNamePlaceholder": "ej. Granja Los Olivos, Atelier du Midi",
+      "companyRegistrationCountry": "País de registro mercantil",
+      "companyRegistrationCountryHint": "País donde está constituida su entidad jurídica (registro mercantil o equivalente nacional). Puede coincidir con el país de producción o diferir.",
+      "companyRegistrationCountryPlaceholder": "ej. España, Francia, Italia",
+      "vatId": "NIF-IVA / identificador fiscal",
+      "vatIdHint": "NIF-IVA intracomunitario (ej. ES12345678X, DE123456789) o el identificador fiscal nacional usado en facturas B2B.",
+      "vatIdPlaceholder": "ej. ES12345678X",
       "email": "Correo electrónico",
       "emailPlaceholder": "usted@ejemplo.es",
       "phone": "Número de teléfono",
@@ -350,6 +382,7 @@
       "confirmNoAlcohol": "Confirmo que mi candidatura no incluye vino, cerveza, licores ni ningún otro producto a base de alcohol.",
       "confirmLocal": "Confirmo que mis productos son de producción local y represento una artesanía auténtica.",
       "confirmQuality": "Acepto los <link>estándares de calidad</link> de Terravoa y entiendo que las candidaturas están sujetas a revisión.",
+      "confirmCompanyRegistered": "Confirmo que somos una empresa legalmente registrada en el país indicado arriba y que el NIF-IVA / identificador fiscal facilitado es válido para facturación y cooperación con Terravoa.",
       "shippingTimes": {
         "within24": "En menos de 24 horas",
         "within48": "En menos de 48 horas",
@@ -373,7 +406,10 @@
     },
     "errors": {
       "formNotReady": "El formulario no está listo.",
-      "fullNameRequired": "Introduzca su nombre completo.",
+      "fullNameRequired": "Introduzca el nombre del contacto.",
+      "businessNameRequired": "Introduzca el nombre de la empresa o marca.",
+      "companyRegistrationCountryRequired": "Indique el país de registro mercantil.",
+      "vatIdRequired": "Introduzca su NIF-IVA o identificador fiscal.",
       "emailRequired": "Introduzca su correo electrónico.",
       "countryRequired": "Introduzca su país.",
       "regionRequired": "Introduzca su región.",
@@ -382,7 +418,7 @@
       "productionScaleRequired": "Indique la escala de su producción.",
       "storyRequired": "Cuéntenos su historia.",
       "shippingSpeedRequired": "Seleccione con qué rapidez puede enviar los pedidos.",
-      "confirmationsRequired": "Confirme las tres declaraciones antes de enviar.",
+      "confirmationsRequired": "Confirme todas las declaraciones (incluido registro e identificador fiscal) antes de enviar.",
       "genericError": "Algo ha salido mal. Por favor, inténtelo de nuevo."
     }
   },
@@ -462,6 +498,7 @@
       "imageHint": "JPG, PNG, WebP o GIF — hasta 10 MB",
       "imageUploading": "Subiendo…",
       "imageRemove": "Eliminar imagen",
+      "imagePreviewAlt": "Vista previa de la foto del producto subida",
       "imageAlt": "Descripción de la imagen (para accesibilidad)",
       "imageAltPlaceholder": "ej. Botella de aceite de oliva dorado sobre una superficie de mármol",
       "imageAltHint": "Una breve descripción de lo que hay en la imagen — la usan los lectores de pantalla y cuando la imagen no carga.",

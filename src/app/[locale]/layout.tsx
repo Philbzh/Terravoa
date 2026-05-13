@@ -15,11 +15,17 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { PostHogProvider } from '@/components/providers/PostHogProvider'
 import { SiteJsonLd } from '@/components/seo/SiteJsonLd'
 import { routing } from '@/i18n/routing'
-import { SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/constants'
+import { SITE_NAME, SITE_URL } from '@/lib/constants'
 import { openGraphLocaleForAppLocale } from '@/lib/seo/open-graph-locale'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
+}
+
+type SeoMessages = {
+  defaultTitle: string
+  defaultDescription: string
+  keywords: string[]
 }
 
 export async function generateMetadata({
@@ -51,17 +57,38 @@ export async function generateMetadata({
     .filter((l) => l !== locale)
     .map((l) => openGraphLocaleForAppLocale(l))
 
+  const messages = await getMessages({ locale })
+  const seo = messages.seo as SeoMessages
+
+  const defaultTitle = seo.defaultTitle
+  const defaultDescription = seo.defaultDescription
+  const keywords = seo.keywords
+
   return {
+    title: {
+      default: defaultTitle,
+      template: `%s | ${SITE_NAME}`,
+    },
+    description: defaultDescription,
+    keywords,
     alternates: {
       canonical,
       languages,
     },
     openGraph: {
       url: canonical,
-      siteName: `${SITE_NAME} — ${SITE_TAGLINE}`,
+      siteName: defaultTitle,
+      title: defaultTitle,
+      description: defaultDescription,
       locale: ogLocale,
       alternateLocale,
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@terravoa_eu',
+      title: defaultTitle,
+      description: defaultDescription,
     },
   }
 }

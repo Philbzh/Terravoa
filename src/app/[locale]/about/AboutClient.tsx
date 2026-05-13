@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { BookOpenCheck, Leaf, Handshake, Globe, Award, Landmark } from 'lucide-react'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { useTranslations } from 'next-intl'
 
 const values = [
   {
@@ -47,6 +48,7 @@ const values = [
 ]
 
 export function AboutClient() {
+  const t = useTranslations('aboutPage')
   return (
     <PageContainer>
       {/* Hero intro */}
@@ -144,7 +146,7 @@ export function AboutClient() {
         <div className="relative rounded-2xl overflow-hidden aspect-[21/9]">
           <Image
             src="/images/hero/terrova-table.png"
-            alt="The Terravoa Table — olive oil, artisan cheese, honey, and fresh bread against a Tuscan landscape"
+            alt={t('heroImageAlt')}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 1100px"

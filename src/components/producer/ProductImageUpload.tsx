@@ -49,6 +49,8 @@ interface BaseProps {
   uploadingLabel: string
   /** aria-label for each "remove image" × button. */
   removeLabel: string
+  /** Alt text for uploaded image previews (accessibility). Falls back to `dropLabel`. */
+  previewImageAlt?: string
 }
 
 interface SingleProps extends BaseProps {
@@ -75,8 +77,16 @@ function validateClientSide(file: File): string | null {
 }
 
 export function ProductImageUpload(props: Props) {
-  const { className, disabled, dropLabel, hintLabel, uploadingLabel, removeLabel } =
-    props
+  const {
+    className,
+    disabled,
+    dropLabel,
+    hintLabel,
+    uploadingLabel,
+    removeLabel,
+    previewImageAlt,
+  } = props
+  const previewAlt = previewImageAlt ?? dropLabel
   const [uploadingCount, setUploadingCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
@@ -226,7 +236,7 @@ export function ProductImageUpload(props: Props) {
           {/* eslint-disable-next-line @next/next/no-img-element -- Supabase public URLs are runtime-unknown; next/image needs a configured domain. Swap later if you whitelist the Upstash/Supabase host. */}
           <img
             src={props.value}
-            alt=""
+            alt={previewAlt}
             className="h-40 w-40 object-cover rounded-xl border border-outline-variant/30 bg-surface-container-low"
           />
           <button
@@ -255,7 +265,7 @@ export function ProductImageUpload(props: Props) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={url}
-                alt=""
+                alt={`${previewAlt} (${index + 1})`}
                 className="aspect-square w-full object-cover rounded-lg border border-outline-variant/30 bg-surface-container-low"
               />
               <button

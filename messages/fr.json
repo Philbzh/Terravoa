@@ -163,7 +163,9 @@
   "ui": {
     "shipsFromProducer": "Expédié directement par le producteur",
     "addToWishlist": "Ajouter à la liste de souhaits",
-    "removeFromWishlist": "Retirer de la liste de souhaits"
+    "removeFromWishlist": "Retirer de la liste de souhaits",
+    "countryFlagAlt": "Drapeau de {country}",
+    "producerBackdropAlt": "Ambiance de fond — {name}"
   },
   "cookies": {
     "banner": "Nous utilisons des cookies essentiels pour le fonctionnement du site et des cookies d’analyse optionnels pour comprendre comment vous utilisez Terravoa. Aucune revente de données à des tiers.",
@@ -172,6 +174,28 @@
     "accept": "Accepter",
     "dialogLabel": "Consentement aux cookies"
   },
+  "seo": {
+    "defaultTitle": "Terravoa — Goûtez l’Origine",
+    "defaultDescription": "Terravoa met en relation les amateurs exigeants avec les producteurs les plus authentiques d’Europe — des produits marqués par l’origine, le savoir-faire et le goût. Découvrez une sélection exceptionnelle, livrée directement depuis la source.",
+    "keywords": [
+      "producteurs européens",
+      "épicerie fine",
+      "acheter directement aux producteurs",
+      "marketplace artisanale européenne",
+      "huile d’olive",
+      "terroir",
+      "artisanat traditionnel",
+      "petites productions",
+      "délices européens",
+      "épicerie fine en ligne"
+    ]
+  },
+  "aboutPage": {
+    "heroImageAlt": "La table Terravoa — huile d’olive, fromage artisanal, miel et pain frais devant un paysage toscan."
+  },
+  "customerAuth": {
+    "emailConfirmed": "Votre adresse e-mail est confirmée. Vous pouvez vous connecter ci-dessous."
+  },
   "producerApply": {
     "backToProducerInfo": "Retour aux informations producteur",
     "pageTitle": "Rejoindre Terravoa",
@@ -179,7 +203,7 @@
     "intro2": "Prenez quelques minutes pour nous parler de vos produits et de votre histoire.",
     "intro3": "Chaque candidature est examinée avec attention.",
     "stepLabels": {
-      "aboutYou": "Vous",
+      "aboutYou": "Contact & entreprise",
       "products": "Produits",
       "quality": "Qualité & Savoir-faire",
       "story": "Histoire",
@@ -196,13 +220,21 @@
       "daysAgo": "{n, plural, =1 {il y a 1 jour} other {il y a # jours}}"
     },
     "step1": {
-      "sectionTitle": "À propos de vous",
+      "sectionTitle": "Personne de contact & entreprise",
+      "contactCompanyIntro": "Indiquez qui remplit ce dossier (nom de la personne de contact pour nos échanges) et le nom de votre entreprise ou marque tel que vos clients le connaissent.",
       "regionTitle": "Votre région",
-      "fullName": "Nom complet",
-      "fullNamePlaceholder": "Votre nom complet",
-      "businessName": "Nom de l’entreprise",
-      "businessNameHint": "Optionnel",
-      "businessNamePlaceholder": "Ferme, atelier ou nom de marque",
+      "fullName": "Nom du contact",
+      "fullNameHint": "La personne qui soumet cette candidature — nous utilisons ce nom dans nos messages à propos de votre dossier.",
+      "fullNamePlaceholder": "Prénom et nom",
+      "businessName": "Nom de l’entreprise ou de la marque",
+      "businessNameHint": "Dénomination légale ou commerciale pour la facturation — telle qu’elle figure sur vos documents officiels.",
+      "businessNamePlaceholder": "ex. Ferme des Collines, Atelier du Midi",
+      "companyRegistrationCountry": "Pays d’immatriculation de l’entreprise",
+      "companyRegistrationCountryHint": "Pays où votre entité juridique est immatriculée (registre du commerce ou équivalent national). Peut être le même que le pays de production ou différent.",
+      "companyRegistrationCountryPlaceholder": "ex. France, Allemagne, Italie",
+      "vatId": "Numéro de TVA / identifiant fiscal",
+      "vatIdHint": "Numéro de TVA intracommunautaire (ex. FRXX999999999, DE123456789) ou identifiant fiscal national utilisé pour la facturation B2B.",
+      "vatIdPlaceholder": "ex. FR12345678901",
       "email": "Adresse e-mail",
       "emailPlaceholder": "vous@exemple.fr",
       "phone": "Numéro de téléphone",
@@ -350,6 +382,7 @@
       "confirmNoAlcohol": "Je confirme que ma candidature ne comprend pas de vin, bière, spiritueux ou tout autre produit à base d’alcool.",
       "confirmLocal": "Je confirme que mes produits sont fabriqués localement et que je représente un artisanat authentique.",
       "confirmQuality": "J’accepte les <link>normes de qualité</link> de Terravoa et comprends que les candidatures sont soumises à curation.",
+      "confirmCompanyRegistered": "Je confirme que nous sommes une entreprise légalement immatriculée dans le pays indiqué ci-dessus et que le numéro de TVA / identifiant fiscal fourni est valide pour la facturation et la coopération avec Terravoa.",
       "shippingTimes": {
         "within24": "Sous 24 heures",
         "within48": "Sous 48 heures",
@@ -373,7 +406,10 @@
     },
     "errors": {
       "formNotReady": "Le formulaire n’est pas prêt.",
-      "fullNameRequired": "Veuillez saisir votre nom complet.",
+      "fullNameRequired": "Veuillez saisir le nom du contact.",
+      "businessNameRequired": "Veuillez saisir le nom de l’entreprise ou de la marque.",
+      "companyRegistrationCountryRequired": "Veuillez indiquer le pays d’immatriculation de l’entreprise.",
+      "vatIdRequired": "Veuillez saisir votre numéro de TVA ou identifiant fiscal.",
       "emailRequired": "Veuillez saisir votre adresse e-mail.",
       "countryRequired": "Veuillez saisir votre pays.",
       "regionRequired": "Veuillez saisir votre région.",
@@ -382,7 +418,7 @@
       "storyRequired": "Veuillez nous raconter votre histoire.",
       "productionScaleRequired": "Veuillez indiquer votre échelle de production.",
       "shippingSpeedRequired": "Veuillez indiquer dans quel délai vous pouvez expédier les commandes.",
-      "confirmationsRequired": "Veuillez confirmer les trois déclarations avant d’envoyer.",
+      "confirmationsRequired": "Veuillez confirmer toutes les déclarations (y compris l’immatriculation et la TVA) avant d’envoyer.",
       "genericError": "Une erreur s’est produite. Veuillez réessayer."
     }
   },
@@ -462,6 +498,7 @@
       "imageHint": "JPG, PNG, WebP ou GIF — jusqu’à 10 Mo",
       "imageUploading": "Envoi en cours…",
       "imageRemove": "Supprimer l’image",
+      "imagePreviewAlt": "Aperçu de la photo produit téléchargée",
       "imageAlt": "Description de l’image (pour l’accessibilité)",
       "imageAltPlaceholder": "ex. Bouteille d’huile d’olive dorée sur une surface en marbre",
       "imageAltHint": "Une courte description de l’image — utilisée par les lecteurs d’écran et en cas d’échec de chargement.",

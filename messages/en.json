@@ -163,7 +163,9 @@
   "ui": {
     "shipsFromProducer": "Ships directly from producer",
     "addToWishlist": "Add to wishlist",
-    "removeFromWishlist": "Remove from wishlist"
+    "removeFromWishlist": "Remove from wishlist",
+    "countryFlagAlt": "Flag of {country}",
+    "producerBackdropAlt": "Background atmosphere — {name}"
   },
   "cookies": {
     "banner": "We use essential cookies to keep the site running, and optional analytics cookies to understand how visitors use Terravoa. No data is sold to third parties.",
@@ -172,6 +174,28 @@
     "accept": "Accept",
     "dialogLabel": "Cookie consent"
   },
+  "seo": {
+    "defaultTitle": "Terravoa — Taste the Origin",
+    "defaultDescription": "Terravoa connects discerning customers with Europe's most authentic producers, offering products defined by origin, craftsmanship, and taste. Discover exceptional foods — carefully curated and delivered directly from the source.",
+    "keywords": [
+      "European producers",
+      "artisan food",
+      "buy food direct from producers",
+      "European artisan marketplace",
+      "olive oil",
+      "terroir",
+      "traditional craftsmanship",
+      "small-batch producers",
+      "European delicacies",
+      "curated food online"
+    ]
+  },
+  "aboutPage": {
+    "heroImageAlt": "The Terravoa table — olive oil, artisan cheese, honey, and fresh bread arranged against a Tuscan landscape."
+  },
+  "customerAuth": {
+    "emailConfirmed": "Your email address is confirmed. You can sign in below."
+  },
   "producerApply": {
     "backToProducerInfo": "Back to producer information",
     "pageTitle": "Become part of Terravoa",
@@ -179,7 +203,7 @@
     "intro2": "Please take a few minutes to tell us more about your products and your story.",
     "intro3": "Every application is reviewed with care.",
     "stepLabels": {
-      "aboutYou": "About You",
+      "aboutYou": "Contact & company",
       "products": "Products",
       "quality": "Quality & Craft",
       "story": "Story",
@@ -196,13 +220,21 @@
       "daysAgo": "{n, plural, =1 {1 day ago} other {# days ago}}"
     },
     "step1": {
-      "sectionTitle": "About You",
+      "sectionTitle": "Contact person & company",
+      "contactCompanyIntro": "Please tell us who is completing this form (your name as the contact person) and the name of your company or brand as customers know it.",
       "regionTitle": "Your Region",
-      "fullName": "Full Name",
-      "fullNamePlaceholder": "Your full name",
-      "businessName": "Business Name",
-      "businessNameHint": "Optional",
-      "businessNamePlaceholder": "Farm, workshop, or brand name",
+      "fullName": "Full name of contact person",
+      "fullNameHint": "The individual submitting this application — we use this name when we reply about your application.",
+      "fullNamePlaceholder": "First and last name",
+      "businessName": "Company or brand name",
+      "businessNameHint": "Legal or trading name under which you invoice — as it appears on official documents.",
+      "businessNamePlaceholder": "e.g. Hill Farm Dairy, Atelier du Midi",
+      "companyRegistrationCountry": "Country of company registration",
+      "companyRegistrationCountryHint": "Where your legal entity is registered (commercial register or national equivalent). This may match your production country or differ if your seat is elsewhere.",
+      "companyRegistrationCountryPlaceholder": "e.g. Germany, France, Italy",
+      "vatId": "VAT / tax identification number",
+      "vatIdHint": "EU VAT ID (e.g. DE123456789, FRXX999999999) or your national tax number used for B2B invoicing.",
+      "vatIdPlaceholder": "e.g. DE123456789",
       "email": "Email Address",
       "emailPlaceholder": "you@example.com",
       "phone": "Phone Number",
@@ -350,6 +382,7 @@
       "confirmNoAlcohol": "I confirm that my application does not include wine, beer, spirits, or any other alcohol-based products.",
       "confirmLocal": "I confirm that my products are locally produced and that I represent authentic, artisanal craftsmanship.",
       "confirmQuality": "I agree to Terravoa's <link>quality standards</link> and understand that applications are subject to curation.",
+      "confirmCompanyRegistered": "I confirm we are a legally registered business in the country stated above, and the VAT / tax ID provided is valid for invoicing and cooperation with Terravoa.",
       "shippingTimes": {
         "within24": "Within 24 hours",
         "within48": "Within 48 hours",
@@ -373,7 +406,10 @@
     },
     "errors": {
       "formNotReady": "Form is not ready.",
-      "fullNameRequired": "Please enter your full name.",
+      "fullNameRequired": "Please enter the contact person’s full name.",
+      "businessNameRequired": "Please enter your company or brand name.",
+      "companyRegistrationCountryRequired": "Please enter the country where your company is registered.",
+      "vatIdRequired": "Please enter your VAT or tax identification number.",
       "emailRequired": "Please enter your email.",
       "countryRequired": "Please enter your country.",
       "regionRequired": "Please enter your region.",
@@ -382,7 +418,7 @@
       "productionScaleRequired": "Please indicate your production scale.",
       "storyRequired": "Please tell us your story.",
       "shippingSpeedRequired": "Please select how quickly you can ship orders.",
-      "confirmationsRequired": "Please confirm all three declarations before submitting.",
+      "confirmationsRequired": "Please confirm all declarations (including legal registration and VAT) before submitting.",
       "genericError": "Something went wrong. Please try again."
     }
   },
@@ -462,6 +498,7 @@
       "imageHint": "JPG, PNG, WebP or GIF — up to 10 MB",
       "imageUploading": "Uploading…",
       "imageRemove": "Remove image",
+      "imagePreviewAlt": "Uploaded product photo preview",
       "imageAlt": "Image description (for accessibility)",
       "imageAltPlaceholder": "e.g. Bottle of golden olive oil on a marble surface",
       "imageAltHint": "A short description of what's in the image — used by screen readers and when the image fails to load.",

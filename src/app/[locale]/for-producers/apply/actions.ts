@@ -113,10 +113,16 @@ export async function submitApplication(
   const confirmNoAlcohol = formData.get('confirm_no_alcohol')
   const confirmLocal    = formData.get('confirm_local')
   const confirmQuality  = formData.get('confirm_quality')
-  if (confirmNoAlcohol !== 'on' || confirmLocal !== 'on' || confirmQuality !== 'on') {
+  const confirmCompany  = formData.get('confirm_company_registered')
+  if (
+    confirmNoAlcohol !== 'on' ||
+    confirmLocal !== 'on' ||
+    confirmQuality !== 'on' ||
+    confirmCompany !== 'on'
+  ) {
     return {
       success: false,
-      error: 'Please confirm all three declarations before submitting.',
+      error: 'Please confirm all declarations before submitting.',
     }
   }
 
@@ -153,7 +159,11 @@ export async function submitApplication(
   const payload = {
     // ── Step 1: About You ──
     full_name:           String(formData.get('full_name') ?? '').trim(),
-    business_name:       optionalString(formData.get('business_name')),
+    business_name:       String(formData.get('business_name') ?? '').trim(),
+    company_registration_country: String(
+      formData.get('company_registration_country') ?? '',
+    ).trim(),
+    vat_id:              String(formData.get('vat_id') ?? '').trim(),
     email:               String(formData.get('email') ?? '').trim(),
     phone:               optionalString(formData.get('phone')),
     country:             String(formData.get('country') ?? '').trim(),
@@ -199,6 +209,9 @@ export async function submitApplication(
 
   if (
     !payload.full_name ||
+    !payload.business_name ||
+    !payload.company_registration_country ||
+    !payload.vat_id ||
     !payload.email ||
     !payload.country ||
     !payload.region ||
@@ -262,7 +275,7 @@ export async function submitApplication(
     try {
       const resend = new Resend(resendKey)
       const firstName = payload.full_name.split(' ')[0] ?? payload.full_name
-      await resend.emails.send({
+      const { error: ackErr } = await resend.emails.send({
         from: process.env.EMAIL_FROM ?? `${SITE_NAME} <onboarding@resend.dev>`,
         to: payload.email,
         subject: `We received your application — ${SITE_NAME}`,
@@ -286,6 +299,7 @@ export async function submitApplication(
             </p>
           </div>`,
       })
+      if (ackErr) console.error('[email] applicant acknowledgement Resend error:', ackErr.message)
     } catch (e) {
       console.error('[email] applicant acknowledgement failed', e)
     }
@@ -296,7 +310,7 @@ export async function submitApplication(
   if (adminEmail && resendKey) {
     try {
       const resend = new Resend(resendKey)
-      await resend.emails.send({
+      const { error: adminMailErr } = await resend.emails.send({
         from: process.env.EMAIL_FROM ?? `${SITE_NAME} <onboarding@resend.dev>`,
         to: adminEmail,
         subject: `[${SITE_NAME}] New producer application — ${payload.full_name}`,
@@ -308,13 +322,22 @@ export async function submitApplication(
               New producer application
             </p>
             <p style="font-size:13px;color:#555;margin:0 0 4px;">
-              <strong>Name:</strong> ${payload.full_name}${payload.business_name ? ` — ${payload.business_name}` : ''}
+              <strong>Contact:</strong> ${payload.full_name}
+            </p>
+            <p style="font-size:13px;color:#555;margin:0 0 4px;">
+              <strong>Business:</strong> ${payload.business_name}
+            </p>
+            <p style="font-size:13px;color:#555;margin:0 0 4px;">
+              <strong>Registered in:</strong> ${payload.company_registration_country}
+            </p>
+            <p style="font-size:13px;color:#555;margin:0 0 4px;">
+              <strong>VAT / tax ID:</strong> ${payload.vat_id}
             </p>
             <p style="font-size:13px;color:#555;margin:0 0 4px;">
               <strong>Email:</strong> <a href="mailto:${payload.email}">${payload.email}</a>
             </p>
             <p style="font-size:13px;color:#555;margin:0 0 4px;">
-              <strong>Location:</strong> ${payload.region}, ${payload.country}
+              <strong>Production location:</strong> ${payload.region}, ${payload.country}
             </p>
             <p style="font-size:13px;color:#555;margin:0 0 12px;">
               <strong>Categories:</strong> ${product_categories.join(', ')}
@@ -330,6 +353,8 @@ export async function submitApplication(
             </a>
           </div>`,
       })
+      if (adminMailErr)
+        console.error('[email] admin application Resend error:', adminMailErr.message)
     } catch (e) {
       console.error('[email] admin application notification failed', e)
     }

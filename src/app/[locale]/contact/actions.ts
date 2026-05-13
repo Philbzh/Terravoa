@@ -4,7 +4,8 @@ import { headers } from 'next/headers'
 import { createServerSupabase } from '@/lib/supabase/server'
 import { Resend } from 'resend'
 import { SITE_NAME } from '@/lib/constants'
-import { html } from '@/lib/email/html-template'
+import { escapeHtml } from '@/lib/email/escape-html'
+import { html, raw } from '@/lib/email/html-template'
 import { rateLimit, getClientIpFromHeaders } from '@/lib/rate-limit'
 
 // Contact form length guards — also prevent DB bloat on unbounded inputs.
@@ -63,28 +64,110 @@ export async function submitContactMessage(
   if (adminEmail && resendKey) {
     try {
       const resend = new Resend(resendKey)
-      await resend.emails.send({
+      const receivedAt = new Date().toLocaleString('en-GB', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      })
+      const emailHref = encodeURIComponent(email)
+      const emailAnchor = raw(
+        `<a href="mailto:${emailHref}" style="color:#1e4336;font-weight:600;text-decoration:underline;text-underline-offset:2px;">${escapeHtml(email)}</a>`,
+      )
+      const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(`Re: ${SITE_NAME} - your message`)}`
+      const replyButton = raw(
+        `<a href="${escapeHtml(replyHref)}" style="display:inline-block;padding:12px 26px;background:#2d5a4a;color:#f8faf8;font-size:14px;font-weight:600;text-decoration:none;font-family:'Segoe UI',Arial,sans-serif;mso-line-height-rule:exactly;line-height:14px;border-radius:6px;">Reply to sender</a>`,
+      )
+      const { error: sendError } = await resend.emails.send({
         from: process.env.EMAIL_FROM ?? `${SITE_NAME} <onboarding@resend.dev>`,
         to: adminEmail,
-        subject: `[${SITE_NAME}] New contact message from ${first_name} ${last_name}`,
-        // MED-2: every interpolated value is auto-escaped by the `html` tag.
+        subject: `[${SITE_NAME}] Contact · ${first_name} ${last_name} · ${audience}`,
+        /* Table-first layout: Outlook ignores many div widths; fixed label column avoids a huge gap. */
         html: html`
-          <div style="max-width:520px;margin:0 auto;padding:24px;font-family:sans-serif;">
-            <p style="font-family:Georgia,serif;font-size:18px;color:#1a1a1a;margin:0 0 16px;">
-              New contact message
-            </p>
-            <p style="font-size:13px;color:#555;margin:0 0 4px;">
-              <strong>From:</strong> ${first_name} ${last_name}
-              &lt;<a href="mailto:${email}">${email}</a>&gt;
-            </p>
-            <p style="font-size:13px;color:#555;margin:0 0 16px;">
-              <strong>Type:</strong> ${audience}
-            </p>
-            <p style="font-size:14px;line-height:1.7;color:#333;white-space:pre-wrap;border-left:3px solid #2d5a4a;padding-left:12px;margin:0;">
-              ${message}
-            </p>
-          </div>`,
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;background:#edf1ed;">
+            <tr>
+              <td align="center" style="padding:28px 12px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="560" style="border-collapse:collapse;width:100%;max-width:560px;background:#ffffff;border:1px solid #cfd9d2;">
+                  <tr>
+                    <td bgcolor="#2d5a4a" style="background:#2d5a4a;padding:22px 28px;">
+                      <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:26px;font-weight:600;color:#f8faf8;">
+                        ${SITE_NAME}
+                      </p>
+                      <p style="margin:8px 0 0;font-size:11px;line-height:14px;color:#d8e8df;text-transform:uppercase;letter-spacing:0.14em;font-family:'Segoe UI',Arial,sans-serif;">
+                        Contact form
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:22px 28px 6px;font-family:'Segoe UI',Arial,sans-serif;">
+                      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;font-size:15px;line-height:22px;color:#1f2e1f;">
+                        <tr>
+                          <td width="132" valign="top" style="width:132px;max-width:132px;padding:0 16px 14px 0;border-bottom:1px solid #e8eee9;font-size:12px;line-height:18px;color:#5f7264;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">
+                            Name
+                          </td>
+                          <td valign="top" style="padding:0 0 14px 0;border-bottom:1px solid #e8eee9;font-size:16px;line-height:22px;font-weight:600;color:#142414;">
+                            ${first_name} ${last_name}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="132" valign="top" style="width:132px;max-width:132px;padding:14px 16px 14px 0;border-bottom:1px solid #e8eee9;font-size:12px;line-height:18px;color:#5f7264;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">
+                            Email
+                          </td>
+                          <td valign="top" style="padding:14px 0;border-bottom:1px solid #e8eee9;font-size:15px;line-height:22px;">
+                            ${emailAnchor}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td width="132" valign="top" style="width:132px;max-width:132px;padding:14px 16px 14px 0;border-bottom:1px solid #e8eee9;font-size:12px;line-height:18px;color:#5f7264;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">
+                            Topic
+                          </td>
+                          <td valign="top" style="padding:14px 0;border-bottom:1px solid #e8eee9;font-size:15px;line-height:22px;color:#2a3d2a;">
+                            ${audience}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:6px 28px 20px;font-family:'Segoe UI',Arial,sans-serif;">
+                      <p style="margin:0 0 10px;font-size:12px;line-height:16px;color:#5f7264;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">
+                        Their message
+                      </p>
+                      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;background:#f3f7f4;border:1px solid #d5e0d8;">
+                        <tr>
+                          <td style="padding:18px 20px;font-size:16px;line-height:26px;color:#1a2e1a;white-space:pre-wrap;">
+                            ${message}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding:0 28px 24px;font-family:'Segoe UI',Arial,sans-serif;">
+                      ${replyButton}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 28px 26px;font-family:'Segoe UI',Arial,sans-serif;">
+                      <p style="margin:0;font-size:12px;line-height:18px;color:#7a8c7e;">
+                        Received ${receivedAt}. You can also start a reply from the green button — it opens a message to their address.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding:0 28px 22px;font-family:'Segoe UI',Arial,sans-serif;font-size:11px;line-height:16px;color:#8a9a8a;">
+                      Internal · ${SITE_NAME} contact form · not shown to customers
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>`,
       })
+      if (sendError) console.error('[email] contact Resend error:', sendError.message)
     } catch (e) {
       console.error('[email] contact notification failed', e)
     }
