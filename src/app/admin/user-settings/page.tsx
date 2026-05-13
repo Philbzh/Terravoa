@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader'
 import { ChangePasswordForm } from '@/components/admin/ChangePasswordForm'
+import { TwoFactorSetup } from '@/components/admin/TwoFactorSetup'
 import { upsertAdminAccess, removeAdminAccess } from './actions'
 import { Shield, UserPlus, Users } from 'lucide-react'
 
@@ -42,8 +43,13 @@ export default async function AdminUserSettingsPage() {
 
       <div className="grid xl:grid-cols-3 gap-6 mb-8">
         {/* ── Your account ── */}
-        <div className="xl:col-span-1 rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
-          <ChangePasswordForm />
+        <div className="xl:col-span-1 space-y-6">
+          <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
+            <ChangePasswordForm />
+          </div>
+          <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
+            <TwoFactorSetup />
+          </div>
         </div>
 
         {/* ── Add / update user ── */}

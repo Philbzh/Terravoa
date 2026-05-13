@@ -7,6 +7,7 @@ import { Loader2, Shield, ShoppingBag, ArrowLeft, Lock } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { sanitizeAdminNextPath } from '@/lib/auth/admin-login'
+import { TwoFactorChallenge } from '@/components/admin/TwoFactorChallenge'
 
 type Portal = 'select' | 'admin' | 'producer'
 
@@ -25,6 +26,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [needs2FA, setNeeds2FA] = useState(false)
   const [sessionEmail, setSessionEmail] = useState<string | null>(null)
 
   useEffect(() => {
@@ -47,6 +49,16 @@ export default function AdminLoginPage() {
     setLoading(false)
     if (signError) { setError(signError.message); return }
 
+    // Check if user has 2FA enabled (admin portal only)
+    if (portal === 'admin') {
+      const { data: factorsData } = await supabase.auth.mfa.listFactors()
+      const verified = (factorsData?.totp ?? []).filter((f) => f.status === 'verified')
+      if (verified.length > 0) {
+        setNeeds2FA(true)
+        return
+      }
+    }
+
     if (portal === 'producer') {
       router.push('/en/producer')
     } else {
@@ -60,6 +72,28 @@ export default function AdminLoginPage() {
     await supabase.auth.signOut()
     setSessionEmail(null)
     router.refresh()
+  }
+
+  // ─── 2FA challenge view ───
+  if (needs2FA) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-primary px-6 py-12">
+        <div className="w-full max-w-md">
+          <TwoFactorChallenge
+            onVerified={() => {
+              router.push(next)
+              router.refresh()
+            }}
+            onCancel={async () => {
+              const supabase = createClient()
+              await supabase.auth.signOut()
+              setNeeds2FA(false)
+              setSessionEmail(null)
+            }}
+          />
+        </div>
+      </div>
+    )
   }
 
   // ─── Portal selector view ───
