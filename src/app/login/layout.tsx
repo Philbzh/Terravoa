@@ -6,18 +6,14 @@ export default function LoginLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen pt-28 pb-16 px-6 flex items-center justify-center bg-surface">
-      <div className="w-full max-w-md">
-        <Suspense
-          fallback={
-            <p className="text-center font-sans text-sm text-on-surface-variant">
-              Loading…
-            </p>
-          }
-        >
-          {children}
-        </Suspense>
-      </div>
-    </div>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-primary">
+          <p className="font-sans text-sm text-white/50">Loading…</p>
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
   )
 }
