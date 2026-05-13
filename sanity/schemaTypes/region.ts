@@ -46,6 +46,46 @@ export const regionType = defineType({
       fields: [{ name: 'alt', type: 'string', title: 'Alt text' }],
     }),
     defineField({
+      name: 'traditions',
+      title: 'Traditions & Flavours',
+      description: 'Cultural editorial blocks shown on the region page. Aim for 3 entries covering food culture, craftsmanship, and lifestyle.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              type: 'string',
+              title: 'Title',
+              description: 'Short heading, e.g. "The Olive Harvest", "Smoke & Cure"',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'body',
+              type: 'text',
+              title: 'Body',
+              rows: 4,
+              description: '2-3 sentences of editorial text.',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'icon',
+              type: 'string',
+              title: 'Icon (emoji)',
+              description: 'A single emoji shown above the title, e.g. "🫒", "🍯", "🧂"',
+            },
+          ],
+          preview: {
+            select: { title: 'title', subtitle: 'icon' },
+            prepare({ title, subtitle }: { title?: string; subtitle?: string }) {
+              return { title: `${subtitle ?? ''} ${title ?? ''}`.trim() }
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
       name: 'productCount',
       title: 'Product count (display)',
       type: 'number',
