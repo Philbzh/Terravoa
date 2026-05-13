@@ -89,6 +89,15 @@ const qRegions = `*[_type == "region" && defined(slug.current)] | order(name asc
   longDescription,
   image,
   traditions[] { title, body, icon },
+  selectedAddresses[] {
+    name,
+    kind,
+    description,
+    location,
+    website,
+    "imageSrc": image.asset->url,
+    "imageAlt": image.alt
+  },
   productCount,
   producerCount
 }`
@@ -257,6 +266,15 @@ type RawRegion = {
   longDescription?: string
   image?: unknown
   traditions?: { title?: string; body?: string; icon?: string }[]
+  selectedAddresses?: {
+    name?: string
+    kind?: string
+    description?: string
+    location?: string
+    website?: string
+    imageSrc?: string
+    imageAlt?: string
+  }[]
   productCount?: number
   producerCount?: number
 }
@@ -277,6 +295,17 @@ function mapRegion(raw: RawRegion): Region {
     traditions: raw.traditions
       ?.filter((t) => t.title && t.body)
       .map((t) => ({ title: t.title!, body: t.body!, icon: t.icon })),
+    selectedAddresses: raw.selectedAddresses
+      ?.filter((a) => a.name && a.kind && a.description && a.location)
+      .map((a) => ({
+        name: a.name!,
+        kind: a.kind! as any,
+        description: a.description!,
+        location: a.location!,
+        website: a.website,
+        imageSrc: a.imageSrc,
+        imageAlt: a.imageAlt,
+      })),
   }
 }
 

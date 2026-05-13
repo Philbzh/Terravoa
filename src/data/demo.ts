@@ -63,6 +63,28 @@ export interface RegionTradition {
   icon?: string // emoji or lucide icon name
 }
 
+export type SelectedAddressKind = 'agriturismo' | 'restaurant' | 'hotel' | 'experience' | 'bakery' | 'vineyard'
+
+export interface SelectedAddress {
+  name: string
+  kind: SelectedAddressKind
+  description: string
+  location: string // e.g. "Greve in Chianti, Tuscany"
+  website?: string
+  imageSrc?: string
+  imageAlt?: string
+}
+
+export interface CommunityDiscovery {
+  id: string
+  authorName: string
+  authorLocation?: string
+  body: string
+  regionSlug: string
+  createdAt: string
+  status: 'pending' | 'approved' | 'rejected'
+}
+
 export interface Region {
   slug: string
   name: string
@@ -75,6 +97,7 @@ export interface Region {
   productCount: number
   producerCount: number
   traditions?: RegionTradition[]
+  selectedAddresses?: SelectedAddress[]
 }
 
 /** Journal (SEO): regional guides. Producer portraits live on producer profiles, not in the Journal index. */
@@ -360,6 +383,10 @@ export const regions: Region[] = [
       { title: 'Butter & Caramel', icon: '🧈', body: 'Breton butter is made from lightly cultured cream, giving it a tangy complexity closer to cheese. Mixed with fleur de sel, it becomes the base of salted caramel — a confection the region elevated from afterthought to art form.' },
       { title: 'At the Table', icon: '🥞', body: 'The galette — buckwheat crêpe filled with egg, ham, and cheese — is Brittany in a single dish. Washed down with dry cider, eaten in a crêperie with stone walls, it connects the grain, the dairy, and the orchard in one meal.' },
     ],
+    selectedAddresses: [
+      { name: 'Crêperie du Port', kind: 'restaurant', description: 'A stone-walled crêperie overlooking the harbour. Buckwheat galettes made with local flour, dry cider from the orchard behind the building.', location: 'Cancale, Brittany' },
+      { name: 'Maison des Paludiers', kind: 'experience', description: 'Walk the salt marshes with a working paludier. Learn to read the wind, the tide, and the crust. Fleur de sel to take home.', location: 'Guérande, Brittany' },
+    ],
   },
   {
     slug: 'tuscany',
@@ -376,6 +403,11 @@ export const regions: Region[] = [
       { title: 'The Olive Harvest', icon: '🫒', body: 'Tuscan oil begins with early-picked Frantoio olives — green, bitter, pressed within hours. The peppery cough it provokes is a mark of quality, not a flaw. Harvest year on the label is the first thing to look for.' },
       { title: 'The Truffle Season', icon: '🍄', body: 'Autumn in the Crete Senesi brings truffle hunters and their dogs into the oak forests before dawn. White truffle season lasts barely two months — each specimen is irreplaceable, priced accordingly, and worth every cent.' },
       { title: 'Slow Meals', icon: '🍝', body: 'A Tuscan lunch is an exercise in restraint: pici pasta made from flour and water, ribollita from yesterday\'s bread, bistecca from Chianina cattle. The ingredients do the work; the cook steps back.' },
+    ],
+    selectedAddresses: [
+      { name: 'Fattoria Il Poggio', kind: 'agriturismo', description: 'A working olive estate in the Chianti hills. Stone farmhouse rooms, estate oil at breakfast, sunset dinners under the pergola.', location: 'Greve in Chianti, Tuscany' },
+      { name: 'Trattoria da Mario', kind: 'restaurant', description: 'Shared tables, no menu, whatever the kitchen cooked that morning. Ribollita, lampredotto, house Chianti. Cash only. Queue before noon.', location: 'Florence, Tuscany' },
+      { name: 'Azienda Rossi — Truffle Walk', kind: 'experience', description: 'Join a trifolao and his dog in the oak forests of San Miniato. Two hours at dawn, followed by a truffle breakfast you will not forget.', location: 'San Miniato, Tuscany' },
     ],
   },
   {
@@ -461,6 +493,10 @@ export const regions: Region[] = [
       { title: 'Lavender & Distillation', icon: '💜', body: 'The Valensole plateau blooms for three weeks in July. Oil content peaks just before full flower — cutting too late means sweeter, less complex fragrance. Great lavender oil comes from watching the plants, not the calendar.' },
       { title: 'Wild Herbs', icon: '🌿', body: 'Thyme, rosemary, savory, and oregano grow wild across the limestone garrigue. Thin soil, intense heat, and cool nights concentrate their volatile oils to a degree that cultivated herbs rarely approach.' },
       { title: 'Provençal Oil', icon: '🫒', body: 'The oils of Baux-de-Provence are quiet, buttery, shaped by Salonenque and Aglandau olives. They are not the peppery oils of Tuscany — they are richer, more delicate, and excellent where a Tuscan oil would dominate.' },
+    ],
+    selectedAddresses: [
+      { name: 'Bastide de Moustiers', kind: 'hotel', description: 'Alain Ducasse\'s country inn below the Gorges du Verdon. Vegetable garden, lavender fields, and a kitchen that treats simplicity as the highest ambition.', location: 'Moustiers-Sainte-Marie, Provence' },
+      { name: 'Distillerie Lavande & Terroir', kind: 'experience', description: 'Visit a family-run lavender distillery on the Valensole plateau. Watch the steam extraction, smell the difference between early and late harvest.', location: 'Valensole, Provence' },
     ],
   },
 ]

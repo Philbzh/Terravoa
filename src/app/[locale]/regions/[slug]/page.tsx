@@ -7,6 +7,7 @@ import {
   getProducersByRegion,
   getStoriesByRegion,
 } from '@/lib/content'
+import type { CommunityDiscovery } from '@/data/demo'
 import { RegionPageClient } from './RegionPageClient'
 
 export const revalidate = 60
@@ -31,15 +32,32 @@ export async function generateMetadata(
   }
 }
 
+async function fetchCommunityDiscoveries(regionSlug: string): Promise<CommunityDiscovery[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/community-discovery?region=${regionSlug}`, {
+      next: { revalidate: 120 },
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    return data.discoveries ?? []
+  } catch {
+    return []
+  }
+}
+
 export default async function RegionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const region = await getRegionBySlug(slug)
   if (!region) notFound()
 
-  const [regionProducts, regionProducers, regionStories] = await Promise.all([
+  const [regionProducts, regionProducers, regionStories, communityDiscoveries] = await Promise.all([
     getProductsByRegion(region.name),
     getProducersByRegion(region.name),
     getStoriesByRegion(region.name),
+    fetchCommunityDiscoveries(slug),
   ])
 
   return (
@@ -48,6 +66,7 @@ export default async function RegionPage({ params }: { params: Promise<{ slug: s
       producers={regionProducers}
       products={regionProducts}
       stories={regionStories}
+      communityDiscoveries={communityDiscoveries}
     />
   )
 }

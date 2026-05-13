@@ -86,6 +86,96 @@ export const regionType = defineType({
       ],
     }),
     defineField({
+      name: 'selectedAddresses',
+      title: 'Selected Addresses',
+      description:
+        'Curated places the Terravoa team recommends — agriturismo, restaurants, bakeries, experiences. Aim for 3–6 per region.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              type: 'string',
+              title: 'Name',
+              description: 'Name of the establishment or experience',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'kind',
+              type: 'string',
+              title: 'Category',
+              options: {
+                list: [
+                  { title: 'Agriturismo', value: 'agriturismo' },
+                  { title: 'Restaurant', value: 'restaurant' },
+                  { title: 'Hotel', value: 'hotel' },
+                  { title: 'Experience', value: 'experience' },
+                  { title: 'Bakery', value: 'bakery' },
+                  { title: 'Vineyard', value: 'vineyard' },
+                ],
+              },
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'description',
+              type: 'text',
+              title: 'Description',
+              rows: 3,
+              description: '1–2 sentence editorial blurb',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'location',
+              type: 'string',
+              title: 'Location',
+              description: 'Town / area, e.g. "Panzano in Chianti"',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'website',
+              type: 'url',
+              title: 'Website',
+              description: 'Optional link',
+            },
+            {
+              name: 'image',
+              type: 'image',
+              title: 'Image',
+              options: { hotspot: true },
+              fields: [{ name: 'alt', type: 'string', title: 'Alt text' }],
+            },
+          ],
+          preview: {
+            select: { title: 'name', subtitle: 'kind', location: 'location' },
+            prepare({
+              title,
+              subtitle,
+              location,
+            }: {
+              title?: string
+              subtitle?: string
+              location?: string
+            }) {
+              const kindEmoji: Record<string, string> = {
+                agriturismo: '🏡',
+                restaurant: '🍽️',
+                hotel: '🏨',
+                experience: '🌿',
+                bakery: '🥖',
+                vineyard: '🍇',
+              }
+              return {
+                title: `${kindEmoji[subtitle ?? ''] ?? '📍'} ${title ?? ''}`.trim(),
+                subtitle: location,
+              }
+            },
+          },
+        },
+      ],
+    }),
+    defineField({
       name: 'productCount',
       title: 'Product count (display)',
       type: 'number',
