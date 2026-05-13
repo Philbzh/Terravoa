@@ -27,8 +27,16 @@ export function TwoFactorSetup() {
   async function loadFactors() {
     const supabase = createClient()
     const { data } = await supabase.auth.mfa.listFactors()
-    const totp = (data?.totp ?? []).filter((f) => f.status === 'verified') as Factor[]
-    setFactors(totp)
+    const allTotp = (data?.totp ?? []) as Factor[]
+
+    // Clean up any unverified (stale) factors automatically
+    const unverified = allTotp.filter((f) => f.status === 'unverified')
+    for (const f of unverified) {
+      await supabase.auth.mfa.unenroll({ factorId: f.id })
+    }
+
+    const verified = allTotp.filter((f) => f.status === 'verified')
+    setFactors(verified)
     setLoading(false)
   }
 
@@ -40,6 +48,14 @@ export function TwoFactorSetup() {
     setEnrolling(true)
     setError('')
     const supabase = createClient()
+
+    // Clean up any lingering unverified factors before enrolling
+    const { data: existing } = await supabase.auth.mfa.listFactors()
+    const stale = (existing?.totp ?? []).filter((f: Factor) => f.status === 'unverified')
+    for (const f of stale) {
+      await supabase.auth.mfa.unenroll({ factorId: f.id })
+    }
+
     const { data, error: enrollError } = await supabase.auth.mfa.enroll({
       factorType: 'totp',
       friendlyName: 'Terravoa Admin',
