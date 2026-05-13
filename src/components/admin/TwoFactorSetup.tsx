@@ -43,6 +43,7 @@ export function TwoFactorSetup() {
     const { data, error: enrollError } = await supabase.auth.mfa.enroll({
       factorType: 'totp',
       friendlyName: 'Terravoa Admin',
+      issuer: 'Terravoa_Admin',
     })
     if (enrollError || !data) {
       setError(enrollError?.message ?? 'Failed to start enrollment.')
