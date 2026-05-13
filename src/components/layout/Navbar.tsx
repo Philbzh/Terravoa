@@ -1,8 +1,8 @@
 'use client'
 
 import { Link, usePathname } from '@/i18n/navigation'
-import { ShoppingBag, Menu, X, UserCircle, Search } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { ShoppingBag, Menu, X, UserCircle, Search, Shield, Store } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -23,6 +23,7 @@ export function Navbar() {
   const openSearch = useSearchStore((s) => s.open)
   const isDark = useThemeStore((s) => s.isDark)
   const [isSignedIn, setIsSignedIn] = useState(false)
+  const [userRole, setUserRole] = useState<'admin' | 'producer' | 'customer' | null>(null)
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
@@ -32,16 +33,33 @@ export function Navbar() {
   const isHomePage = pathname === '/'
   const onHero = isHomePage && !scrolled
 
+  const fetchUserRole = useCallback(async () => {
+    try {
+      const res = await fetch('/api/user-role')
+      if (res.ok) {
+        const data = await res.json()
+        setUserRole(data.role)
+      }
+    } catch {
+      setUserRole(null)
+    }
+  }, [])
+
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => {
-      setIsSignedIn(!!data.user)
+      const signedIn = !!data.user
+      setIsSignedIn(signedIn)
+      if (signedIn) fetchUserRole()
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsSignedIn(!!session?.user)
+      const signedIn = !!session?.user
+      setIsSignedIn(signedIn)
+      if (signedIn) fetchUserRole()
+      else setUserRole(null)
     })
     return () => subscription.unsubscribe()
-  }, [])
+  }, [fetchUserRole])
 
   useEffect(() => {
     let lastY = 0
@@ -104,18 +122,48 @@ export function Navbar() {
         <div className="flex justify-end items-center gap-3">
           <LocaleSwitcher onHero={onHero} />
           {isSignedIn ? (
-            <Link
-              href="/account"
-              className={cn(
-                'inline-flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.15em] font-semibold hover:opacity-75 transition-opacity border px-3 py-1.5 rounded-full',
-                onHero
-                  ? 'text-white border-white/35'
-                  : 'text-primary border-primary/25',
+            <div className="flex items-center gap-2">
+              {userRole === 'admin' && (
+                <a
+                  href="/admin"
+                  className={cn(
+                    'inline-flex items-center gap-1.5 font-sans text-[10px] uppercase tracking-[0.12em] font-semibold hover:opacity-75 transition-opacity border px-2.5 py-1.5 rounded-full',
+                    onHero
+                      ? 'text-white border-white/35'
+                      : 'text-secondary border-secondary/30',
+                  )}
+                >
+                  <Shield size={13} strokeWidth={1.5} />
+                  Admin
+                </a>
               )}
-            >
-              <UserCircle size={15} strokeWidth={1.5} />
-              {t('myAccount')}
-            </Link>
+              {userRole === 'producer' && (
+                <Link
+                  href="/producer"
+                  className={cn(
+                    'inline-flex items-center gap-1.5 font-sans text-[10px] uppercase tracking-[0.12em] font-semibold hover:opacity-75 transition-opacity border px-2.5 py-1.5 rounded-full',
+                    onHero
+                      ? 'text-white border-white/35'
+                      : 'text-secondary border-secondary/30',
+                  )}
+                >
+                  <Store size={13} strokeWidth={1.5} />
+                  Producer
+                </Link>
+              )}
+              <Link
+                href="/account"
+                className={cn(
+                  'inline-flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.15em] font-semibold hover:opacity-75 transition-opacity border px-3 py-1.5 rounded-full',
+                  onHero
+                    ? 'text-white border-white/35'
+                    : 'text-primary border-primary/25',
+                )}
+              >
+                <UserCircle size={15} strokeWidth={1.5} />
+                {t('myAccount')}
+              </Link>
+            </div>
           ) : (
             <>
               <Link
@@ -273,13 +321,35 @@ export function Navbar() {
               ))}
               <hr className="border-outline-variant/20" />
               {isSignedIn ? (
-                <Link
-                  href="/account"
-                  onClick={() => setMobileOpen(false)}
-                  className="text-primary font-sans text-sm uppercase tracking-[0.15em] font-medium"
-                >
-                  {t('myAccount')}
-                </Link>
+                <>
+                  {userRole === 'admin' && (
+                    <a
+                      href="/admin"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 text-secondary font-sans text-sm uppercase tracking-[0.15em] font-semibold"
+                    >
+                      <Shield size={15} strokeWidth={1.5} />
+                      Admin Dashboard
+                    </a>
+                  )}
+                  {userRole === 'producer' && (
+                    <Link
+                      href="/producer"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 text-secondary font-sans text-sm uppercase tracking-[0.15em] font-semibold"
+                    >
+                      <Store size={15} strokeWidth={1.5} />
+                      Producer Dashboard
+                    </Link>
+                  )}
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-primary font-sans text-sm uppercase tracking-[0.15em] font-medium"
+                  >
+                    {t('myAccount')}
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link
