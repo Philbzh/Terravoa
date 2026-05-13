@@ -5,7 +5,7 @@ import { Truck, Heart } from 'lucide-react'
 import { cn, isExternalUnoptimizedSrc } from '@/lib/utils'
 import { Badge, type BadgeVariant } from './Badge'
 import { useWishlist } from '@/lib/wishlist'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 /** Country name → ISO 3166-1 alpha-2 code (lowercase) for flagcdn.com */
 const countryISO: Record<string, string> = {
@@ -22,18 +22,44 @@ const countryISO: Record<string, string> = {
   Croatia: 'hr',
 }
 
-function getFlagSrc(origin: string): string | null {
+function getFlagCountryCode(origin: string): string | null {
   for (const [country, code] of Object.entries(countryISO)) {
-    if (origin.includes(country)) return `https://flagcdn.com/w20/${code}.png`
+    if (origin.includes(country)) return code
   }
   return null
 }
 
 function FlagImage({ origin }: { origin: string }) {
-  const src = getFlagSrc(origin)
-  if (!src) return <span className="text-sm">🌍</span>
+  const t = useTranslations('ui')
+  const locale = useLocale()
+  const code = getFlagCountryCode(origin)
+  if (!code) {
+    return (
+      <span className="text-sm" aria-hidden title={origin}>
+        🌍
+      </span>
+    )
+  }
+  const src = `https://flagcdn.com/w20/${code}.png`
+  let regionLabel: string
+  try {
+    regionLabel =
+      new Intl.DisplayNames([locale], { type: 'region' }).of(code.toUpperCase()) ??
+      code.toUpperCase()
+  } catch {
+    regionLabel = code.toUpperCase()
+  }
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt="" width={16} height={12} className="inline rounded-[2px] object-cover" style={{ width: 18, height: 13 }} />
+  return (
+    <img
+      src={src}
+      alt={t('countryFlagAlt', { country: regionLabel })}
+      width={16}
+      height={12}
+      className="inline rounded-[2px] object-cover"
+      style={{ width: 18, height: 13 }}
+    />
+  )
 }
 
 interface ProductCardProps {
@@ -50,6 +76,8 @@ interface ProductCardProps {
   reviewCount?: number
   /** Smaller image and type — e.g. producer profile grid */
   compact?: boolean
+  /** Light text for dark backgrounds */
+  invertText?: boolean
 }
 
 export function ProductCard({
@@ -63,6 +91,7 @@ export function ProductCard({
   badge,
   priceRaw,
   compact = false,
+  invertText = false,
 }: ProductCardProps) {
   const t = useTranslations('ui')
   const { isInWishlist, toggle } = useWishlist()
@@ -131,20 +160,22 @@ export function ProductCard({
       <div className={cn('space-y-1', compact && 'text-left')}>
         <span
           className={cn(
-            'text-secondary font-sans uppercase tracking-[0.15em] flex items-center gap-1.5',
+            'font-sans uppercase tracking-[0.15em] flex items-center gap-1.5',
+            invertText ? 'text-secondary-fixed-dim' : 'text-secondary',
             compact ? 'text-[9px]' : 'text-[10px]',
           )}
         >
           <FlagImage origin={origin} />
           {origin} &bull; {producer}
         </span>
-        <h4 className={cn('font-serif text-primary', compact ? 'text-sm leading-snug' : 'text-lg')}>
+        <h4 className={cn('font-serif', invertText ? 'text-on-primary' : 'text-primary', compact ? 'text-sm leading-snug' : 'text-lg')}>
           {name}
         </h4>
-        <p className={cn('text-on-surface-variant font-sans', compact && 'text-sm')}>{price}</p>
+        <p className={cn('font-sans', invertText ? 'text-on-primary/70' : 'text-on-surface-variant', compact && 'text-sm')}>{price}</p>
         <p
           className={cn(
-            'flex items-center gap-1.5 text-on-surface-variant/60 font-sans uppercase tracking-wider pt-1',
+            'flex items-center gap-1.5 font-sans uppercase tracking-wider pt-1',
+            invertText ? 'text-on-primary/40' : 'text-on-surface-variant/60',
             compact ? 'text-[9px]' : 'text-[10px]',
           )}
         >

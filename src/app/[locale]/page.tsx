@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Hero } from '@/components/home/Hero'
 import { TrustStrip } from '@/components/home/TrustStrip'
 import { FastPaths } from '@/components/home/FastPaths'
-import { BestSellers } from '@/components/home/BestSellers'
 import { EuropeStrip } from '@/components/home/EuropeStrip'
 import { HowItWorks } from '@/components/home/HowItWorks'
 import { StoryOfTheWeek } from '@/components/home/StoryOfTheWeek'
@@ -16,7 +15,6 @@ import {
   getJournalStories,
   getHomepageProducts,
   getAllRegions,
-  getBestSellers,
 } from '@/lib/content'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 
@@ -33,30 +31,45 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [journal, homepage, regions, bestSellers] = await Promise.all([
+  const [journal, homepage, regions] = await Promise.all([
     getJournalStories(),
     getHomepageProducts(),
     getAllRegions(),
-    getBestSellers(),
   ])
   const journalHighlight = journal[0]
 
   return (
     <>
+      {/* ── Opening: hero + trust signals + navigation ── */}
       <Hero />
       <TrustStrip />
       <FastPaths />
+
+      {/* ── Products: dark dramatic showcase ── */}
       <CuratedCollection
         products={homepage.products}
         subtitleOverride={homepage.subtitleOverride}
       />
-      <BestSellers products={bestSellers} />
+
+      {/* ── Europe context: scrolling regions strip ── */}
       <EuropeStrip />
+
+      {/* ── How it works: clean steps ── */}
       <HowItWorks />
+
+      {/* ── Editorial: journal story ── */}
       {journalHighlight ? <StoryOfTheWeek story={journalHighlight} /> : null}
-      <RegionalArchives regions={regions} />
+
+      {/* ── Social proof: testimonials ── */}
       <TestimonialsSection />
+
+      {/* ── Discovery: regional archives masonry ── */}
+      <RegionalArchives regions={regions} />
+
+      {/* ── Values: dark integrity section ── */}
       <CuratorsPromise />
+
+      {/* ── Conversion: newsletter + producer CTA ── */}
       <NewsletterCTA />
       <ProducerCTA />
     </>

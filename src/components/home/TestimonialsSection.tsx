@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, Quote } from 'lucide-react'
-import { staggerContainer, staggerItem, testimonialEnter } from '@/lib/motion/variants'
+import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const testimonials = [
   {
@@ -62,8 +61,7 @@ const testimonials = [
   },
 ]
 
-const CARDS_VISIBLE = 3
-const ROTATE_INTERVAL = 5200
+const ROTATE_INTERVAL = 6000
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -71,39 +69,11 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          size={11}
+          size={12}
           className={i < rating ? 'text-secondary fill-secondary' : 'text-outline-variant/40'}
           strokeWidth={1.5}
         />
       ))}
-    </div>
-  )
-}
-
-function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
-  return (
-    <div className="flex flex-col h-full rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm">
-      <Quote
-        size={22}
-        strokeWidth={1.2}
-        className="text-secondary/40 mb-4 shrink-0"
-      />
-      <p className="font-sans text-sm text-on-surface leading-relaxed flex-1 mb-5">
-        "{t.text}"
-      </p>
-      <div className="mt-auto">
-        <StarRating rating={t.rating} />
-        <div className="mt-2.5 flex items-start justify-between gap-3">
-          <div>
-            <p className="font-sans text-sm font-semibold text-on-surface">{t.name}</p>
-            <p className="font-sans text-[11px] text-on-surface-variant">{t.location}</p>
-          </div>
-          <div className="text-right shrink-0">
-            <p className="font-sans text-[10px] uppercase tracking-wider text-secondary">{t.region}</p>
-            <p className="font-sans text-[10px] text-on-surface-variant/70 leading-tight max-w-[120px]">{t.product}</p>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
@@ -116,93 +86,175 @@ export function TestimonialsSection() {
     setOffset((o) => (o + 1) % testimonials.length)
   }, [])
 
+  const retreat = useCallback(() => {
+    setOffset((o) => (o - 1 + testimonials.length) % testimonials.length)
+  }, [])
+
   useEffect(() => {
     if (paused) return
     const id = setInterval(advance, ROTATE_INTERVAL)
     return () => clearInterval(id)
   }, [paused, advance])
 
-  // Visible indices (wrapping)
-  const visible = Array.from({ length: CARDS_VISIBLE }, (_, i) =>
+  // Get 3 visible (desktop) or 1 (mobile)
+  const visible = Array.from({ length: 3 }, (_, i) =>
     testimonials[(offset + i) % testimonials.length],
   )
 
   return (
     <section
-      className="py-24 md:py-32 px-6 md:px-16 bg-surface"
+      className="py-24 md:py-32 px-6 md:px-16 bg-surface-container-low"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Header */}
-      <motion.div
-        className="mb-14"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="h-px w-12 bg-secondary mb-5" />
-        <h2
-          className="font-serif text-primary leading-[0.92]"
-          style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.5rem)' }}
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
-          What our customers say
-        </h2>
-        <p className="font-sans text-xs uppercase tracking-[0.2em] text-on-surface-variant mt-3">
-          Verified purchases · European producers
-        </p>
-      </motion.div>
+          <div>
+            <div className="flex items-center gap-5 mb-5">
+              <div className="h-px w-14 bg-secondary shrink-0" />
+              <span className="font-sans text-[10px] uppercase tracking-[0.32em] text-secondary font-semibold">
+                Verified purchases
+              </span>
+            </div>
+            <h2
+              className="font-serif text-primary leading-[0.92]"
+              style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)' }}
+            >
+              What our customers say
+            </h2>
+          </div>
 
-      {/* Desktop: 3-column grid with stagger */}
-      <div className="hidden md:block">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={offset}
-            className="grid grid-cols-3 gap-5"
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-          >
-            {visible.map((t) => (
-              <motion.div key={`${t.id}-${offset}`} variants={staggerItem}>
-                <TestimonialCard t={t} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+          {/* Navigation arrows */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={retreat}
+              aria-label="Previous testimonial"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-colors"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={advance}
+              aria-label="Next testimonial"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </motion.div>
 
-      {/* Mobile: single card with cross-fade */}
-      <div className="md:hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={offset}
-            variants={testimonialEnter}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            <TestimonialCard t={testimonials[offset]} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
+        {/* Desktop: 3-column cards */}
+        <div className="hidden md:block">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={offset}
+              className="grid grid-cols-3 gap-6"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {visible.map((t) => (
+                <div
+                  key={`${t.id}-${offset}`}
+                  className="relative flex flex-col rounded-2xl bg-surface p-7 shadow-sm border border-outline-variant/15 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                >
+                  {/* Quote accent */}
+                  <div className="absolute -top-3 left-7">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary/10">
+                      <Quote size={14} strokeWidth={1.5} className="text-secondary" />
+                    </div>
+                  </div>
 
-      {/* Dot navigation */}
-      <div className="flex items-center justify-center gap-2 mt-8">
-        {testimonials.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => setOffset(i)}
-            aria-label={`Go to testimonial ${i + 1}`}
-            className={`rounded-full transition-all duration-300 ${
-              i === offset
-                ? 'w-5 h-1.5 bg-secondary'
-                : 'w-1.5 h-1.5 bg-outline-variant/40 hover:bg-outline-variant'
-            }`}
-          />
-        ))}
+                  <div className="mt-3 mb-5">
+                    <StarRating rating={t.rating} />
+                  </div>
+
+                  <p className="font-sans text-sm text-on-surface leading-relaxed flex-1 mb-6">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+
+                  <div className="pt-5 border-t border-outline-variant/15">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-serif text-sm font-semibold text-primary">{t.name}</p>
+                        <p className="font-sans text-[11px] text-on-surface-variant">{t.location}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="font-sans text-[10px] uppercase tracking-wider text-secondary font-medium">{t.region}</p>
+                        <p className="font-sans text-[10px] text-on-surface-variant/60 leading-tight max-w-[120px]">{t.product}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Mobile: single card */}
+        <div className="md:hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={offset}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.35 }}
+              className="relative rounded-2xl bg-surface p-7 shadow-sm border border-outline-variant/15"
+            >
+              <div className="absolute -top-3 left-7">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary/10">
+                  <Quote size={14} strokeWidth={1.5} className="text-secondary" />
+                </div>
+              </div>
+              <div className="mt-3 mb-5">
+                <StarRating rating={testimonials[offset].rating} />
+              </div>
+              <p className="font-sans text-sm text-on-surface leading-relaxed mb-6">
+                &ldquo;{testimonials[offset].text}&rdquo;
+              </p>
+              <div className="pt-5 border-t border-outline-variant/15">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-serif text-sm font-semibold text-primary">{testimonials[offset].name}</p>
+                    <p className="font-sans text-[11px] text-on-surface-variant">{testimonials[offset].location}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="font-sans text-[10px] uppercase tracking-wider text-secondary font-medium">{testimonials[offset].region}</p>
+                    <p className="font-sans text-[10px] text-on-surface-variant/60 leading-tight max-w-[120px]">{testimonials[offset].product}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setOffset(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                i === offset
+                  ? 'w-6 h-1.5 bg-secondary'
+                  : 'w-1.5 h-1.5 bg-outline-variant/40 hover:bg-outline-variant'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )
