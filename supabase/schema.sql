@@ -215,6 +215,44 @@ create policy "Anyone can submit contact message" on contact_messages for insert
 create policy "No direct browser access to newsletter" on newsletter_subscribers for all using (false);
 
 -- ═══════════════════════════════════════════════════════════════
+-- Explicit role grants (required from October 2026)
+-- ═══════════════════════════════════════════════════════════════
+
+-- Public-facing tables
+grant select on public.producers to anon;
+grant select, insert, update, delete on public.producers to authenticated;
+grant select, insert, update, delete on public.producers to service_role;
+
+grant select on public.products to anon;
+grant select, insert, update, delete on public.products to authenticated;
+grant select, insert, update, delete on public.products to service_role;
+
+grant select on public.orders to authenticated;
+grant select, insert, update, delete on public.orders to service_role;
+
+grant select on public.order_items to authenticated;
+grant select, insert, update, delete on public.order_items to service_role;
+
+grant insert on public.producer_applications to anon;
+grant insert on public.producer_applications to authenticated;
+grant select, insert, update, delete on public.producer_applications to service_role;
+
+grant insert on public.contact_messages to anon;
+grant insert on public.contact_messages to authenticated;
+grant select, insert, update, delete on public.contact_messages to service_role;
+
+grant select, insert, update, delete on public.newsletter_subscribers to service_role;
+
+grant select on public.regions to anon;
+grant select on public.regions to authenticated;
+grant select, insert, update, delete on public.regions to service_role;
+
+-- Sequences
+grant usage on all sequences in schema public to anon;
+grant usage on all sequences in schema public to authenticated;
+grant usage on all sequences in schema public to service_role;
+
+-- ═══════════════════════════════════════════════════════════════
 -- Storage bucket for images
 -- ═══════════════════════════════════════════════════════════════
 
