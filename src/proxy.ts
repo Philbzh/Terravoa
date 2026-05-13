@@ -116,6 +116,9 @@ export async function proxy(request: NextRequest) {
   return response
 }
 
-// NOTE: the middleware matcher `config` lives in `./middleware.ts` — Next.js 16
-// requires it to be a statically-parseable literal export in that file and
-// cannot follow a re-export across modules.
+/** Limit which paths run the proxy — must stay in this file (Next.js parses it statically). */
+export const config = {
+  matcher: [
+    '/((?!api|_next|_vercel|.*\\..*).*)',
+  ],
+}
