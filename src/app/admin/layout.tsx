@@ -19,15 +19,27 @@ export default async function AdminLayout({
   const counts = await getAdminNavCounts()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-surface to-surface-container-lowest px-4 md:px-6 lg:px-8 py-5 md:py-6">
-      <div className="w-full max-w-[1600px] mx-auto flex flex-col gap-6">
-        <AdminSidebar counts={counts} access={access} />
-        <div className="admin-content flex-1 min-w-0 rounded-2xl border border-outline-variant/20 bg-surface px-4 md:px-6 lg:px-7 py-5 md:py-6 shadow-sm">
+    <div className="flex min-h-screen bg-surface-container-lowest">
+      {/* Skip-to-content link for accessibility */}
+      <a
+        href="#admin-main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-primary focus:text-on-primary focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
+      >
+        Skip to content
+      </a>
+
+      <AdminSidebar counts={counts} access={access} />
+
+      <main
+        id="admin-main"
+        className="admin-content flex-1 min-w-0 min-h-screen lg:pl-0"
+      >
+        <div className="px-4 md:px-6 lg:px-8 py-5 md:py-6 max-w-[1400px]">
           <AdminPageTransition>
             {children}
           </AdminPageTransition>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
