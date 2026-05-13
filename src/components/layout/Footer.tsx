@@ -49,12 +49,11 @@ function Confetti({ particles }: { particles: Particle[] }) {
   )
 }
 
-const discoverHrefs = ['/collection', '/stories', '/about', '/regions', '/savoir-faire', '/for-producers'] as const
+const discoverHrefs = ['/collection', '/regions', '/about', '/savoir-faire', '/for-producers'] as const
 const discoverKeys = [
   'collection',
-  'journal',
+  'origins',
   'ourStory',
-  'regionalArchives',
   'savoirFaire',
   'becomeProducer',
 ] as const

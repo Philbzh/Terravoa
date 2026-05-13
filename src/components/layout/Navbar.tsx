@@ -13,8 +13,8 @@ import { createClient } from '@/lib/supabase/client'
 import { LocaleSwitcher } from '@/components/layout/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
-const navHrefs = ['/collection', '/producers', '/stories', '/about'] as const
-const navKeys = ['shop', 'producers', 'journal', 'about'] as const
+const navHrefs = ['/collection', '/producers', '/regions', '/about'] as const
+const navKeys = ['shop', 'producers', 'origins', 'about'] as const
 
 export function Navbar() {
   const t = useTranslations('nav')

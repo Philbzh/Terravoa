@@ -5,8 +5,8 @@ import { getAllRegions } from '@/lib/content'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Regions',
-  description: 'Explore the European regions we source from — each with its own terroir, climate, and centuries-old tradition.',
+  title: 'Origins — Discover European Regions',
+  description: 'Explore the regions behind our producers — their terroir, traditions, and the culture that shapes artisan food across Europe.',
 }
 
 export default async function RegionsPage() {

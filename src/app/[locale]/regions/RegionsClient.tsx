@@ -12,9 +12,9 @@ export function RegionsClient({ regions }: { regions: Region[] }) {
   return (
     <PageContainer>
       <SectionHeader
-        kicker="Regions"
-        title="Regional Archives"
-        subtitle="Europe is a mosaic of terroir and tradition. Explore the regions we source from, each with its own character, climate, and centuries-old savoir-faire."
+        kicker="Origins"
+        title="Origins"
+        subtitle="Every product begins somewhere. Explore the regions behind our producers — their terroir, traditions, and the culture that shapes what ends up in your kitchen."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

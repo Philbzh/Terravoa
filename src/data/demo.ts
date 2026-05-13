@@ -57,6 +57,12 @@ export interface Product {
   featuredOrder?: number
 }
 
+export interface RegionTradition {
+  title: string
+  body: string
+  icon?: string // emoji or lucide icon name
+}
+
 export interface Region {
   slug: string
   name: string
@@ -68,6 +74,7 @@ export interface Region {
   imageAlt: string
   productCount: number
   producerCount: number
+  traditions?: RegionTradition[]
 }
 
 /** Journal (SEO): regional guides. Producer portraits live on producer profiles, not in the Journal index. */
@@ -348,6 +355,11 @@ export const regions: Region[] = [
     imageAlt: 'Rocky Atlantic coastline of Brittany with salt marshes at low tide',
     productCount: 2,
     producerCount: 0,
+    traditions: [
+      { title: 'The Salt Harvest', icon: '🧂', body: 'Fleur de sel forms only when wind, sun, and tide align. Paludiers skim this fragile crust by hand with wooden rakes — a technique unchanged since the ninth century. Each harvest depends on the weather; no two seasons yield the same salt.' },
+      { title: 'Butter & Caramel', icon: '🧈', body: 'Breton butter is made from lightly cultured cream, giving it a tangy complexity closer to cheese. Mixed with fleur de sel, it becomes the base of salted caramel — a confection the region elevated from afterthought to art form.' },
+      { title: 'At the Table', icon: '🥞', body: 'The galette — buckwheat crêpe filled with egg, ham, and cheese — is Brittany in a single dish. Washed down with dry cider, eaten in a crêperie with stone walls, it connects the grain, the dairy, and the orchard in one meal.' },
+    ],
   },
   {
     slug: 'tuscany',
@@ -360,6 +372,11 @@ export const regions: Region[] = [
     imageAlt: 'Rolling Tuscan hills with cypress trees and terracotta farmhouses at dusk',
     productCount: 2,
     producerCount: 1,
+    traditions: [
+      { title: 'The Olive Harvest', icon: '🫒', body: 'Tuscan oil begins with early-picked Frantoio olives — green, bitter, pressed within hours. The peppery cough it provokes is a mark of quality, not a flaw. Harvest year on the label is the first thing to look for.' },
+      { title: 'The Truffle Season', icon: '🍄', body: 'Autumn in the Crete Senesi brings truffle hunters and their dogs into the oak forests before dawn. White truffle season lasts barely two months — each specimen is irreplaceable, priced accordingly, and worth every cent.' },
+      { title: 'Slow Meals', icon: '🍝', body: 'A Tuscan lunch is an exercise in restraint: pici pasta made from flour and water, ribollita from yesterday\'s bread, bistecca from Chianina cattle. The ingredients do the work; the cook steps back.' },
+    ],
   },
   {
     slug: 'black-forest',
@@ -372,6 +389,11 @@ export const regions: Region[] = [
     imageAlt: 'Dense Black Forest pine canopy with morning mist and wildflower clearing',
     productCount: 2,
     producerCount: 1,
+    traditions: [
+      { title: 'Forest Honey', icon: '🍯', body: 'Black Forest beekeepers tend fewer than fifty hives, harvest by meadow and season, and never heat or filter. Each jar carries the bloom cycle of that clearing — acacia in spring, thistle and clover in summer, resinous pine in late season.' },
+      { title: 'Smoke & Cure', icon: '🥩', body: 'Schwarzwälder Schinken is cold-smoked over fir branches for weeks. The double-smoke technique produces a flavour no factory has convincingly replicated — dry, aromatic, unmistakably forest.' },
+      { title: 'Spice & Season', icon: '🎄', body: 'The Christmas baking tradition runs deep: Lebkuchen spiced with cinnamon and clove, Kirschwasser-soaked cherries, and Christstollen shaped by recipes older than the towns that bake them.' },
+    ],
   },
   {
     slug: 'andalusia',
@@ -384,6 +406,11 @@ export const regions: Region[] = [
     imageAlt: 'Sun-drenched Andalusian village with whitewashed walls and terracotta rooftops',
     productCount: 2,
     producerCount: 1,
+    traditions: [
+      { title: 'Pimentón & Smoke', icon: '🌶️', body: 'In Jaraíz de la Vera, peppers are smoked over holm oak fires for two weeks — turned by hand around the clock. The result is pimentón de la Vera: a spice with a depth that ordinary paprika cannot approach.' },
+      { title: 'The Saffron Harvest', icon: '🌸', body: 'A gram of saffron represents 150 flowers, picked before dawn in October, stigmas separated by hand the same day. The harvest window lasts three weeks. There are no shortcuts.' },
+      { title: 'Moorish Pantry', icon: '🏺', body: 'Eight centuries of Islamic influence left Andalusia with almonds, citrus, cumin, and a philosophy of preservation — sun-drying, brining, smoking — that turns seasonal abundance into year-round flavour.' },
+    ],
   },
   {
     slug: 'alentejo',
@@ -396,6 +423,11 @@ export const regions: Region[] = [
     imageAlt: 'Golden wheat plains of the Alentejo with cork oaks at harvest time',
     productCount: 1,
     producerCount: 1,
+    traditions: [
+      { title: 'Cork & Time', icon: '🪵', body: 'The cork oak waits twenty-five years before its first harvest, then yields bark on a nine-year cycle. Each tree lives two centuries or more. The stripped trunk turns terracotta-red for a season — a landscape marking time in decades.' },
+      { title: 'Sheep Cheese', icon: '🧀', body: 'Queijo de ovelha is made from Merino ewes grazing open plains. Thistle rennet gives it a sharp, saline edge; the best versions are almost liquid inside. Eaten with bread and local white wine, it defines the region.' },
+      { title: 'Terracotta Craft', icon: '🏺', body: 'Alentejo potters work unglazed clay, hand-thrown and wood-fired through the night. The warmth of the finished piece comes from the specific clay, the specific kiln, the specific hands — no industrial process replicates it.' },
+    ],
   },
   {
     slug: 'alsace',
@@ -408,6 +440,11 @@ export const regions: Region[] = [
     imageAlt: 'Colourful half-timbered houses along a canal in Colmar, Alsace',
     productCount: 0,
     producerCount: 0,
+    traditions: [
+      { title: 'Between Two Cultures', icon: '🏘️', body: 'Alsace absorbed the best of France and Germany without being fully reducible to either. Tarte flambée, choucroute garnie, baeckeoffe — the cuisine carries German generosity with French precision.' },
+      { title: 'The Wine Route', icon: '🍷', body: 'Riesling, Gewurztraminer, and Pinot Gris from the Vosges foothills are aromatic, often bone-dry, and built to age in ways Alsatian wines rarely get credit for. The grands crus on limestone above Kaysersberg are genuinely extraordinary.' },
+      { title: 'Christmas Spice', icon: '🍪', body: 'Bredele cookies, pain d\'épices, Lebkuchen — Alsace\'s Christmas baking tradition is not nostalgia but a living calendar. Mustard made with Riesling rather than verjuice ties the vineyards to the charcuterie board.' },
+    ],
   },
   {
     slug: 'provence',
@@ -420,6 +457,11 @@ export const regions: Region[] = [
     imageAlt: 'Endless lavender fields of the Valensole plateau at peak bloom',
     productCount: 2,
     producerCount: 1,
+    traditions: [
+      { title: 'Lavender & Distillation', icon: '💜', body: 'The Valensole plateau blooms for three weeks in July. Oil content peaks just before full flower — cutting too late means sweeter, less complex fragrance. Great lavender oil comes from watching the plants, not the calendar.' },
+      { title: 'Wild Herbs', icon: '🌿', body: 'Thyme, rosemary, savory, and oregano grow wild across the limestone garrigue. Thin soil, intense heat, and cool nights concentrate their volatile oils to a degree that cultivated herbs rarely approach.' },
+      { title: 'Provençal Oil', icon: '🫒', body: 'The oils of Baux-de-Provence are quiet, buttery, shaped by Salonenque and Aglandau olives. They are not the peppery oils of Tuscany — they are richer, more delicate, and excellent where a Tuscan oil would dominate.' },
+    ],
   },
 ]
 
