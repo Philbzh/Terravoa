@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Loader2, Package } from 'lucide-react'
 import { PageContainer } from '@/components/ui/PageContainer'
@@ -18,6 +18,7 @@ const paymentsEnabled = Boolean(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.
 
 export default function CheckoutPage() {
   const locale = useLocale()
+  const t = useTranslations('checkout')
   const hydrated = useCartStore((s) => s.hydrated)
   const lines = useCartStore((s) => s.lines)
   const [error, setError] = useState<string | null>(null)
@@ -43,8 +44,8 @@ export default function CheckoutPage() {
     return (
       <PageContainer>
         <div className="max-w-xl mx-auto text-center py-16">
-          <h1 className="font-serif text-4xl text-primary mb-4">Checkout</h1>
-          <p className="text-on-surface-variant font-sans">Loading your cart…</p>
+          <h1 className="font-serif text-4xl text-primary mb-4">{t('title')}</h1>
+          <p className="text-on-surface-variant font-sans">{t('loading')}</p>
         </div>
       </PageContainer>
     )
@@ -68,7 +69,7 @@ export default function CheckoutPage() {
       })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error ?? 'Checkout failed')
+        setError(data.error ?? t('genericError'))
         setLoading(false)
         return
       }
@@ -76,9 +77,9 @@ export default function CheckoutPage() {
         window.location.href = data.url
         return
       }
-      setError('No checkout URL returned')
+      setError(t('genericError'))
     } catch {
-      setError('Something went wrong. Please try again.')
+      setError(t('genericError'))
     }
     setLoading(false)
   }
@@ -87,13 +88,13 @@ export default function CheckoutPage() {
     return (
       <PageContainer>
         <div className="max-w-xl mx-auto text-center py-16">
-          <h1 className="font-serif text-4xl text-primary mb-4">Checkout</h1>
-          <p className="text-on-surface-variant font-sans mb-8">Your cart is empty.</p>
+          <h1 className="font-serif text-4xl text-primary mb-4">{t('title')}</h1>
+          <p className="text-on-surface-variant font-sans mb-8">{t('emptyCart')}</p>
           <Link
             href="/collection"
             className="text-secondary font-sans text-sm uppercase tracking-wider underline underline-offset-4"
           >
-            Back to collection
+            {t('backToCollection')}
           </Link>
         </div>
       </PageContainer>
@@ -106,15 +107,14 @@ export default function CheckoutPage() {
         className="font-serif text-primary mb-4 leading-[0.96]"
         style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)' }}
       >
-        Checkout
+        {t('title')}
       </h1>
       <p className="text-on-surface-variant font-sans text-sm mb-10 max-w-xl">
-        One secure payment — your products will be shipped directly by each producer.
-        Shipping and billing details are collected on the next step.
+        {t('subtitle')}
       </p>
 
       <div className="max-w-md rounded-xl border border-outline-variant/20 bg-surface-container-low p-8 mb-8">
-        <h2 className="font-serif text-lg text-primary mb-4">Order summary</h2>
+        <h2 className="font-serif text-lg text-primary mb-4">{t('orderSummary')}</h2>
         <ul className="space-y-3 font-sans text-sm text-on-surface-variant mb-6">
           {lines.map((l) => (
             <li key={l.slug} className="flex justify-between gap-4">
@@ -126,7 +126,7 @@ export default function CheckoutPage() {
           ))}
           {features.giftMessaging && giftData.isGift && giftData.giftWrap && (
             <li className="flex justify-between gap-4">
-              <span>Gift wrapping</span>
+              <span>{t('giftWrapping')}</span>
               <span className="text-primary tabular-nums shrink-0">€3.50</span>
             </li>
           )}
@@ -150,15 +150,14 @@ export default function CheckoutPage() {
         </div>
 
         <div className="flex justify-between font-serif text-xl text-primary">
-          <span>Total</span>
+          <span>{t('total')}</span>
           <span>€{(total / 100).toFixed(2)}</span>
         </div>
         {producerCount > 1 && (
           <div className="flex items-start gap-3 mt-5 pt-4 border-t border-outline-variant/10">
             <Package size={16} strokeWidth={1.2} className="text-secondary shrink-0 mt-0.5" />
             <p className="font-sans text-xs text-on-surface-variant leading-relaxed">
-              Your order includes products from {producerCount} producers.
-              Items will be shipped in separate packages, fresh from each origin.
+              {t('multiProducer', { count: producerCount })}
             </p>
           </div>
         )}
@@ -178,7 +177,7 @@ export default function CheckoutPage() {
 
       {!paymentsEnabled && (
         <p className="text-on-surface-variant font-sans text-sm mb-4" role="status">
-          Payments are currently unavailable in this environment. You can still review your cart.
+          {t('paymentsUnavailable')}
         </p>
       )}
 
@@ -192,23 +191,26 @@ export default function CheckoutPage() {
         {loading ? (
           <>
             <Loader2 size={16} className="animate-spin" />
-            Redirecting…
+            {t('redirecting')}
           </>
         ) : (
-          'Pay with Stripe'
+          t('payButton')
         )}
       </Button>
 
       <p className="font-sans text-xs text-on-surface-variant mt-8 max-w-lg">
-        By continuing you agree to our{' '}
-        <Link href="/terms" className="text-secondary underline underline-offset-2">
-          terms
-        </Link>
-        . For questions,{' '}
-        <Link href="/contact" className="text-secondary underline underline-offset-2">
-          contact us
-        </Link>
-        .
+        {t.rich('termsNotice', {
+          terms: (chunks) => (
+            <Link href="/terms" className="text-secondary underline underline-offset-2">
+              {chunks}
+            </Link>
+          ),
+          contact: (chunks) => (
+            <Link href="/contact" className="text-secondary underline underline-offset-2">
+              {chunks}
+            </Link>
+          ),
+        })}
       </p>
     </PageContainer>
   )

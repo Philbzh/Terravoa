@@ -608,5 +608,21 @@
     "emptyState": "Nessun produttore in questa regione per ora.",
     "view": "Vedi",
     "discover": "Scopri"
+  },
+  "checkout": {
+    "title": "Pagamento",
+    "loading": "Caricamento del carrello…",
+    "emptyCart": "Il tuo carrello è vuoto.",
+    "backToCollection": "Torna alla collezione",
+    "subtitle": "Un unico pagamento sicuro — i tuoi prodotti saranno spediti direttamente da ogni produttore. L'indirizzo di spedizione e fatturazione viene raccolto nel passaggio successivo.",
+    "orderSummary": "Riepilogo ordine",
+    "giftWrapping": "Confezione regalo",
+    "total": "Totale",
+    "multiProducer": "Il tuo ordine include prodotti di {count} produttori. Gli articoli verranno spediti in pacchi separati, freschi da ogni origine.",
+    "payButton": "Paga con Stripe",
+    "redirecting": "Reindirizzamento…",
+    "paymentsUnavailable": "I pagamenti non sono disponibili in questo ambiente. Puoi comunque consultare il tuo carrello.",
+    "termsNotice": "Continuando accetti i nostri <terms>termini</terms>. Per domande, <contact>contattaci</contact>.",
+    "genericError": "Qualcosa è andato storto. Riprova."
   }
 }

@@ -80,6 +80,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
+  // Handle refund events
+  if (event.type === 'charge.refunded') {
+    return handleChargeRefunded(event, stripe)
+  }
+
+  // Handle failed payment events
+  if (event.type === 'payment_intent.payment_failed') {
+    return handlePaymentFailed(event)
+  }
+
+  // Handle dispute events
+  if (event.type === 'charge.dispute.created') {
+    return handleDisputeCreated(event)
+  }
+
   if (event.type !== 'checkout.session.completed') {
     return NextResponse.json({ received: true })
   }
@@ -347,6 +362,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Database error' }, { status: 500 })
   }
 
+  // Atomically increment coupon use_count only after confirmed payment.
+  const couponId = full.metadata?.coupon_id
+  if (couponId) {
+    await admin.rpc('increment_coupon_use_count', { coupon_uuid: couponId })
+  }
+
+  // Mark abandoned cart as recovered
+  if (customerEmail) {
+    await admin
+      .from('abandoned_carts')
+      .update({ recovered_at: new Date().toISOString() })
+      .eq('email', customerEmail)
+      .is('recovered_at', null)
+  }
+
+  // Atomically decrement stock for each purchased product.
+  for (const { slug, qty } of parsedLines) {
+    await admin.rpc('decrement_product_stock', { product_slug: slug, qty })
+  }
+
   const producerIds = [...new Set(emailLinesDraft.map((l) => l.producerId))]
   const { data: producerRows } = await admin
     .from('producers')
@@ -375,4 +410,91 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ received: true, order_id: orderId })
+}
+
+// ── Refund handler ──────────────────────────────────────────────────────────
+
+async function handleChargeRefunded(event: Stripe.Event, stripe: Stripe) {
+  const charge = event.data.object as Stripe.Charge
+  const paymentIntentId = typeof charge.payment_intent === 'string'
+    ? charge.payment_intent
+    : charge.payment_intent?.id
+
+  if (!paymentIntentId) {
+    return NextResponse.json({ received: true, skipped: 'no_pi' })
+  }
+
+  // Find the checkout session associated with this payment intent
+  const sessions = await stripe.checkout.sessions.list({
+    payment_intent: paymentIntentId,
+    limit: 1,
+  })
+
+  const sessionId = sessions.data[0]?.id
+  if (!sessionId) {
+    return NextResponse.json({ received: true, skipped: 'no_session' })
+  }
+
+  const admin = createAdminClient() as any
+  const isFullRefund = charge.refunded
+
+  await admin
+    .from('orders')
+    .update({
+      payment_status: isFullRefund ? 'refunded' : 'partially_refunded',
+    })
+    .eq('stripe_payment_id', sessionId)
+
+  console.info(
+    `[webhook] charge.refunded: session=${sessionId} full=${isFullRefund} amount=${charge.amount_refunded}`,
+  )
+
+  return NextResponse.json({ received: true, refunded: true })
+}
+
+// ── Failed payment handler ──────────────────────────────────────────────────
+
+async function handlePaymentFailed(event: Stripe.Event) {
+  const paymentIntent = event.data.object as Stripe.PaymentIntent
+  const lastError = paymentIntent.last_payment_error
+
+  console.warn(
+    `[webhook] payment_intent.payment_failed: pi=${paymentIntent.id} error=${lastError?.message ?? 'unknown'}`,
+  )
+
+  // No order exists yet for failed payments (order is only created on success)
+  // Log for ops monitoring — could trigger an alert email in the future
+  return NextResponse.json({ received: true, failed: true })
+}
+
+// ── Dispute handler ─────────────────────────────────────────────────────────
+
+async function handleDisputeCreated(event: Stripe.Event) {
+  const dispute = event.data.object as Stripe.Dispute
+  const chargeId = typeof dispute.charge === 'string' ? dispute.charge : dispute.charge?.id
+
+  console.error(
+    `[webhook] charge.dispute.created: dispute=${dispute.id} charge=${chargeId} amount=${dispute.amount} reason=${dispute.reason}`,
+  )
+
+  // Notify admin via ops email
+  const adminEmail = process.env.ADMIN_CONTACT_EMAIL?.trim()
+  if (adminEmail) {
+    const { sendAdminOpsDigest } = await import('@/lib/email/ops-emails')
+    try {
+      await sendAdminOpsDigest({
+        to: adminEmail,
+        delayed24h: 0,
+        delayed48h: 0,
+        delayed72h: 0,
+        returnBacklog24h: 0,
+        planBacklog48h: 0,
+        disputeAlert: `Dispute ${dispute.id} opened for €${(dispute.amount / 100).toFixed(2)} — reason: ${dispute.reason}`,
+      })
+    } catch (e) {
+      console.error('[webhook] dispute alert email failed', e)
+    }
+  }
+
+  return NextResponse.json({ received: true, dispute: true })
 }

@@ -1,19 +1,18 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { rateLimit } from '@/lib/rate-limit'
+import { rateLimit, getClientIp } from '@/lib/rate-limit'
+import { requireJsonContentType } from '@/lib/http'
 
 export const dynamic = 'force-dynamic'
-
-function getClientIp(req: Request): string {
-  const xff = req.headers.get('x-forwarded-for')
-  return xff?.split(',')[0]?.trim() || 'unknown'
-}
 
 /**
  * POST /api/community-discovery
  * Submit a community discovery for a region. Moderated before display.
  */
 export async function POST(req: Request) {
+  const badContentType = requireJsonContentType(req)
+  if (badContentType) return badContentType
+
   // Rate limit: 5 submissions per hour per IP
   const ip = getClientIp(req)
   const { success } = await rateLimit(`community-discovery:${ip}`, 5, 3600_000)

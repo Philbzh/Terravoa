@@ -12,6 +12,8 @@ function getCustomerName(payload: unknown): string {
   return typeof value === 'string' && value.trim() ? value.trim() : 'Customer'
 }
 
+const MAX_ATTEMPTS = 5
+
 export async function POST(request: Request) {
   const unauthorized = verifyCronAuth(request)
   if (unauthorized) return unauthorized
@@ -23,6 +25,7 @@ export async function POST(request: Request) {
     .select('id, kind, order_id, customer_email, payload, attempts')
     .is('sent_at', null)
     .lte('send_at', nowIso)
+    .lt('attempts', MAX_ATTEMPTS)
     .order('send_at', { ascending: true })
     .limit(50)
 
@@ -74,21 +77,36 @@ export async function POST(request: Request) {
       sent += 1
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Unknown email job error'
+      const newAttempts = Number(job.attempts ?? 0) + 1
       await admin
         .from('email_jobs')
         .update({
-          attempts: Number(job.attempts ?? 0) + 1,
+          attempts: newAttempts,
           last_error: message,
         })
         .eq('id', job.id)
+
+      if (newAttempts >= MAX_ATTEMPTS) {
+        console.error(
+          `[email-jobs] dead-letter: job ${job.id} (${job.kind}) failed ${MAX_ATTEMPTS} times — last error: ${message}`,
+        )
+      }
       failed += 1
     }
   }
+
+  // Count total dead-lettered jobs for monitoring
+  const { count: deadLetterCount } = await admin
+    .from('email_jobs')
+    .select('id', { count: 'exact', head: true })
+    .is('sent_at', null)
+    .gte('attempts', MAX_ATTEMPTS)
 
   return NextResponse.json({
     ok: true,
     due: jobs.length,
     sent,
     failed,
+    dead_letter: deadLetterCount ?? 0,
   })
 }

@@ -104,7 +104,9 @@
       "Bash(find \"C:\\\\\\\\Users\\\\\\\\User\\\\\\\\..2_PHIL\\\\\\\\GESCHÄFTSKONZEPT\\\\\\\\MyTerraVera\\\\\\\\__DESIGNSYSTEM_TERRAVOA\\\\\\\\Terravoa Design System\" -type f)",
       "Bash(findstr /n \"primary\\\\|secondary\\\\|tertiary\\\\|surface\\\\|font\\\\|radius\" src\\\\app\\\\globals.css)",
       "mcp__Claude_in_Chrome__tabs_context_mcp",
-      "Bash(npx supabase *)"
+      "Bash(npx supabase *)",
+      "Bash(powershell -Command \"\\(Get-Content messages/en.json | Measure-Object -Line\\).Lines\")",
+      "Bash(git add *)"
     ]
   }
 }

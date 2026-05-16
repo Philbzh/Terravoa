@@ -608,5 +608,21 @@
     "emptyState": "Noch keine Produzenten in dieser Region.",
     "view": "Ansehen",
     "discover": "Entdecken"
+  },
+  "checkout": {
+    "title": "Kasse",
+    "loading": "Warenkorb wird geladen…",
+    "emptyCart": "Dein Warenkorb ist leer.",
+    "backToCollection": "Zurück zur Kollektion",
+    "subtitle": "Eine sichere Zahlung — deine Produkte werden direkt von jedem Produzenten versendet. Versand- und Rechnungsdaten werden im nächsten Schritt erfasst.",
+    "orderSummary": "Bestellübersicht",
+    "giftWrapping": "Geschenkverpackung",
+    "total": "Gesamt",
+    "multiProducer": "Deine Bestellung enthält Produkte von {count} Produzenten. Die Artikel werden in separaten Paketen direkt vom Ursprung versendet.",
+    "payButton": "Mit Stripe bezahlen",
+    "redirecting": "Weiterleitung…",
+    "paymentsUnavailable": "Zahlungen sind in dieser Umgebung derzeit nicht verfügbar.",
+    "termsNotice": "Mit dem Fortfahren akzeptierst du unsere <terms>AGB</terms>. Bei Fragen <contact>kontaktiere uns</contact>.",
+    "genericError": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
   }
 }

@@ -49,15 +49,23 @@ export async function sendAdminOpsDigest(opts: {
   delayed72h: number
   returnBacklog24h: number
   planBacklog48h: number
+  disputeAlert?: string
 }) {
+  const disputeHtml = opts.disputeAlert
+    ? `<li style="color:#ba1a1a;font-weight:600;">⚠ ${opts.disputeAlert}</li>`
+    : ''
+
   await send(
     opts.to,
-    `[${SITE_NAME}] Ops digest — producer-direct fulfillment`,
+    opts.disputeAlert
+      ? `[${SITE_NAME}] ⚠ Dispute alert`
+      : `[${SITE_NAME}] Ops digest — producer-direct fulfillment`,
     `<div style="max-width:540px;margin:0 auto;padding:24px;font-family:sans-serif;">
       <p style="font-family:Georgia,serif;font-size:20px;color:#182a1b;margin:0 0 14px;">
         Operations digest
       </p>
       <ul style="margin:0 0 18px 18px;padding:0;font-size:14px;line-height:1.8;color:#333;">
+        ${disputeHtml}
         <li>Untracked producer items >=24h: <strong>${opts.delayed24h}</strong></li>
         <li>Untracked producer items >=48h: <strong>${opts.delayed48h}</strong></li>
         <li>Untracked producer items >=72h: <strong>${opts.delayed72h}</strong></li>

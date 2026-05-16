@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
 import { requireAdminSession } from '@/lib/auth/require-admin'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireJsonContentType } from '@/lib/http'
 
 const VALID_STATUSES = ['pending', 'approved', 'rejected', 'completed']
 
 export async function PATCH(req: Request) {
+  const badContentType = requireJsonContentType(req)
+  if (badContentType) return badContentType
+
   try {
     await requireAdminSession()
   } catch {

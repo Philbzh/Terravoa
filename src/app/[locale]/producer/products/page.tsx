@@ -2,7 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getProducerForSession } from '@/lib/producer/server'
 import { getTranslations } from 'next-intl/server'
-import { Plus } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 import { ProductSparkline } from '@/components/producer/ProductSparkline'
 
 type ProductRow = {
@@ -118,8 +118,11 @@ export default async function ProducerProductsPage() {
                 <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">
                   14d
                 </th>
-                <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 text-right">
+                <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3">
                   {t('colStatus')}
+                </th>
+                <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 text-right">
+                  {t('colActions') ?? 'Actions'}
                 </th>
               </tr>
             </thead>
@@ -141,7 +144,7 @@ export default async function ProducerProductsPage() {
                   <td className="px-4 py-3.5 hidden md:table-cell">
                     <ProductSparkline data={sparklines[p.id] ?? Array(14).fill(0)} />
                   </td>
-                  <td className="px-4 py-3.5 text-right">
+                  <td className="px-4 py-3.5">
                     <span
                       className={`inline-block font-sans text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full ${
                         p.status === 'approved'
@@ -153,6 +156,15 @@ export default async function ProducerProductsPage() {
                     >
                       {statusLabel[p.status]}
                     </span>
+                  </td>
+                  <td className="px-4 py-3.5 text-right">
+                    <Link
+                      href={`/producer/products/${p.slug}/edit`}
+                      className="inline-flex items-center gap-1 text-secondary font-sans text-xs uppercase tracking-wider hover:text-primary transition-colors"
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </Link>
                   </td>
                 </tr>
               ))}

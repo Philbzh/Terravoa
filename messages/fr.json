@@ -608,5 +608,21 @@
     "emptyState": "Aucun producteur dans cette région pour l'instant.",
     "view": "Voir",
     "discover": "Découvrir"
+  },
+  "checkout": {
+    "title": "Paiement",
+    "loading": "Chargement de votre panier…",
+    "emptyCart": "Votre panier est vide.",
+    "backToCollection": "Retour à la collection",
+    "subtitle": "Un seul paiement sécurisé — vos produits seront expédiés directement par chaque producteur. L'adresse de livraison et de facturation est collectée à l'étape suivante.",
+    "orderSummary": "Récapitulatif de commande",
+    "giftWrapping": "Emballage cadeau",
+    "total": "Total",
+    "multiProducer": "Votre commande inclut des produits de {count} producteurs. Les articles seront envoyés dans des colis séparés, frais de chaque origine.",
+    "payButton": "Payer avec Stripe",
+    "redirecting": "Redirection…",
+    "paymentsUnavailable": "Les paiements ne sont pas disponibles dans cet environnement. Vous pouvez tout de même consulter votre panier.",
+    "termsNotice": "En continuant, vous acceptez nos <terms>conditions</terms>. Pour toute question, <contact>contactez-nous</contact>.",
+    "genericError": "Une erreur est survenue. Veuillez réessayer."
   }
 }

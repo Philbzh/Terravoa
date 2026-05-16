@@ -8,6 +8,8 @@
     "dev:stable": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev --webpack",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint",
     "seed": "node scripts/seed-sanity.mjs",
     "seed:sanity": "node scripts/seed-sanity.mjs"
@@ -44,6 +46,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.1"
   }
 }

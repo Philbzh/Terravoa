@@ -15,6 +15,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
  */
 export type AuditAction =
   | 'producer.product.created'
+  | 'producer.product.updated'
   | 'producer.product.image.uploaded'
   | 'producer.order_item.tracking_updated'
   | 'producer.order_item.tracking_cleared'
