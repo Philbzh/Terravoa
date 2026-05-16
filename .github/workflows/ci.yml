@@ -34,7 +34,11 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      # ── Type-check ──────────────────────────────────────────────────────────
+      # ── Tests ─���───────────────────────────────────────────────────────────
+      - name: Run tests
+        run: npx vitest run
+
+      # ── Type-check ──────────────────────────────────��───────────────────────
       - name: TypeScript type-check
         run: npx tsc --noEmit
 

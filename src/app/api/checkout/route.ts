@@ -79,11 +79,11 @@ export async function POST(request: Request) {
   const admin = createAdminClient()
   const slugs = [...new Set(items.map((l) => l.slug))]
 
-  type DbProductRow = { slug: string; price: number; name: string; status: string }
+  type DbProductRow = { slug: string; price: number; name: string; status: string; stock_quantity: number | null }
 
   const { data: dbProductsRaw, error: dbErr } = await admin
     .from('products')
-    .select('slug, price, name, status')
+    .select('slug, price, name, status, stock_quantity')
     .in('slug', slugs)
     .eq('status', 'approved')
 
@@ -98,9 +98,21 @@ export async function POST(request: Request) {
   const productMap = new Map<string, DbProductRow>(dbProducts.map((p) => [p.slug, p]))
 
   for (const line of items) {
-    if (!productMap.has(line.slug)) {
+    const dbProduct = productMap.get(line.slug)
+    if (!dbProduct) {
       return NextResponse.json(
         { error: `Product unavailable: ${line.slug}` },
+        { status: 400 },
+      )
+    }
+    // Check stock availability (null = unlimited)
+    if (
+      (dbProduct as any).stock_quantity !== null &&
+      (dbProduct as any).stock_quantity !== undefined &&
+      (dbProduct as any).stock_quantity < line.quantity
+    ) {
+      return NextResponse.json(
+        { error: `Insufficient stock for: ${dbProduct.name}` },
         { status: 400 },
       )
     }
@@ -221,14 +233,6 @@ export async function POST(request: Request) {
       { error: 'Could not create checkout session' },
       { status: 500 },
     )
-  }
-
-  // Increment coupon use_count after session is successfully created
-  if (appliedCoupon) {
-    await (admin as any)
-      .from('coupons')
-      .update({ use_count: appliedCoupon.use_count + 1 })
-      .eq('id', appliedCoupon.id)
   }
 
   return NextResponse.json({ url: session.url })

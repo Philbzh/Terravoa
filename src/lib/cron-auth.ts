@@ -1,5 +1,6 @@
 import 'server-only'
 
+import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 
 /**
@@ -15,6 +16,13 @@ import { NextResponse } from 'next/server'
  *
  * Returns `null` when authorised; a 401/503 `NextResponse` otherwise.
  */
+function safeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a)
+  const bufB = Buffer.from(b)
+  if (bufA.length !== bufB.length) return false
+  return crypto.timingSafeEqual(bufA, bufB)
+}
+
 export function verifyCronAuth(request: Request): NextResponse | null {
   const secret = process.env.CRON_SECRET?.trim()
   if (!secret) {
@@ -23,13 +31,11 @@ export function verifyCronAuth(request: Request): NextResponse | null {
 
   const bearer = request.headers.get('authorization') ?? ''
   const bearerSecret = bearer.startsWith('Bearer ') ? bearer.slice('Bearer '.length) : ''
-  if (bearerSecret === secret) return null
+  if (bearerSecret && safeEqual(bearerSecret, secret)) return null
 
-  // Optional legacy compatibility — set ALLOW_LEGACY_CRON_HEADER=true during
-  // the deprecation window, then remove.
   if (process.env.ALLOW_LEGACY_CRON_HEADER === 'true') {
     const headerSecret = request.headers.get('x-cron-secret') ?? ''
-    if (headerSecret === secret) {
+    if (headerSecret && safeEqual(headerSecret, secret)) {
       console.warn(
         '[cron-auth] request used deprecated x-cron-secret header; ' +
           'update scheduler to use Authorization: Bearer <CRON_SECRET>',

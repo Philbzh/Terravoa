@@ -608,5 +608,21 @@
     "emptyState": "Ainda não há produtores nesta região.",
     "view": "Ver",
     "discover": "Descobrir"
+  },
+  "checkout": {
+    "title": "Pagamento",
+    "loading": "A carregar o seu carrinho…",
+    "emptyCart": "O seu carrinho está vazio.",
+    "backToCollection": "Voltar à coleção",
+    "subtitle": "Um pagamento seguro — os seus produtos serão enviados diretamente por cada produtor. O endereço de envio e faturação é recolhido no próximo passo.",
+    "orderSummary": "Resumo do pedido",
+    "giftWrapping": "Embrulho para presente",
+    "total": "Total",
+    "multiProducer": "O seu pedido inclui produtos de {count} produtores. Os artigos serão enviados em embalagens separadas, frescos de cada origem.",
+    "payButton": "Pagar com Stripe",
+    "redirecting": "A redirecionar…",
+    "paymentsUnavailable": "Os pagamentos não estão disponíveis neste ambiente. Ainda pode consultar o seu carrinho.",
+    "termsNotice": "Ao continuar, aceita os nossos <terms>termos</terms>. Para questões, <contact>contacte-nos</contact>.",
+    "genericError": "Algo correu mal. Tente novamente."
   }
 }

@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/email-jobs",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/ops-alerts",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/abandoned-carts",
+      "schedule": "0 18 * * *"
+    }
+  ]
+}

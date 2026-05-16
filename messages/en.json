@@ -608,5 +608,21 @@
     "emptyState": "No producers in this region yet.",
     "view": "View",
     "discover": "Discover"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "loading": "Loading your cart…",
+    "emptyCart": "Your cart is empty.",
+    "backToCollection": "Back to collection",
+    "subtitle": "One secure payment — your products will be shipped directly by each producer. Shipping and billing details are collected on the next step.",
+    "orderSummary": "Order summary",
+    "giftWrapping": "Gift wrapping",
+    "total": "Total",
+    "multiProducer": "Your order includes products from {count} producers. Items will be shipped in separate packages, fresh from each origin.",
+    "payButton": "Pay with Stripe",
+    "redirecting": "Redirecting…",
+    "paymentsUnavailable": "Payments are currently unavailable in this environment. You can still review your cart.",
+    "termsNotice": "By continuing you agree to our <terms>terms</terms>. For questions, <contact>contact us</contact>.",
+    "genericError": "Something went wrong. Please try again."
   }
 }

@@ -9,21 +9,33 @@ type CustomerRow = {
   totalSpent: number
   firstOrder: string
   lastOrder: string
-  recentOrders: {
-    id: string
-    status: string
-    created_at: string
-    trackingNumbers: string[]
-  }[]
 }
 
-// MED-6: cap aggregation queries so a single admin page view can't try to
-// materialise millions of rows. At scale these views should move to a
-// materialised view / KPI cache, but until then the caps bound memory usage.
+const PAGE_SIZE = 25
 const ORDERS_SCAN_LIMIT = 10_000
 const ORDER_ITEMS_SCAN_LIMIT = 20_000
 
-export default async function AdminCustomersPage() {
+function getPage(raw: string | undefined): number {
+  const n = Number(raw)
+  if (!Number.isFinite(n) || n < 1) return 1
+  return Math.floor(n)
+}
+
+function hrefFor(q: string, page: number) {
+  const sp = new URLSearchParams()
+  if (q.trim()) sp.set('q', q.trim())
+  if (page > 1) sp.set('page', String(page))
+  const qs = sp.toString()
+  return qs ? `/admin/customers?${qs}` : '/admin/customers'
+}
+
+export default async function AdminCustomersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; page?: string }>
+}) {
+  const { q = '', page: pageRaw } = await searchParams
+  const page = getPage(pageRaw)
   const admin = createAdminClient()
 
   const { data, error } = await (admin as any)
@@ -65,33 +77,33 @@ export default async function AdminCustomersPage() {
         totalSpent: row.total,
         firstOrder: row.created_at,
         lastOrder: row.created_at,
-        recentOrders: [
-          {
-            id: row.id,
-            status: row.status,
-            created_at: row.created_at,
-            trackingNumbers: trackingByOrder.get(row.id) ?? [],
-          },
-        ],
       })
     } else {
       existing.orderCount += 1
       existing.totalSpent += row.total
-      // created_at is sorted desc, so firstOrder = smallest date
       if (row.created_at < existing.firstOrder) existing.firstOrder = row.created_at
       if (row.created_at > existing.lastOrder) existing.lastOrder = row.created_at
-      if (existing.recentOrders.length < 5) {
-        existing.recentOrders.push({
-          id: row.id,
-          status: row.status,
-          created_at: row.created_at,
-          trackingNumbers: trackingByOrder.get(row.id) ?? [],
-        })
-      }
     }
   }
 
-  const customers = Array.from(map.values()).sort((a, b) => b.totalSpent - a.totalSpent)
+  let customers = Array.from(map.values()).sort((a, b) => b.totalSpent - a.totalSpent)
+
+  // Search filter
+  const search = q.trim().toLowerCase()
+  if (search) {
+    customers = customers.filter(
+      (c) =>
+        c.name.toLowerCase().includes(search) ||
+        c.email.toLowerCase().includes(search),
+    )
+  }
+
+  const totalCount = customers.length
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
+  const from = (page - 1) * PAGE_SIZE
+  const paginated = customers.slice(from, from + PAGE_SIZE)
+  const prevPage = page > 1 ? page - 1 : null
+  const nextPage = page < totalPages ? page + 1 : null
 
   function fmt(dateStr: string) {
     return new Date(dateStr).toLocaleDateString('en-GB', {
@@ -105,14 +117,33 @@ export default async function AdminCustomersPage() {
     <div>
       <AdminPageHeader
         title="Customers"
-        description="Customer overview with order history, shipment status, and tracking numbers entered by producers."
+        description="Customer overview with order history and spending."
+        metrics={[
+          { label: 'customers', value: totalCount },
+        ]}
       />
+
+      <form method="get" className="admin-toolbar">
+        <input
+          type="search"
+          name="q"
+          defaultValue={q}
+          placeholder="Search by name or email…"
+          className="w-full sm:max-w-md rounded-lg border border-outline-variant/30 bg-surface px-3 py-2 font-sans text-sm text-on-surface"
+        />
+        <button
+          type="submit"
+          className="font-sans text-xs uppercase tracking-wider px-4 py-2 rounded-full border border-secondary/30 text-secondary hover:bg-secondary/8 transition-colors"
+        >
+          Search
+        </button>
+      </form>
 
       {error && (
         <p className="text-error font-sans text-sm mb-4">{error.message}</p>
       )}
 
-      {customers.length === 0 ? (
+      {paginated.length === 0 ? (
         <div className="rounded-xl border border-dashed border-outline-variant/30 bg-surface-container-low/50 p-12 text-center">
           <p className="font-sans text-sm text-on-surface-variant">
             No customers yet. They will appear here once orders are placed.
@@ -141,13 +172,13 @@ export default async function AdminCustomersPage() {
                 <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 hidden md:table-cell">
                   Last order
                 </th>
-                <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3">
-                  Logistics
+                <th className="font-sans text-[10px] uppercase tracking-wider text-on-surface-variant px-4 py-3 text-right">
+                  Details
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/10">
-              {customers.map((c) => (
+              {paginated.map((c) => (
                 <tr key={c.email} className="hover:bg-surface-container-low/30 transition-colors">
                   <td className="px-4 py-3">
                     <p className="font-sans text-sm text-on-surface">{c.name}</p>
@@ -170,53 +201,51 @@ export default async function AdminCustomersPage() {
                   <td className="px-4 py-3 hidden md:table-cell">
                     <p className="font-sans text-xs text-on-surface-variant">{fmt(c.lastOrder)}</p>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/orders?q=${encodeURIComponent(c.email)}`}
-                      className="font-sans text-[11px] text-secondary hover:underline block mb-2"
+                      className="font-sans text-[11px] uppercase tracking-wide text-secondary hover:text-primary transition-colors"
                     >
-                      Open all orders for this customer
+                      View orders
                     </Link>
-                    <details>
-                      <summary className="cursor-pointer font-sans text-xs text-secondary hover:underline">
-                        View orders ({c.recentOrders.length})
-                      </summary>
-                      <div className="mt-2 space-y-2">
-                        {c.recentOrders.map((o) => (
-                          <div key={o.id} className="rounded-lg border border-outline-variant/15 px-3 py-2 bg-surface">
-                            <p className="font-sans text-[11px] text-on-surface-variant">
-                              {o.id.slice(0, 8)} · {fmt(o.created_at)}
-                            </p>
-                            <p className="font-sans text-xs text-on-surface mt-0.5">
-                              Shipment status: <span className="capitalize">{o.status}</span>
-                            </p>
-                            <p className="font-sans text-xs text-on-surface-variant mt-0.5">
-                              Tracking:{' '}
-                              {o.trackingNumbers.length > 0 ? o.trackingNumbers.join(', ') : 'Not entered yet'}
-                            </p>
-                            <div className="mt-2 flex items-center gap-3">
-                              <Link
-                                href={`/admin/orders/${o.id}`}
-                                className="font-sans text-[11px] text-secondary hover:underline"
-                              >
-                                Open detail
-                              </Link>
-                              <Link
-                                href={`/admin/orders?q=${encodeURIComponent(o.id)}`}
-                                className="font-sans text-[11px] text-secondary hover:underline"
-                              >
-                                Open in list
-                              </Link>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </details>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+      {totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-between">
+          <p className="font-sans text-xs text-on-surface-variant">
+            Page {page} of {totalPages} ({totalCount} customers)
+          </p>
+          <div className="flex items-center gap-3">
+            {prevPage ? (
+              <Link
+                href={hrefFor(q, prevPage)}
+                className="font-sans text-xs uppercase tracking-wider text-secondary hover:text-primary"
+              >
+                Previous
+              </Link>
+            ) : (
+              <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant/40">
+                Previous
+              </span>
+            )}
+            {nextPage ? (
+              <Link
+                href={hrefFor(q, nextPage)}
+                className="font-sans text-xs uppercase tracking-wider text-secondary hover:text-primary"
+              >
+                Next
+              </Link>
+            ) : (
+              <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant/40">
+                Next
+              </span>
+            )}
+          </div>
         </div>
       )}
     </div>

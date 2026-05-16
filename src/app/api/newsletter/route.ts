@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { requireJsonContentType } from '@/lib/http'
+import { sendNewsletterWelcome } from '@/lib/email/newsletter-emails'
 
 // RFC 5322-inspired but practical: must have local@domain.tld
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -36,13 +37,19 @@ export async function POST(req: Request) {
     }
 
     const admin = createAdminClient()
-    const { error } = await (admin as any)
+    const { error, count } = await (admin as any)
       .from('newsletter_subscribers')
-      .upsert({ email }, { onConflict: 'email', ignoreDuplicates: true })
+      .upsert({ email }, { onConflict: 'email', ignoreDuplicates: true, count: 'exact' })
 
     if (error) {
       console.error('[newsletter] upsert error:', error.message)
       return NextResponse.json({ error: 'Could not subscribe' }, { status: 500 })
+    }
+
+    // Send welcome email only for new subscribers (count > 0 means a row was inserted)
+    if (count && count > 0) {
+      const locale = typeof body?.locale === 'string' ? body.locale : undefined
+      sendNewsletterWelcome({ to: email, locale }).catch(() => {})
     }
 
     return NextResponse.json({ ok: true })

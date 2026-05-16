@@ -18,7 +18,7 @@ export function Button({
   return (
     <button
       className={cn(
-        'inline-flex items-center gap-2 font-sans font-medium transition-all duration-300',
+        'inline-flex items-center gap-2 font-sans font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         variant === 'primary' &&
           'bg-secondary text-on-secondary text-[11px] uppercase tracking-[0.2em] font-semibold px-8 py-4 rounded-full hover:bg-secondary-container transition-colors duration-300',
         variant === 'secondary' &&

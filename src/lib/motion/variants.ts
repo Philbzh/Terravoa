@@ -3,6 +3,21 @@ import type { Variants } from 'framer-motion'
 /** Ease curve matching Framer Motion's default spring feel but as a cubic-bezier */
 const ease = [0.22, 1, 0.36, 1] as const
 
+/**
+ * Checks if the user prefers reduced motion.
+ * Use this in components to conditionally disable animations.
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/** Variant set that resolves immediately (no animation). */
+export const noMotion: Variants = {
+  hidden: { opacity: 1 },
+  visible: { opacity: 1, transition: { duration: 0 } },
+}
+
 // ── Directional fades ────────────────────────────────────────────────────────
 
 export const fadeInUp: Variants = {
