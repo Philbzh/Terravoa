@@ -178,7 +178,8 @@
       "tagline": "— De las marismas de Bretaña al Bosque Negro, de los Alpes a las costas atlánticas. —",
       "shopCta": "Ver productos",
       "producersCta": "Ideas de regalo",
-      "imageAlt": "Mesa rústica con productos artesanales y viñedos toscanos al atardecer"
+      "imageAlt": "Mesa rústica con productos artesanales y viñedos toscanos al atardecer",
+      "scrollHint": "Desplazar"
     },
     "trustStrip": {
       "directFromProducers": "Directo del productor",

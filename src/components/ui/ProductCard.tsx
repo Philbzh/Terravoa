@@ -101,10 +101,16 @@ export function ProductCard({
   const badgeLabel = badge ? translatedBadgeLabel : undefined
 
   return (
-    <div className={cn('group cursor-pointer w-full', compact && 'max-w-[200px] sm:max-w-[220px]')}>
+    <div
+      className={cn(
+        'group cursor-pointer w-full transition-[transform,box-shadow] duration-500 ease-[var(--ease-editorial)]',
+        !compact && 'hover:-translate-y-1.5 hover:shadow-[var(--shadow-lg)]',
+        compact && 'max-w-[200px] sm:max-w-[220px]',
+      )}
+    >
       <div
         className={cn(
-          'bg-surface-container-lowest rounded-lg overflow-hidden relative mx-auto',
+          'bg-surface-container-lowest rounded-lg overflow-hidden relative mx-auto shadow-[var(--shadow-sm)]',
           compact ? 'aspect-square mb-3 max-h-[160px] w-[160px] sm:max-h-[180px] sm:w-[180px]' : 'aspect-square mb-6 w-full',
         )}
       >

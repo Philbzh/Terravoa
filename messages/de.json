@@ -178,7 +178,8 @@
       "tagline": "— Von den Salzwiesen der Bretagne bis zum Schwarzwald, von den Alpen bis zur Atlantikküste. —",
       "shopCta": "Zur Kollektion",
       "producersCta": "Geschenkideen",
-      "imageAlt": "Rustikaler Tisch mit handwerklichen Produkten vor toskanischen Weinbergen im goldenen Abendlicht"
+      "imageAlt": "Rustikaler Tisch mit handwerklichen Produkten vor toskanischen Weinbergen im goldenen Abendlicht",
+      "scrollHint": "Scrollen"
     },
     "trustStrip": {
       "directFromProducers": "Direkt vom Produzenten",

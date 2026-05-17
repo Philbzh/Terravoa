@@ -2,6 +2,7 @@
 
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
+import { motionDurations, motionEase, motionViewport } from '@/lib/motion/tokens'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { useTranslations } from 'next-intl'
 import { ArrowRight } from 'lucide-react'
@@ -40,7 +41,7 @@ export function CuratedCollection({ products, subtitleOverride }: Props) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65 }}
+          transition={{ duration: motionDurations.slow, ease: motionEase.out }}
         >
           <div>
             <div className="flex items-center gap-5 mb-6">
@@ -70,8 +71,8 @@ export function CuratedCollection({ products, subtitleOverride }: Props) {
               key={product.slug || product.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              viewport={motionViewport}
+              transition={{ duration: motionDurations.slow, delay: i * 0.08, ease: motionEase.out }}
             >
               <Link href={product.slug ? `/collection/${product.slug}` : '/collection'}>
                 <ProductCard

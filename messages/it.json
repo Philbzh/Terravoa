@@ -178,7 +178,8 @@
       "tagline": "— Dalle saline della Bretagna alla Foresta Nera, dalle Alpi alle coste atlantiche. —",
       "shopCta": "Acquista prodotti",
       "producersCta": "Idee regalo",
-      "imageAlt": "Tavolo rustico con prodotti artigianali e vigneti toscani al tramonto"
+      "imageAlt": "Tavolo rustico con prodotti artigianali e vigneti toscani al tramonto",
+      "scrollHint": "Scorri"
     },
     "trustStrip": {
       "directFromProducers": "Direttamente dal produttore",

@@ -178,7 +178,8 @@
       "tagline": "— Das salinas da Bretanha à Floresta Negra, dos Alpes às costas atlânticas. —",
       "shopCta": "Ver produtos",
       "producersCta": "Ideias de presente",
-      "imageAlt": "Mesa rústica com produtos artesanais e vinhas toscanas ao pôr do sol"
+      "imageAlt": "Mesa rústica com produtos artesanais e vinhas toscanas ao pôr do sol",
+      "scrollHint": "Deslizar"
     },
     "trustStrip": {
       "directFromProducers": "Direto do produtor",

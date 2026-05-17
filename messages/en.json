@@ -219,7 +219,8 @@
       "tagline": "— From Brittany's salt marshes to the Black Forest, from the Alps to the Atlantic coast. —",
       "shopCta": "Shop Products",
       "producersCta": "Gift Ideas",
-      "imageAlt": "Rustic table with artisan products overlooking Tuscan vineyards at golden hour"
+      "imageAlt": "Rustic table with artisan products overlooking Tuscan vineyards at golden hour",
+      "scrollHint": "Scroll"
     },
     "trustStrip": {
       "directFromProducers": "Direct from producers",
