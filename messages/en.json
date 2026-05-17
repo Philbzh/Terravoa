@@ -701,11 +701,32 @@
     }
   },
   "producersPage": {
+    "metaTitle": "Producers",
+    "metaDescription": "Meet the artisan producers behind every Terravoa product — small-batch makers from across Europe.",
     "kicker": "Our Producers",
+    "title": "Meet the Makers",
+    "subtitle": "Each producer has been personally visited and verified — not for scale, but for soul.",
+    "featuredProducer": "Featured Producer",
     "allFilter": "All",
     "emptyState": "No producers in this region yet.",
     "view": "View",
-    "discover": "Discover"
+    "discover": "Discover",
+    "specialties": {
+      "oliveOil": "Olive Oil",
+      "honey": "Honey",
+      "preserves": "Preserves",
+      "ceramics": "Ceramics",
+      "savonLavender": "Savon & Lavender",
+      "bodyCare": "Body Care",
+      "spices": "Spices"
+    },
+    "catalog": {
+      "rossi-estate": { "tagline": "Four centuries of liquid gold" },
+      "schwarzwald-imkerei": { "tagline": "Wild honey from ancient forests" },
+      "casa-del-sol": { "tagline": "Sun-dried traditions of the Mediterranean" },
+      "atelier-alentejo": { "tagline": "Earth shaped by hand" },
+      "maison-lavande": { "tagline": "The scent of Provence, bottled" }
+    }
   },
   "checkout": {
     "title": "Checkout",

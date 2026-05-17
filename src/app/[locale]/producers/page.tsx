@@ -1,12 +1,21 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ProducersClient } from './ProducersClient'
 import { getAllProducers } from '@/lib/content'
 
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: 'Producers',
-  description: 'Meet the artisan producers behind every Terravoa product — small-batch makers from across Europe.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'producersPage' })
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  }
 }
 
 export default async function ProducersPage() {

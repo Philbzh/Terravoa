@@ -13,12 +13,22 @@ import Image from 'next/image'
 import type { Producer } from '@/data/demo'
 import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useProducerDisplayLabels } from '@/lib/i18n/producer-labels'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Standard producer card with 3-D tilt
-// ─────────────────────────────────────────────────────────────────────────────
-function ProducerCard({ producer, index }: { producer: Producer; index: number }) {
+type LabelFns = ReturnType<typeof useProducerDisplayLabels>
+
+function ProducerCard({
+  producer,
+  index,
+  t,
+  labels,
+}: {
+  producer: Producer
+  index: number
+  t: ReturnType<typeof useTranslations<'producersPage'>>
+  labels: LabelFns
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -55,8 +65,7 @@ function ProducerCard({ producer, index }: { producer: Producer; index: number }
           href={`/producers/${producer.slug}`}
           className="group block bg-surface-container-low rounded-2xl overflow-hidden hover:shadow-[0_28px_80px_rgba(24,42,27,0.13)] transition-shadow duration-500 h-full"
         >
-          {/* Image */}
-          <div className="aspect-[4/3] relative overflow-hidden">
+          <motion.div className="aspect-[4/3] relative overflow-hidden">
             <Image
               src={producer.imageSrc}
               alt={producer.imageAlt || producer.name}
@@ -65,40 +74,42 @@ function ProducerCard({ producer, index }: { producer: Producer; index: number }
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               unoptimized={isUnoptimized}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <motion.div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
-            {/* Location badge top-left */}
-            <div className="absolute top-4 left-4">
+            <motion.div className="absolute top-4 left-4">
               <span className="font-sans text-[10px] uppercase tracking-[0.22em] text-white/70 bg-black/25 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                {producer.region}
+                {labels.labelRegion(producer.region)}
               </span>
-            </div>
+            </motion.div>
 
-            {/* Name slides up on hover */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
+            <motion.div className="absolute bottom-0 left-0 right-0 p-6 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
               <h3 className="font-serif text-2xl text-white">{producer.name}</h3>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Card footer */}
-          <div className="px-6 py-5 flex items-center justify-between gap-4">
+          <motion.div className="px-6 py-5 flex items-center justify-between gap-4">
             <p className="font-sans text-sm text-on-surface-variant line-clamp-1 flex-1">
-              {producer.specialty}
+              {labels.labelSpecialty(producer.specialty)}
             </p>
             <span className="shrink-0 inline-flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.15em] text-secondary group-hover:gap-3 transition-all duration-300">
-              View <ArrowRight size={12} strokeWidth={2} />
+              {t('view')} <ArrowRight size={12} strokeWidth={2} />
             </span>
-          </div>
+          </motion.div>
         </Link>
       </motion.div>
     </motion.div>
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Featured / hero card — wide, editorial treatment (first producer)
-// ─────────────────────────────────────────────────────────────────────────────
-function HeroCard({ producer }: { producer: Producer }) {
+function HeroCard({
+  producer,
+  t,
+  labels,
+}: {
+  producer: Producer
+  t: ReturnType<typeof useTranslations<'producersPage'>>
+  labels: LabelFns
+}) {
   const src = producer.heroImageSrc || producer.imageSrc
   const isUnoptimized = src.startsWith('https://')
 
@@ -113,8 +124,7 @@ function HeroCard({ producer }: { producer: Producer }) {
         href={`/producers/${producer.slug}`}
         className="group block bg-surface-container-low rounded-2xl overflow-hidden hover:shadow-[0_30px_90px_rgba(24,42,27,0.15)] transition-shadow duration-500"
       >
-        {/* Hero image */}
-        <div className="aspect-[16/9] md:aspect-[21/9] relative overflow-hidden">
+        <motion.div className="aspect-[16/9] md:aspect-[21/9] relative overflow-hidden">
           <Image
             src={src}
             alt={producer.imageAlt || producer.name}
@@ -124,20 +134,18 @@ function HeroCard({ producer }: { producer: Producer }) {
             sizes="(max-width: 768px) 100vw, 70vw"
             unoptimized={isUnoptimized}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
+          <motion.div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <motion.div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
 
-          {/* Featured badge */}
-          <div className="absolute top-6 left-6">
+          <motion.div className="absolute top-6 left-6">
             <span className="font-sans text-[10px] uppercase tracking-[0.28em] text-secondary px-3 py-1.5 rounded-full border border-secondary/40 bg-secondary/8 backdrop-blur-sm">
-              Featured Producer
+              {t('featuredProducer')}
             </span>
-          </div>
+          </motion.div>
 
-          {/* Text overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+          <motion.div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
             <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-white/55 mb-3">
-              {producer.region}, {producer.country}
+              {labels.labelRegion(producer.region)}, {labels.labelCountry(producer.country)}
             </p>
             <h3
               className="font-serif text-white leading-tight mb-4"
@@ -146,36 +154,34 @@ function HeroCard({ producer }: { producer: Producer }) {
               {producer.name}
             </h3>
             <p className="font-sans text-sm md:text-base text-white/65 font-light italic max-w-lg leading-relaxed">
-              {producer.tagline}
+              {labels.labelTagline(producer.slug, producer.tagline)}
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Card footer */}
-        <div className="px-8 md:px-10 py-6 flex items-center justify-between gap-6">
-          <div>
+        <motion.div className="px-8 md:px-10 py-6 flex items-center justify-between gap-6">
+          <motion.div>
             <p className="font-sans text-xs uppercase tracking-[0.2em] text-on-surface-variant/55 mb-1">
-              {producer.region} · {producer.country}
+              {labels.labelRegion(producer.region)} · {labels.labelCountry(producer.country)}
             </p>
-            <p className="font-sans text-sm text-on-surface-variant">{producer.specialty}</p>
-          </div>
+            <p className="font-sans text-sm text-on-surface-variant">
+              {labels.labelSpecialty(producer.specialty)}
+            </p>
+          </motion.div>
           <span className="shrink-0 inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-secondary group-hover:gap-4 transition-all duration-300">
-            Discover <ArrowRight size={13} strokeWidth={2} />
+            {t('discover')} <ArrowRight size={13} strokeWidth={2} />
           </span>
-        </div>
+        </motion.div>
       </Link>
     </motion.div>
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main export
-// ─────────────────────────────────────────────────────────────────────────────
 export function ProducersClient({ producers }: { producers: Producer[] }) {
   const t = useTranslations('producersPage')
+  const labels = useProducerDisplayLabels()
   const [activeRegion, setActiveRegion] = useState<string | null>(null)
 
-  // Unique regions for filter pills
   const regions = Array.from(new Set(producers.map((p) => p.region))).sort()
 
   const filtered = activeRegion
@@ -186,15 +192,12 @@ export function ProducersClient({ producers }: { producers: Producer[] }) {
 
   return (
     <div className="pt-32 pb-24 px-6 md:px-16 max-w-7xl mx-auto">
-
-      {/* ── Page header ── */}
       <SectionHeader
         kicker={t('kicker')}
-        title="Meet the Makers"
-        subtitle="Each producer has been personally visited and verified — not for scale, but for soul."
+        title={t('title')}
+        subtitle={t('subtitle')}
       />
 
-      {/* ── Region filter pills ── */}
       {regions.length > 1 && (
         <motion.div
           className="flex flex-wrap gap-2 mb-12"
@@ -210,7 +213,7 @@ export function ProducersClient({ producers }: { producers: Producer[] }) {
                 : 'border-outline-variant/30 text-on-surface-variant hover:border-primary/35 hover:text-primary'
             }`}
           >
-            All
+            {t('allFilter')}
           </button>
           {regions.map((region) => (
             <button
@@ -222,13 +225,12 @@ export function ProducersClient({ producers }: { producers: Producer[] }) {
                   : 'border-outline-variant/30 text-on-surface-variant hover:border-primary/35 hover:text-primary'
               }`}
             >
-              {region}
+              {labels.labelRegion(region)}
             </button>
           ))}
         </motion.div>
       )}
 
-      {/* ── Grid ── */}
       <AnimatePresence mode="wait">
         {filtered.length === 0 ? (
           <motion.div
@@ -239,7 +241,7 @@ export function ProducersClient({ producers }: { producers: Producer[] }) {
             exit={{ opacity: 0 }}
           >
             <p className="font-serif text-2xl text-on-surface-variant/50">
-              No producers in this region yet.
+              {t('emptyState')}
             </p>
           </motion.div>
         ) : (
@@ -251,12 +253,10 @@ export function ProducersClient({ producers }: { producers: Producer[] }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Hero card spans 2 columns — only when showing all */}
-            {hero && !activeRegion && <HeroCard producer={hero} />}
+            {hero && !activeRegion && <HeroCard producer={hero} t={t} labels={labels} />}
 
-            {/* Remaining cards */}
             {(activeRegion ? filtered : rest).map((producer, i) => (
-              <ProducerCard key={producer.slug} producer={producer} index={i} />
+              <ProducerCard key={producer.slug} producer={producer} index={i} t={t} labels={labels} />
             ))}
           </motion.div>
         )}

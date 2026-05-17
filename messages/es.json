@@ -720,11 +720,32 @@
     }
   },
   "producersPage": {
-    "kicker": "Nuestros Productores",
+    "metaTitle": "Productores",
+    "metaDescription": "Conozca a los artesanos detrás de cada producto Terravoa — pequeños productores de toda Europa.",
+    "kicker": "Nuestros productores",
+    "title": "Conozca a los artesanos",
+    "subtitle": "Cada productor ha sido visitado y verificado personalmente — no por escala, sino por alma.",
+    "featuredProducer": "Productor destacado",
     "allFilter": "Todos",
     "emptyState": "Aún no hay productores en esta región.",
     "view": "Ver",
-    "discover": "Descubrir"
+    "discover": "Descubrir",
+    "specialties": {
+      "oliveOil": "Aceite de oliva",
+      "honey": "Miel",
+      "preserves": "Conservas",
+      "ceramics": "Cerámica",
+      "savonLavender": "Jabón y lavanda",
+      "bodyCare": "Cuidado corporal",
+      "spices": "Especias"
+    },
+    "catalog": {
+      "rossi-estate": { "tagline": "Cuatro siglos de oro líquido" },
+      "schwarzwald-imkerei": { "tagline": "Miel silvestre de bosques antiguos" },
+      "casa-del-sol": { "tagline": "Tradiciones secadas al sol del Mediterráneo" },
+      "atelier-alentejo": { "tagline": "Tierra moldeada a mano" },
+      "maison-lavande": { "tagline": "El aroma de Provenza, embotellado" }
+    }
   },
   "checkout": {
     "title": "Pago",

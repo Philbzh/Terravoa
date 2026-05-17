@@ -720,11 +720,32 @@
     }
   },
   "producersPage": {
+    "metaTitle": "Produzenten",
+    "metaDescription": "Lernen Sie die Handwerker hinter jedem Terravoa-Produkt kennen — Kleinproduzenten aus ganz Europa.",
     "kicker": "Unsere Produzenten",
+    "title": "Die Macher kennenlernen",
+    "subtitle": "Jeder Produzent wurde persönlich besucht und geprüft — nicht nach Größe, sondern nach Seele.",
+    "featuredProducer": "Ausgewählter Produzent",
     "allFilter": "Alle",
     "emptyState": "Noch keine Produzenten in dieser Region.",
     "view": "Ansehen",
-    "discover": "Entdecken"
+    "discover": "Entdecken",
+    "specialties": {
+      "oliveOil": "Olivenöl",
+      "honey": "Honig",
+      "preserves": "Konserven",
+      "ceramics": "Keramik",
+      "savonLavender": "Seife & Lavendel",
+      "bodyCare": "Körperpflege",
+      "spices": "Gewürze"
+    },
+    "catalog": {
+      "rossi-estate": { "tagline": "Vier Jahrhunderte flüssiges Gold" },
+      "schwarzwald-imkerei": { "tagline": "Wilder Honig aus alten Wäldern" },
+      "casa-del-sol": { "tagline": "Sonnengetrocknete Traditionen des Mittelmeers" },
+      "atelier-alentejo": { "tagline": "Erde, von Hand geformt" },
+      "maison-lavande": { "tagline": "Der Duft der Provence, abgefüllt" }
+    }
   },
   "checkout": {
     "title": "Kasse",
