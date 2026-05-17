@@ -133,14 +133,7 @@ function Lightbox({
 
 // ── Main gallery ──────────────────────────────────────────────────────────────
 
-export function ProductImageGallery({
-  images,
-  productSlug,
-}: {
-  images: GalleryImage[]
-  /** Enables shared layout morph from collection cards */
-  productSlug?: string
-}) {
+export function ProductImageGallery({ images }: { images: GalleryImage[] }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, dragFree: false })
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -177,29 +170,15 @@ export function ProductImageGallery({
               key={i}
               className="relative aspect-square flex-[0_0_100%] min-w-0"
             >
-              {productSlug && i === 0 ? (
-                <motion.div layoutId={`product-cover-${productSlug}`} className="absolute inset-0">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                    unoptimized={isExternalUnoptimizedSrc(img.src)}
-                  />
-                </motion.div>
-              ) : (
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority={i === 0}
-                  unoptimized={isExternalUnoptimizedSrc(img.src)}
-                />
-              )}
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority={i === 0}
+                unoptimized={isExternalUnoptimizedSrc(img.src)}
+              />
             </div>
           ))}
         </div>

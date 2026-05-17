@@ -32,26 +32,24 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     if (isSmoothScrollDisabled(pathname)) return
 
     let lenis: import('lenis').default | null = null
-    let raf = 0
+    let cancelled = false
 
     void import('lenis').then(({ default: Lenis }) => {
+      if (cancelled) return
       lenis = new Lenis({
         duration: 1.05,
         smoothWheel: true,
         touchMultiplier: 1.2,
+        autoRaf: true,
       })
-
-      const tick = (time: number) => {
-        lenis?.raf(time)
-        raf = requestAnimationFrame(tick)
-      }
-      raf = requestAnimationFrame(tick)
     })
 
     return () => {
-      cancelAnimationFrame(raf)
+      cancelled = true
       lenis?.destroy()
       lenis = null
+      document.documentElement.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped')
+      document.body.classList.remove('lenis', 'lenis-smooth', 'lenis-stopped')
     }
   }, [pathname])
 
