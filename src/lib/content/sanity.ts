@@ -33,7 +33,7 @@ const qProducts = `*[_type == "product" && defined(slug.current)] | order(name a
 
 /** Fetches only products marked isFeatured == true, sorted by featuredOrder then _updatedAt. */
 const qFeaturedProducts = `*[_type == "product" && defined(slug.current) && isFeatured == true]
-  | order(featuredOrder asc, _updatedAt desc)
+  | order(coalesce(featuredOrder, 999) asc, _updatedAt desc)
   [0...8] {
   "slug": slug.current,
   name,
