@@ -12,7 +12,7 @@ import { useMotionConfig } from '@/lib/motion/use-motion-config'
 import type { Region } from '@/data/demo'
 
 /**
- * Homepage "Regional Archives" — horizontal snap rail (signature scroll moment).
+ * Homepage "Regional Archives" — horizontal snap rail with uniform card sizes.
  */
 export function RegionalArchives({ regions }: { regions: Region[] }) {
   const t = useTranslations('home.regionalArchives')
@@ -83,9 +83,8 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
                 'snap-center shrink-0',
                 reduced
                   ? 'w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] h-[280px]'
-                  : i === 0
-                    ? 'w-[min(88vw,540px)] h-[min(70vh,520px)]'
-                    : 'w-[min(72vw,360px)] h-[min(58vh,440px)]',
+                  : 'w-[min(72vw,360px)] h-[min(58vh,440px)]',
+                !reduced && i === regions.length - 1 && 'mr-6 md:mr-16',
               )}
               initial={reduced ? false : { opacity: 0, y: 28 }}
               whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
