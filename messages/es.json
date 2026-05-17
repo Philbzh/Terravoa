@@ -84,6 +84,88 @@
     "body": "Las reseñas de producto las escriben quienes compran en el marketplace. Terravoa no asigna esas notas ni puede cambiarlas para favorecer a nadie. Nos importa la satisfacción del cliente: si los comentarios y el cumplimiento siguen siendo deficientes con el tiempo, podemos ajustar o retirar un anuncio — siempre según nuestro acuerdo y con aviso cuando proceda. Nada de esto afecta a sus derechos legales.",
     "termsLink": "Ver condiciones"
   },
+  "forProducersPage": {
+    "metaTitle": "Para productores — Únase a Terravoa",
+    "metaDescription": "Venda sus productos artesanales en toda Europa. Terravoa conecta pequeños productores auténticos con clientes exigentes que valoran el verdadero origen.",
+    "hero": {
+      "kicker": "Para productores",
+      "titleLine1": "Venda sus productos",
+      "titleLine2": "en toda Europa",
+      "subtitle": "Colaboramos con productores cuidadosamente seleccionados en Europa que representan autenticidad, artesanía y verdadero origen. Únase a una comunidad curada que valora la calidad sobre la cantidad."
+    },
+    "benefits": {
+      "customers": { "title": "Acceda a nuevos clientes", "description": "Llegue a compradores exigentes en toda Europa que buscan activamente productos artesanales auténticos." },
+      "payments": { "title": "Pagos seguros", "description": "Gestionamos todos los pagos. Recibe pagos automáticos — sin facturación, sin complicaciones." },
+      "visibility": { "title": "Visibilidad premium", "description": "Su historia, su oficio, su región — presentados con fotografía y narrativa de calidad editorial." },
+      "craft": { "title": "Enfóquese en su oficio", "description": "No necesita crear una tienda online. Gestionamos la plataforma, el marketing y el servicio al cliente." }
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "steps": {
+        "apply": { "title": "Envíe su solicitud", "description": "Cuéntenos sobre sus productos, su historia y sus métodos de producción. Nos tomamos el tiempo de entender lo que le hace único." },
+        "curation": { "title": "Curación y selección", "description": "Cada solicitud es revisada con cuidado por nuestro equipo. Seleccionamos productores por calidad, autenticidad y artesanía." },
+        "welcome": { "title": "Bienvenido a Terravoa", "description": "Si es seleccionado, accede al portal de productor, a la incorporación y a herramientas para publicar productos — los términos comerciales solo se comparten en ese espacio." },
+        "sell": { "title": "Venda y envíe directamente", "description": "Los clientes piden en Terravoa, usted envía directamente. Gestionamos los pagos y transferimos sus ingresos automáticamente." }
+      }
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes",
+      "subtitle": "Sin cargos ocultos. Sin contratos a largo plazo. Cancele cuando quiera. Los términos finales se confirman en la incorporación tras la selección.",
+      "perMonth": "/mes",
+      "perSale": "por venta",
+      "foundingNote": "El plan Fundador es gratuito de por vida para los primeros 50 productores aceptados — sin necesidad de actualizar.",
+      "addonsTitle": "Complementos opcionales",
+      "tiers": {
+        "founding": {
+          "badge": "Fundador",
+          "badgeNote": "Limitado a 50 productores",
+          "headline": "Empiece sin riesgo",
+          "cta": "Solicitar plaza fundador",
+          "features": {
+            "productLimit": "Hasta {count} productos",
+            "profile": "Perfil de productor estándar",
+            "notifications": "Notificaciones de pedido directas",
+            "payouts": "Pagos automáticos",
+            "onboarding": "Soporte prioritario de incorporación"
+          }
+        },
+        "growth": {
+          "badge": "Crecimiento",
+          "badgeNote": "El más popular",
+          "headline": "Amplíe su alcance",
+          "cta": "Solicitar ahora",
+          "features": {
+            "unlimited": "Productos ilimitados",
+            "story": "Página de historia del productor + fotos",
+            "visibility": "Mayor visibilidad en búsqueda",
+            "analytics": "Panel de ventas",
+            "reviews": "Gestión de reseñas de clientes",
+            "payouts": "Pagos automáticos"
+          }
+        },
+        "premium": {
+          "badge": "Premium",
+          "badgeNote": "Productores destacados",
+          "headline": "Lidere la plataforma",
+          "cta": "Solicitar ahora",
+          "features": {
+            "allGrowth": "Todo lo incluido en Crecimiento",
+            "searchFeatured": "Posicionamiento destacado en búsqueda",
+            "homepageEligible": "Elegibilidad para portada",
+            "support": "Soporte de socio dedicado",
+            "contentReview": "Revisión prioritaria de contenido e historias",
+            "earlyAccess": "Acceso anticipado a nuevas funciones"
+          }
+        }
+      },
+      "addons": {
+        "featuredPlacement": { "name": "Posicionamiento destacado", "description": "Aparezca en la parte superior de categoría y resultados de búsqueda.", "price": "desde 25 € / mes" },
+        "homepageFeature": { "name": "Destacado en portada", "description": "Su producto o historia destacados en la página de inicio de Terravoa.", "price": "100 € / mes" }
+      }
+    },
+    "selectivity": { "title": "Solo se aceptan productores seleccionados", "body": "Terravoa se basa en una selección curada. Los productores seleccionados reciben acceso completo a los detalles de la asociación y al proceso de incorporación." },
+    "cta": { "title": "¿Listo para llegar a nuevos clientes?", "body": "Buscamos productores apasionados que elaboran productos auténticos y tradicionales. Cuéntenos su historia.", "applyNow": "Solicitar ahora", "signInPrefix": "¿Ya es productor de Terravoa?", "signInLink": "Inicie sesión en su portal →" }
+  },
   "home": {
     "journalTeaser": {
       "kicker": "Del diario",

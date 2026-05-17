@@ -84,6 +84,129 @@
     "body": "Product ratings are written by people who purchased through the marketplace. Terravoa does not assign those scores and cannot change them to favour anyone. We care about customer satisfaction: if feedback and fulfilment issues stay poor over time, we may need to adjust or end a listing — always in line with our agreement and with notice where required. Nothing here affects your statutory rights.",
     "termsLink": "Read the Terms"
   },
+  "forProducersPage": {
+    "metaTitle": "For Producers — Join Terravoa",
+    "metaDescription": "Sell your artisan products across Europe. Terravoa connects authentic small-batch producers with discerning customers who value true origin.",
+    "hero": {
+      "kicker": "For Producers",
+      "titleLine1": "Sell your products",
+      "titleLine2": "across Europe",
+      "subtitle": "We collaborate with carefully selected producers across Europe who stand for authenticity, craftsmanship, and true origin. Join a curated community that values quality over quantity."
+    },
+    "benefits": {
+      "customers": {
+        "title": "Access New Customers",
+        "description": "Reach discerning buyers across Europe who actively seek authentic, artisanal products."
+      },
+      "payments": {
+        "title": "Secure Payment Handling",
+        "description": "We manage all payments. You receive automatic payouts — no invoicing, no hassle."
+      },
+      "visibility": {
+        "title": "Premium Visibility",
+        "description": "Your story, your craft, your region — presented with editorial quality photography and storytelling."
+      },
+      "craft": {
+        "title": "Focus on Your Craft",
+        "description": "No need to build an online store. We handle the platform, marketing, and customer service."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "steps": {
+        "apply": {
+          "title": "Submit Your Application",
+          "description": "Tell us about your products, your story, and your production methods. We take the time to understand what makes you unique."
+        },
+        "curation": {
+          "title": "Curation & Selection",
+          "description": "Every application is carefully reviewed by our team. We select producers based on quality, authenticity, and craftsmanship."
+        },
+        "welcome": {
+          "title": "Welcome to Terravoa",
+          "description": "If selected, you receive access to the producer portal, onboarding guidance, and tools to list your products — commercial terms are shared only inside that space."
+        },
+        "sell": {
+          "title": "Sell & Ship Directly",
+          "description": "Customers order on Terravoa, you ship directly. We handle payments and transfer your earnings automatically."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Simple, transparent pricing",
+      "subtitle": "No hidden fees. No long-term contracts. Cancel anytime. Final terms are confirmed during onboarding after selection.",
+      "perMonth": "/month",
+      "perSale": "per sale",
+      "foundingNote": "Founding tier is free for life for the first 50 accepted producers — no upgrade required.",
+      "addonsTitle": "Optional add-ons",
+      "tiers": {
+        "founding": {
+          "badge": "Founding",
+          "badgeNote": "Limited to 50 producers",
+          "headline": "Start with no risk",
+          "cta": "Apply for a founding spot",
+          "features": {
+            "productLimit": "Up to {count} products",
+            "profile": "Standard producer profile",
+            "notifications": "Direct order notifications",
+            "payouts": "Automatic payouts",
+            "onboarding": "Priority onboarding support"
+          }
+        },
+        "growth": {
+          "badge": "Growth",
+          "badgeNote": "Most popular",
+          "headline": "Scale your reach",
+          "cta": "Apply now",
+          "features": {
+            "unlimited": "Unlimited products",
+            "story": "Producer story page + photos",
+            "visibility": "Enhanced search visibility",
+            "analytics": "Sales analytics dashboard",
+            "reviews": "Customer review management",
+            "payouts": "Automatic payouts"
+          }
+        },
+        "premium": {
+          "badge": "Premium",
+          "badgeNote": "Top producers",
+          "headline": "Lead the platform",
+          "cta": "Apply now",
+          "features": {
+            "allGrowth": "Everything in Growth",
+            "searchFeatured": "Featured placement in search",
+            "homepageEligible": "Homepage feature eligibility",
+            "support": "Dedicated partner support",
+            "contentReview": "Priority content & story review",
+            "earlyAccess": "Early access to new features"
+          }
+        }
+      },
+      "addons": {
+        "featuredPlacement": {
+          "name": "Featured Placement",
+          "description": "Appear at the top of category and search results.",
+          "price": "from €25 / month"
+        },
+        "homepageFeature": {
+          "name": "Homepage Feature",
+          "description": "Your product or story featured on the Terravoa homepage.",
+          "price": "€100 / month"
+        }
+      }
+    },
+    "selectivity": {
+      "title": "Only selected producers are accepted",
+      "body": "Terravoa is built on a curated selection. Selected producers receive full access to our partnership details and onboarding process."
+    },
+    "cta": {
+      "title": "Ready to reach new customers?",
+      "body": "We're looking for passionate producers who craft authentic, traditional products. Tell us your story.",
+      "applyNow": "Apply Now",
+      "signInPrefix": "Already a Terravoa producer?",
+      "signInLink": "Sign in to your portal →"
+    }
+  },
   "home": {
     "journalTeaser": {
       "kicker": "From the Journal",
