@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { Check, Zap, ArrowRight } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { PLAN_CONFIG, type PlanId } from '@/lib/partnership-plans'
 
@@ -17,7 +17,17 @@ const TIER_FEATURE_KEYS: Record<PlanId, readonly string[]> = {
 
 const ADDON_KEYS = ['featuredPlacement', 'homepageFeature'] as const
 
+function formatMonthlyEur(amount: number, locale: string) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
 export function PricingSection() {
+  const locale = useLocale()
   const t = useTranslations('forProducersPage.pricing')
 
   return (
@@ -39,7 +49,7 @@ export function PricingSection() {
         {TIER_IDS.map((tierId, i) => {
           const config = PLAN_CONFIG[tierId]
           const highlight = tierId === 'growth'
-          const price = `â‚¬${config.monthlyFeeEur}`
+          const price = formatMonthlyEur(config.monthlyFeeEur, locale)
           const commission = `${config.commissionPct}%`
           const featureKeys = TIER_FEATURE_KEYS[tierId]
 
