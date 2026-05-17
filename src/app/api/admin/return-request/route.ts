@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 import { requireAdminSession } from '@/lib/auth/require-admin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireJsonContentType } from '@/lib/http'
+import { rateLimit } from '@/lib/rate-limit'
 
 const VALID_STATUSES = ['pending', 'approved', 'rejected', 'completed']
 
@@ -13,6 +15,17 @@ export async function PATCH(req: Request) {
     await requireAdminSession()
   } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  // Rate limit: 30 requests per minute per IP
+  const hdrs = await headers()
+  const ip = hdrs.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const rl = await rateLimit(`admin-return-request:${ip}`, 30, 60_000)
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 },
+    )
   }
 
   try {

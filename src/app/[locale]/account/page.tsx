@@ -1,7 +1,7 @@
 import { createServerSupabase as createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { setRequestLocale } from 'next-intl/server'
+import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { Package, Heart, LogOut, ArrowRight } from 'lucide-react'
 
 export default async function AccountPage({
@@ -16,12 +16,13 @@ export default async function AccountPage({
 
   if (!user) redirect(`/${locale}/login?next=/account`)
 
+  const t = await getTranslations({ locale, namespace: 'account' })
   const name = user.user_metadata?.full_name ?? user.email
 
   return (
     <div className="min-h-screen pt-32 pb-16 px-6 bg-surface">
       <div className="max-w-2xl mx-auto">
-        <h1 className="font-serif text-3xl text-primary mb-1">My Account</h1>
+        <h1 className="font-serif text-3xl text-primary mb-1">{t('title')}</h1>
         <p className="font-sans text-sm text-on-surface-variant mb-10">{name}</p>
 
         <div className="grid gap-4">
@@ -31,8 +32,8 @@ export default async function AccountPage({
           >
             <Package size={24} strokeWidth={1.5} className="text-secondary/70 shrink-0" />
             <div className="flex-1">
-              <p className="font-serif text-lg text-primary group-hover:text-secondary transition-colors duration-300">My Orders</p>
-              <p className="font-sans text-sm text-on-surface-variant">Track and review your purchases</p>
+              <p className="font-serif text-lg text-primary group-hover:text-secondary transition-colors duration-300">{t('orders')}</p>
+              <p className="font-sans text-sm text-on-surface-variant">{t('ordersDesc')}</p>
             </div>
             <ArrowRight size={14} strokeWidth={2} className="text-on-surface-variant/30 group-hover:text-secondary group-hover:translate-x-1 transition-all duration-300 shrink-0" />
           </Link>
@@ -42,8 +43,8 @@ export default async function AccountPage({
           >
             <Heart size={24} strokeWidth={1.5} className="text-secondary/70 shrink-0" />
             <div className="flex-1">
-              <p className="font-serif text-lg text-primary group-hover:text-secondary transition-colors duration-300">My Wishlist</p>
-              <p className="font-sans text-sm text-on-surface-variant">Products you&apos;ve saved for later</p>
+              <p className="font-serif text-lg text-primary group-hover:text-secondary transition-colors duration-300">{t('wishlist')}</p>
+              <p className="font-sans text-sm text-on-surface-variant">{t('wishlistDesc')}</p>
             </div>
             <ArrowRight size={14} strokeWidth={2} className="text-on-surface-variant/30 group-hover:text-secondary group-hover:translate-x-1 transition-all duration-300 shrink-0" />
           </Link>
@@ -56,7 +57,7 @@ export default async function AccountPage({
               className="flex items-center gap-2 font-sans text-sm text-on-surface-variant/60 hover:text-primary transition-colors"
             >
               <LogOut size={16} strokeWidth={1.5} />
-              Sign out
+              {t('signOut')}
             </button>
           </form>
         </div>

@@ -134,18 +134,36 @@
       "title": "Comment fonctionne Terravoa",
       "subtitle": "Du producteur à votre porte — sans détour",
       "steps": {
-        "discover": { "title": "Découvrir", "description": "Parcourez des produits sélectionnés auprès des meilleurs producteurs artisanaux d'Europe." },
-        "order": { "title": "Commander en direct", "description": "Votre commande va directement chez le producteur — pas d'intermédiaires, pas d'entrepôts." },
-        "delivered": { "title": "Livré frais", "description": "Expédié directement depuis la source, portant l'âme de son terroir." }
+        "discover": {
+          "title": "Découvrir",
+          "description": "Parcourez des produits sélectionnés auprès des meilleurs producteurs artisanaux d'Europe."
+        },
+        "order": {
+          "title": "Commander en direct",
+          "description": "Votre commande va directement chez le producteur — pas d'intermédiaires, pas d'entrepôts."
+        },
+        "delivered": {
+          "title": "Livré frais",
+          "description": "Expédié directement depuis la source, portant l'âme de son terroir."
+        }
       }
     },
     "curatorsPromise": {
       "title": "La promesse Terravoa",
       "learnMore": "En savoir plus sur notre processus de sélection",
       "items": {
-        "origins": { "title": "Origines vérifiées", "description": "Nous visitons chaque ferme, atelier et studio en personne. Pas d'intermédiaires — des relations directes avec les artisans." },
-        "sustainable": { "title": "Âme durable", "description": "Priorité aux méthodes agricoles et de fabrication traditionnelles qui respectent l'écosystème local et la biodiversité." },
-        "fair": { "title": "Rémunération équitable", "description": "Les producteurs fixent leurs propres prix. Nous veillons à ce qu'ils reçoivent la majorité de la valeur, préservant les moyens de subsistance ruraux." }
+        "origins": {
+          "title": "Origines vérifiées",
+          "description": "Nous visitons chaque ferme, atelier et studio en personne. Pas d'intermédiaires — des relations directes avec les artisans."
+        },
+        "sustainable": {
+          "title": "Âme durable",
+          "description": "Priorité aux méthodes agricoles et de fabrication traditionnelles qui respectent l'écosystème local et la biodiversité."
+        },
+        "fair": {
+          "title": "Rémunération équitable",
+          "description": "Les producteurs fixent leurs propres prix. Nous veillons à ce qu'ils reçoivent la majorité de la valeur, préservant les moyens de subsistance ruraux."
+        }
       }
     },
     "producerCTA": {
@@ -428,6 +446,7 @@
     "sidebar": {
       "portalLabel": "Espace producteur",
       "dashboard": "Tableau de bord",
+      "analytics": "Statistiques",
       "orders": "Commandes",
       "products": "Produits",
       "payments": "Paiements",
@@ -542,7 +561,12 @@
       "saving": "Enregistrement",
       "clear": "Effacer",
       "savedConfirm": "Enregistré. Le statut de la commande est mis à jour quand tous les producteurs ajoutent un suivi.",
-      "customer": "Client"
+      "customer": "Client",
+      "detailTitle": "Détail de la commande",
+      "detailBack": "Toutes les commandes",
+      "detailSignIn": "Connectez-vous pour voir cette commande.",
+      "detailSignInLink": "Connexion producteur",
+      "detailNetEarnings": "Vos revenus nets sur cette commande :"
     },
     "profile": {
       "title": "Profil public",
@@ -562,7 +586,13 @@
       "imageProfile": "Profil",
       "imageHero": "Bannière",
       "editNote": "Les modifications de profil sont coordonnées avec Terravoa pour maintenir la cohérence de la collection. Pour demander des changements,",
-      "editNoteLink": "contactez-nous"
+      "editNoteLink": "contactez-nous",
+      "editTitle": "Modifier le profil public",
+      "editIntro": "Mettez à jour votre histoire telle que les clients la voient sur la marketplace. Nom, slug, région et images sont gérés par Terravoa.",
+      "editSave": "Enregistrer le profil",
+      "editSaving": "Enregistrement…",
+      "editSaved": "Profil enregistré.",
+      "editNoteImages": "Pour modifier nom, slug, région ou photos,"
     },
     "partnership": {
       "title": "Partenariat & versements",
@@ -574,13 +604,22 @@
       "requestAccess": "Demander un accès producteur",
       "earningsTitle": "Revenus & versements",
       "earningsSubtitle": "Stripe Connect gérera les répartitions : commission Terravoa, puis versement net sur votre compte. Cette section affichera les revenus, déductions et l’historique des versements.",
-      "noPayoutData": "Aucune donnée de versement pour l’instant — intégrez Stripe Connect pour activer.",
+      "noPayoutData": "Pas encore de ventes. Lorsque des clients achètent vos produits, les revenus et statuts de paiement apparaîtront ici.",
       "planStarterTitle": "Starter",
       "planStarterDesc": "Adhésion mensuelle plus faible, commission plus élevée par vente — idéal pour les petits volumes et les premières offres.",
       "planGrowthTitle": "Growth",
       "planGrowthDesc": "Adhésion plus élevée, commission réduite — conçu pour les producteurs qui développent leur volume sur Terravoa.",
       "monthlyMembership": "Adhésion mensuelle",
-      "commissionOnSale": "Commission par vente"
+      "commissionOnSale": "Commission par vente",
+      "payoutSignIn": "Connectez-vous avec votre compte producteur pour voir l’historique des paiements.",
+      "payoutTotalNet": "Revenus nets (toutes lignes)",
+      "payoutTotalCommission": "Commission Terravoa",
+      "payoutColDate": "Date",
+      "payoutColProduct": "Produit / commande",
+      "payoutColGross": "Brut",
+      "payoutColCommission": "Commission",
+      "payoutColNet": "Net",
+      "payoutColStatus": "Statut de paiement"
     },
     "shipping": {
       "title": "Paramètres de livraison",
@@ -703,5 +742,160 @@
     "paymentTitle": "Paiement",
     "paymentDesc1": "Un seul paiement simple et centralisé — carte bancaire, Apple Pay ou Google Pay. Toutes les transactions sont traitées de manière sécurisée via Stripe. Vous payez une seule fois, quel que soit le nombre de producteurs concernés par votre commande.",
     "paymentDesc2": "Vos données de paiement ne sont jamais stockées sur nos serveurs. Tous les prix incluent la TVA pour votre pays de livraison."
+  },
+  "account": {
+    "title": "Mon compte",
+    "orders": "Mes commandes",
+    "ordersDesc": "Suivre et consulter vos achats",
+    "wishlist": "Ma liste de souhaits",
+    "wishlistDesc": "Produits enregistrés pour plus tard",
+    "signOut": "Se déconnecter"
+  },
+  "accountOrders": {
+    "title": "Mes commandes",
+    "back": "Mon compte",
+    "subtitle": "Votre historique d'achats sur Terravoa.",
+    "emptyTitle": "Aucune commande pour l'instant",
+    "emptyDesc": "Vos achats apparaîtront ici après votre première commande.",
+    "exploreCta": "Explorer la collection",
+    "orderPrefix": "Commande",
+    "qty": "Qté {count}",
+    "tracking": "Suivi",
+    "progress": "Progression de la commande",
+    "returnCta": "Retour",
+    "statusNew": "Commande reçue",
+    "statusProcessing": "En cours de traitement",
+    "statusShipped": "Expédiée",
+    "statusDelivered": "Livrée"
+  },
+  "accountWishlist": {
+    "title": "Ma liste de souhaits",
+    "subtitle": "Articles enregistrés pour plus tard",
+    "emptyTitle": "Votre liste est vide",
+    "emptyDesc": "Découvrez la collection et enregistrez vos favoris pour plus tard.",
+    "discoverCta": "Découvrir la collection"
+  },
+  "returnRequest": {
+    "title": "Demander un retour",
+    "intro": "Les consommateurs de l'UE disposent d'un droit de rétractation de 14 jours. Les articles endommagés ou incorrects peuvent être retournés à tout moment. Nous répondons sous 2 jours ouvrés.",
+    "back": "Mes commandes",
+    "orderId": "N° de commande",
+    "orderIdPlaceholder": "ex. 3fa85f64-5717-4562-…",
+    "orderIdHelpPrefix": "Retrouvez votre numéro de commande dans",
+    "orderIdHelpLink": "Mes commandes",
+    "reason": "Motif du retour",
+    "selectReason": "Sélectionnez un motif",
+    "reasonWithdrawal": "Droit de rétractation (14 jours)",
+    "reasonWithdrawalDesc": "J'ai changé d'avis dans les 14 jours suivant la réception.",
+    "reasonDamaged": "Article endommagé à la réception",
+    "reasonDamagedDesc": "Le produit était abîmé ou cassé à l'arrivée.",
+    "reasonWrongItem": "Mauvais article reçu",
+    "reasonWrongItemDesc": "J'ai reçu un produit différent de celui commandé.",
+    "reasonQuality": "Problème de qualité",
+    "reasonQualityDesc": "Le produit ne correspondait pas aux standards de qualité attendus.",
+    "description": "Détails supplémentaires (facultatif)",
+    "descriptionPlaceholder": "Dites-nous en plus …",
+    "submit": "Envoyer la demande",
+    "submitting": "Envoi en cours…",
+    "successTitle": "Demande de retour envoyée",
+    "successDesc": "Nous avons bien reçu votre demande et vous répondrons sous 2 jours ouvrés.",
+    "referenceLabel": "Référence",
+    "backToOrders": "Retour à mes commandes",
+    "returnPolicy": "Politique de retour",
+    "errorOrderIdRequired": "Veuillez saisir votre numéro de commande.",
+    "errorReasonRequired": "Veuillez sélectionner un motif.",
+    "errorConnection": "Connexion impossible. Vérifiez votre connexion et réessayez.",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "subtitle": "Producteur, client ou simplement curieux — nous serions ravis d'échanger avec vous.",
+    "emailTitle": "E-mail",
+    "emailValue": "hello@terravoa.com",
+    "locationTitle": "Localisation",
+    "locationValue": "Basés en Europe\nApprovisionnement sur tout le continent",
+    "responseTitle": "Délai de réponse",
+    "responseValue": "Nous répondons généralement sous 24 heures les jours ouvrés.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "audience": "Je suis…",
+    "audienceCustomer": "Client",
+    "audienceProducer": "Producteur souhaitant nous rejoindre",
+    "audiencePress": "Presse / Médias",
+    "audienceOther": "Autre",
+    "message": "Message",
+    "send": "Envoyer le message",
+    "sending": "Envoi en cours…",
+    "successTitle": "Message reçu",
+    "successDesc": "Merci — nous lirons votre message avec attention et vous répondrons dès que possible, en général sous un jour ouvré.",
+    "backHome": "Retour à l'accueil",
+    "browseShop": "Parcourir la boutique"
+  },
+  "savoirFaire": {
+    "kicker": "Notre processus de sélection",
+    "title": "Savoir-Faire",
+    "intro": "Le concept français de « savoir-faire » — le savoir-faire au sens propre — décrit ce que nous recherchons chez chaque producteur : un savoir profond et pratique transmis de génération en génération. Voici comment nous les trouvons et les vérifions.",
+    "step1Title": "Découverte",
+    "step1Desc": "Nous parcourons les régions d'Europe, visitons les marchés locaux, échangeons avec les communautés et identifions les producteurs porteurs d'un savoir traditionnel authentique.",
+    "step2Title": "Visite en personne",
+    "step2Desc": "Chaque producteur est visité sur place. Nous parcourons ses terres, observons ses méthodes, goûtons ses produits et comprenons son histoire de première main.",
+    "step3Title": "Vérification",
+    "step3Desc": "Nous vérifions l'authenticité : pas de revendeurs, pas de production de masse. Les produits doivent être fabriqués selon des méthodes traditionnelles avec des ingrédients ou matériaux locaux.",
+    "step4Title": "Partenariat",
+    "step4Desc": "Les producteurs retenus fixent leurs propres prix et gardent le contrôle total de leur production. Nous gérons la plateforme, les paiements et l'expérience client.",
+    "ctaTitle": "Vous êtes producteur ?",
+    "ctaDesc": "Si vous fabriquez des produits authentiques et traditionnels et souhaitez toucher des clients qui valorisent la qualité et la provenance, racontez-nous votre histoire.",
+    "ctaButton": "Devenir producteur"
+  },
+  "regions": {
+    "kicker": "Origines",
+    "title": "Origines",
+    "subtitle": "Chaque produit a une origine. Explorez les régions de nos producteurs — terroir, traditions et culture derrière ce qui arrive dans votre cuisine.",
+    "producers": "Producteurs",
+    "products": "Produits"
+  },
+  "giftMessaging": {
+    "isGift": "C'est un cadeau",
+    "recipientLabel": "Nom du destinataire",
+    "recipientPlaceholder": "ex. Sophie",
+    "messageLabel": "Message au destinataire",
+    "messagePlaceholder": "Une note personnelle jointe au cadeau…",
+    "giftWrap": "Ajouter un emballage cadeau",
+    "giftWrapPrice": "+3,50 €"
+  },
+  "couponField": {
+    "placeholder": "Code promo",
+    "apply": "Appliquer",
+    "remove": "Retirer le code",
+    "invalidDefault": "Code invalide.",
+    "networkError": "Impossible de valider le code. Réessayez."
+  },
+  "legalPages": {
+    "fallbackNotice": "Ce texte juridique n’est pas encore disponible dans votre langue. La version anglaise est affichée ci-dessous.",
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "metaTitle": "Politique de confidentialité",
+      "metaDescription": "Comment Terravoa collecte, utilise et protège vos données personnelles (RGPD).",
+      "lastUpdated": "Dernière mise à jour : 12 avril 2026"
+    },
+    "terms": {
+      "title": "Conditions générales",
+      "metaTitle": "Conditions générales",
+      "metaDescription": "Conditions régissant l’utilisation de Terravoa et les achats sur notre marketplace.",
+      "lastUpdated": "Dernière mise à jour : 12 avril 2026"
+    },
+    "returns": {
+      "title": "Retours & remboursements",
+      "metaTitle": "Retours & remboursements",
+      "metaDescription": "Politique de retour — droit de rétractation UE, exceptions pour denrées périssables.",
+      "lastUpdated": "Dernière mise à jour : 12 avril 2026"
+    },
+    "cookies": {
+      "title": "Politique des cookies",
+      "metaTitle": "Politique des cookies",
+      "metaDescription": "Comment Terravoa utilise les cookies et comment vous pouvez les contrôler.",
+      "lastUpdated": "Dernière mise à jour : 12 avril 2026"
+    }
   }
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Tag, X, Loader2, Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export type AppliedCoupon = {
   couponId: string
@@ -18,6 +19,7 @@ type Props = {
 }
 
 export function CouponField({ subtotalCents, onApply, applied }: Props) {
+  const t = useTranslations('couponField')
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -35,14 +37,14 @@ export function CouponField({ subtotalCents, onApply, applied }: Props) {
       })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error ?? 'Invalid coupon.')
+        setError(data.error ?? t('invalidDefault'))
         onApply(null)
       } else {
         onApply(data as AppliedCoupon)
         setInput('')
       }
     } catch {
-      setError('Could not validate coupon. Try again.')
+      setError(t('networkError'))
     } finally {
       setLoading(false)
     }
@@ -72,7 +74,7 @@ export function CouponField({ subtotalCents, onApply, applied }: Props) {
         <button
           type="button"
           onClick={remove}
-          aria-label="Remove coupon"
+          aria-label={t('remove')}
           className="text-on-surface-variant hover:text-error transition-colors shrink-0"
         >
           <X size={16} />
@@ -91,7 +93,7 @@ export function CouponField({ subtotalCents, onApply, applied }: Props) {
             value={input}
             onChange={(e) => { setInput(e.target.value.toUpperCase()); setError('') }}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), validate())}
-            placeholder="Coupon code"
+            placeholder={t('placeholder')}
             autoComplete="off"
             spellCheck={false}
             disabled={loading}
@@ -105,7 +107,7 @@ export function CouponField({ subtotalCents, onApply, applied }: Props) {
           className="inline-flex items-center gap-1.5 rounded-lg border border-secondary/40 px-4 py-2.5 font-sans text-xs uppercase tracking-wider text-secondary hover:bg-secondary/8 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
         >
           {loading ? <Loader2 size={13} className="animate-spin" /> : <Check size={13} />}
-          Apply
+          {t('apply')}
         </button>
       </div>
       {error && (

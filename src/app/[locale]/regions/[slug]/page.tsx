@@ -7,8 +7,11 @@ import {
   getProducersByRegion,
   getStoriesByRegion,
 } from '@/lib/content'
+import { SITE_URL } from '@/lib/constants'
 import type { CommunityDiscovery } from '@/data/demo'
 import { RegionPageClient } from './RegionPageClient'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
+import { getTranslations } from 'next-intl/server'
 
 export const revalidate = 60
 
@@ -48,10 +51,16 @@ async function fetchCommunityDiscoveries(regionSlug: string): Promise<CommunityD
   }
 }
 
-export default async function RegionPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function RegionPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}) {
+  const { locale, slug } = await params
   const region = await getRegionBySlug(slug)
   if (!region) notFound()
+
+  const tRegions = await getTranslations({ locale, namespace: 'regions' })
 
   const [regionProducts, regionProducers, regionStories, communityDiscoveries] = await Promise.all([
     getProductsByRegion(region.name),
@@ -60,13 +69,35 @@ export default async function RegionPage({ params }: { params: Promise<{ slug: s
     fetchCommunityDiscoveries(slug),
   ])
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name: region.name,
+    description: region.description,
+    image: region.imageSrc.startsWith('http') ? region.imageSrc : undefined,
+    url: `${SITE_URL}/regions/${region.slug}`,
+  }
+
   return (
-    <RegionPageClient
-      region={region}
-      producers={regionProducers}
-      products={regionProducts}
-      stories={regionStories}
-      communityDiscoveries={communityDiscoveries}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        items={[
+          { name: tRegions('title'), path: '/regions' },
+          { name: region.name, path: `/regions/${region.slug}` },
+        ]}
+      />
+      <RegionPageClient
+        region={region}
+        producers={regionProducers}
+        products={regionProducts}
+        stories={regionStories}
+        communityDiscoveries={communityDiscoveries}
+      />
+    </>
   )
 }

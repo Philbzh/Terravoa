@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/Button'
 import { submitContactMessage } from './actions'
 
@@ -12,6 +13,7 @@ const inputClass =
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitContactMessage, undefined)
+  const t = useTranslations('contact')
 
   if (state?.ok) {
     return (
@@ -28,23 +30,23 @@ export function ContactForm() {
             <CheckCircle2 size={32} strokeWidth={1.5} />
           </span>
           <h2 className="font-serif text-2xl sm:text-[1.65rem] text-primary mb-3 tracking-tight">
-            Message received
+            {t('successTitle')}
           </h2>
           <p className="text-on-surface-variant font-sans text-sm sm:text-[15px] leading-relaxed mb-8">
-            Thank you — we&apos;ll read your note carefully and reply as soon as we can, usually within one business day.
+            {t('successDesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:justify-center sm:w-auto">
             <Link
               href="/"
               className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] bg-secondary text-on-secondary hover:bg-secondary-container transition-colors"
             >
-              Back to home
+              {t('backHome')}
             </Link>
             <Link
               href="/collection"
               className="inline-flex items-center justify-center rounded-full px-8 py-4 font-sans text-sm bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors"
             >
-              Browse shop
+              {t('browseShop')}
             </Link>
           </div>
         </div>
@@ -71,7 +73,7 @@ export function ContactForm() {
             htmlFor="first_name"
             className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant mb-2 block"
           >
-            First Name
+            {t('firstName')}
           </label>
           <input
             id="first_name"
@@ -87,7 +89,7 @@ export function ContactForm() {
             htmlFor="last_name"
             className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant mb-2 block"
           >
-            Last Name
+            {t('lastName')}
           </label>
           <input
             id="last_name"
@@ -104,7 +106,7 @@ export function ContactForm() {
           htmlFor="email"
           className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant mb-2 block"
         >
-          Email
+          {t('email')}
         </label>
         <input
           id="email"
@@ -120,7 +122,7 @@ export function ContactForm() {
           htmlFor="audience"
           className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant mb-2 block"
         >
-          I am a...
+          {t('audience')}
         </label>
         <select
           id="audience"
@@ -129,12 +131,10 @@ export function ContactForm() {
           className={inputClass}
           defaultValue="Customer"
         >
-          <option value="Customer">Customer</option>
-          <option value="Producer interested in joining">
-            Producer interested in joining
-          </option>
-          <option value="Press / Media">Press / Media</option>
-          <option value="Other">Other</option>
+          <option value="Customer">{t('audienceCustomer')}</option>
+          <option value="Producer interested in joining">{t('audienceProducer')}</option>
+          <option value="Press / Media">{t('audiencePress')}</option>
+          <option value="Other">{t('audienceOther')}</option>
         </select>
       </div>
       <div>
@@ -142,7 +142,7 @@ export function ContactForm() {
           htmlFor="message"
           className="font-sans text-xs uppercase tracking-[0.15em] text-on-surface-variant mb-2 block"
         >
-          Message
+          {t('message')}
         </label>
         <textarea
           id="message"
@@ -153,7 +153,7 @@ export function ContactForm() {
         />
       </div>
       <Button variant="primary" type="submit" disabled={pending}>
-        {pending ? 'Sending…' : 'Send Message'}
+        {pending ? t('sending') : t('send')}
       </Button>
     </motion.form>
   )

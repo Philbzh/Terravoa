@@ -3,18 +3,21 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import type { Region } from '@/data/demo'
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 
 export function RegionsClient({ regions }: { regions: Region[] }) {
+  const t = useTranslations('regions')
+
   return (
     <PageContainer>
       <SectionHeader
-        kicker="Origins"
-        title="Origins"
-        subtitle="Every product begins somewhere. Explore the regions behind our producers — their terroir, traditions, and the culture that shapes what ends up in your kitchen."
+        kicker={t('kicker')}
+        title={t('title')}
+        subtitle={t('subtitle')}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -51,10 +54,10 @@ export function RegionsClient({ regions }: { regions: Region[] }) {
                 </div>
                 <div className="absolute top-6 right-6 z-10 flex gap-4">
                   <span className="text-white/60 text-xs font-sans uppercase tracking-wider">
-                    {region.producerCount} Producers
+                    {region.producerCount} {t('producers')}
                   </span>
                   <span className="text-white/60 text-xs font-sans uppercase tracking-wider">
-                    {region.productCount} Products
+                    {region.productCount} {t('products')}
                   </span>
                 </div>
               </div>

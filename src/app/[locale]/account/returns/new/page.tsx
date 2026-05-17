@@ -3,8 +3,6 @@ import { setRequestLocale } from 'next-intl/server'
 import { createServerSupabase } from '@/lib/supabase/server'
 import { ReturnRequestForm } from './ReturnRequestForm'
 
-export const metadata = { title: 'Request a Return' }
-
 /**
  * P3 fix: gate this page server-side so anonymous users are redirected to login.
  * The client component (ReturnRequestForm) never even loads for unauthenticated users,

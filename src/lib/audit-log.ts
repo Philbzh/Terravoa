@@ -22,6 +22,7 @@ export type AuditAction =
   | 'producer.order_item.confirmed'
   | 'producer.plan.request_submitted'
   | 'producer.profile.bank_details_updated'
+  | 'producer.profile.public_updated'
 
 export async function logAuditEvent(input: {
   action: AuditAction

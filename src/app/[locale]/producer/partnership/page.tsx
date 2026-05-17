@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { canViewProducerCommercialTerms } from '@/lib/producer-dashboard-access'
 import { getPartnershipPlanRates } from '@/lib/partnership-plans'
+import { PayoutHistoryTable } from './PayoutHistoryTable'
 
 export default async function ProducerPartnershipPage() {
   const showRates = await canViewProducerCommercialTerms()
@@ -74,11 +75,7 @@ export default async function ProducerPartnershipPage() {
       <p className="text-on-surface-variant font-sans text-sm mb-6 max-w-xl">
         {t('earningsSubtitle')}
       </p>
-      <div className="rounded-xl border border-dashed border-outline-variant/30 bg-surface-container-low/50 p-8 text-center">
-        <p className="font-sans text-sm text-on-surface-variant">
-          {t('noPayoutData')}
-        </p>
-      </div>
+      <PayoutHistoryTable />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server'
 import { Star } from 'lucide-react'
 import { BankDetailsForm } from './BankDetailsForm'
 import { LanguageForm } from './LanguageForm'
+import { ProducerProfileEditForm } from './ProducerProfileEditForm'
 
 export default async function ProducerProfilePage() {
   const session = await getProducerForSession()
@@ -60,6 +61,17 @@ export default async function ProducerProfilePage() {
       )}
 
       <div className="space-y-6 max-w-2xl">
+        <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
+          <h2 className="font-serif text-lg text-primary mb-1">{t('editTitle')}</h2>
+          <ProducerProfileEditForm
+            specialty={p.specialty}
+            tagline={p.tagline}
+            storyHeadline={p.story_headline}
+            story={p.story}
+            quote={p.quote}
+          />
+        </div>
+
         <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
           <h2 className="font-serif text-lg text-primary mb-4">{t('previewTitle')}</h2>
           <dl className="space-y-4 font-sans text-sm">
@@ -173,7 +185,7 @@ export default async function ProducerProfilePage() {
 
         <div className="rounded-xl border border-dashed border-outline-variant/30 bg-surface-container-low/50 p-6">
           <p className="font-sans text-sm text-on-surface-variant">
-            {t('editNote')}{' '}
+            {t('editNoteImages')}{' '}
             <Link href="/contact" className="text-secondary underline underline-offset-2">
               {t('editNoteLink')}
             </Link>

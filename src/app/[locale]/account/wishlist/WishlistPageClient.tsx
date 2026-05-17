@@ -2,23 +2,25 @@
 
 import { Link } from '@/i18n/navigation'
 import { useWishlist } from '@/lib/wishlist'
+import { useTranslations } from 'next-intl'
 import { ProductCard } from '@/components/ui/ProductCard'
 
 export function WishlistPageClient() {
   const { items } = useWishlist()
+  const t = useTranslations('accountWishlist')
 
   if (items.length === 0) {
     return (
       <div className="text-center py-24 space-y-4">
-        <p className="font-serif text-2xl text-primary/60">Your wishlist is empty</p>
+        <p className="font-serif text-2xl text-primary/60">{t('emptyTitle')}</p>
         <p className="font-sans text-sm text-on-surface-variant max-w-xs mx-auto">
-          Discover the collection and save your favourites for later.
+          {t('emptyDesc')}
         </p>
         <Link
           href="/collection"
           className="inline-block font-sans text-xs uppercase tracking-[0.15em] text-secondary hover:text-primary transition-colors underline underline-offset-4"
         >
-          Discover the collection
+          {t('discoverCta')}
         </Link>
       </div>
     )

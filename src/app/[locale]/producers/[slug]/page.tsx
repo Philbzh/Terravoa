@@ -8,6 +8,8 @@ import {
 } from '@/lib/content'
 import { SITE_URL } from '@/lib/constants'
 import { ProducerProfile } from './ProducerProfile'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
+import { getTranslations } from 'next-intl/server'
 
 export const revalidate = 60
 
@@ -31,10 +33,16 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProducerPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function ProducerPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}) {
+  const { locale, slug } = await params
   const producer = await getProducerBySlug(slug)
   if (!producer) notFound()
+
+  const t = await getTranslations({ locale, namespace: 'producersPage' })
 
   const producerProducts = await getProductsByProducer(slug)
   const featureStory = await getProducerFeatureStory(slug)
@@ -58,6 +66,13 @@ export default async function ProducerPage({ params }: { params: Promise<{ slug:
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        items={[
+          { name: t('kicker'), path: '/producers' },
+          { name: producer.name, path: `/producers/${producer.slug}` },
+        ]}
       />
       <ProducerProfile
         producer={producer}

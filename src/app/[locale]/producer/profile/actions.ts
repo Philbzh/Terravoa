@@ -95,3 +95,73 @@ export async function updatePreferredLanguage(
   revalidatePath('/producer/profile')
   return { ok: true } as const
 }
+
+const PROFILE_TEXT_MAX = {
+  specialty: 120,
+  tagline: 200,
+  story_headline: 200,
+  story: 8000,
+  quote: 500,
+} as const
+
+export async function updatePublicProfile(
+  _prev: ProfileResult,
+  formData: FormData,
+): Promise<Exclude<ProfileResult, null>> {
+  const session = await getProducerForSession()
+  if (!session?.producer) {
+    return { ok: false, error: 'Not authenticated.' }
+  }
+
+  const specialty = String(formData.get('specialty') ?? '').trim()
+  const tagline = String(formData.get('tagline') ?? '').trim()
+  const story_headline = String(formData.get('story_headline') ?? '').trim()
+  const story = String(formData.get('story') ?? '').trim()
+  const quote = String(formData.get('quote') ?? '').trim()
+
+  if (!specialty || !tagline || !story_headline || !story) {
+    return { ok: false, error: 'Please fill in specialty, tagline, story headline, and story.' }
+  }
+  if (specialty.length > PROFILE_TEXT_MAX.specialty) {
+    return { ok: false, error: 'Specialty is too long.' }
+  }
+  if (tagline.length > PROFILE_TEXT_MAX.tagline) {
+    return { ok: false, error: 'Tagline is too long.' }
+  }
+  if (story_headline.length > PROFILE_TEXT_MAX.story_headline) {
+    return { ok: false, error: 'Story headline is too long.' }
+  }
+  if (story.length > PROFILE_TEXT_MAX.story) {
+    return { ok: false, error: 'Story is too long.' }
+  }
+  if (quote.length > PROFILE_TEXT_MAX.quote) {
+    return { ok: false, error: 'Quote is too long.' }
+  }
+
+  const admin = createAdminClient()
+  const { error } = await (admin as any)
+    .from('producers')
+    .update({
+      specialty,
+      tagline,
+      story_headline,
+      story,
+      quote: quote || null,
+    })
+    .eq('id', session.producer.id)
+
+  if (error) return { ok: false, error: error.message }
+
+  if (session.email) {
+    await logAuditEvent({
+      action: 'producer.profile.public_updated',
+      actorEmail: session.email,
+      entityType: 'producer',
+      entityId: session.producer.id,
+    })
+  }
+
+  revalidatePath('/producer/profile')
+  revalidatePath(`/producers/${session.producer.slug}`)
+  return { ok: true } as const
+}

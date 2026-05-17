@@ -2,9 +2,11 @@ import { createServerSupabase as createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { setRequestLocale } from 'next-intl/server'
+import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { Package, ArrowLeft, RotateCcw } from 'lucide-react'
 import { OrderTimeline } from '@/components/account/OrderTimeline'
+import Image from 'next/image'
+import { isExternalUnoptimizedSrc } from '@/lib/utils'
 
 type OrderItem = {
   id: string
@@ -22,21 +24,12 @@ type Order = {
   items: OrderItem[]
 }
 
-const statusLabel: Record<string, string> = {
-  new: 'Order received',
-  processing: 'Processing',
-  shipped: 'Shipped',
-  delivered: 'Delivered',
-}
-
 const statusColor: Record<string, string> = {
   new: 'bg-tertiary-fixed/30 text-tertiary',
   processing: 'bg-secondary-container/50 text-secondary',
   shipped: 'bg-primary-fixed/40 text-primary',
   delivered: 'bg-primary-fixed/30 text-primary',
 }
-
-export const metadata = { title: 'My Orders' }
 
 export default async function AccountOrdersPage({
   params,
@@ -49,9 +42,9 @@ export default async function AccountOrdersPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login?next=/account/orders`)
 
+  const t = await getTranslations({ locale, namespace: 'accountOrders' })
   const admin = createAdminClient()
 
-  // Fetch orders for this customer email, with their items + product info
   const { data: rawOrders } = await (admin as any)
     .from('orders')
     .select(`
@@ -72,6 +65,13 @@ export default async function AccountOrdersPage({
     items: o.order_items ?? [],
   }))
 
+  const statusLabel: Record<string, string> = {
+    new: t('statusNew'),
+    processing: t('statusProcessing'),
+    shipped: t('statusShipped'),
+    delivered: t('statusDelivered'),
+  }
+
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 bg-surface">
       <div className="max-w-2xl mx-auto">
@@ -80,26 +80,26 @@ export default async function AccountOrdersPage({
           className="inline-flex items-center gap-2 font-sans text-sm text-on-surface-variant hover:text-primary transition-colors mb-8"
         >
           <ArrowLeft size={15} strokeWidth={1.5} />
-          My Account
+          {t('back')}
         </Link>
 
-        <h1 className="font-serif text-3xl text-primary mb-1">My Orders</h1>
+        <h1 className="font-serif text-3xl text-primary mb-1">{t('title')}</h1>
         <p className="font-sans text-sm text-on-surface-variant mb-10">
-          Your purchase history on Terravoa.
+          {t('subtitle')}
         </p>
 
         {orders.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-outline-variant/30 bg-surface-container-low/50 p-14 text-center">
             <Package className="mx-auto mb-4 text-on-surface-variant/30" size={36} strokeWidth={1} />
-            <p className="font-sans text-sm text-on-surface-variant mb-1">No orders yet</p>
+            <p className="font-sans text-sm text-on-surface-variant mb-1">{t('emptyTitle')}</p>
             <p className="font-sans text-xs text-on-surface-variant/60 mb-6">
-              Your purchases will appear here once you place your first order.
+              {t('emptyDesc')}
             </p>
             <Link
               href="/collection"
               className="font-sans text-xs uppercase tracking-[0.12em] font-semibold bg-primary text-on-primary px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity"
             >
-              Explore the Collection
+              {t('exploreCta')}
             </Link>
           </div>
         ) : (
@@ -109,14 +109,13 @@ export default async function AccountOrdersPage({
                 key={order.id}
                 className="rounded-2xl border border-outline-variant/20 bg-surface-container-lowest overflow-hidden shadow-sm"
               >
-                {/* Order header */}
                 <header className="bg-surface-container-low/70 border-b border-outline-variant/15 px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
                     <p className="font-sans text-[10px] uppercase tracking-[0.12em] text-on-surface-variant mb-0.5">
-                      Order · <span className="font-mono">{order.id.slice(0, 8)}…</span>
+                      {t('orderPrefix')} · <span className="font-mono">{order.id.slice(0, 8)}…</span>
                     </p>
                     <p className="font-sans text-xs text-on-surface-variant">
-                      {new Date(order.created_at).toLocaleDateString('en-GB', {
+                      {new Date(order.created_at).toLocaleDateString(locale, {
                         day: 'numeric',
                         month: 'long',
                         year: 'numeric',
@@ -139,21 +138,22 @@ export default async function AccountOrdersPage({
                       className="inline-flex items-center gap-1 font-sans text-[10px] uppercase tracking-wider text-on-surface-variant/60 hover:text-secondary transition-colors"
                     >
                       <RotateCcw size={11} strokeWidth={1.5} />
-                      Return
+                      {t('returnCta')}
                     </Link>
                   </div>
                 </header>
 
-                {/* Order items */}
                 <div className="divide-y divide-outline-variant/10">
                   {order.items.map((item) => (
                     <div key={item.id} className="px-5 py-4 flex items-start gap-4">
-                      {/* Product image thumbnail */}
                       {item.products?.image_src && (
-                        <img
+                        <Image
                           src={item.products.image_src}
                           alt={item.products.name}
+                          width={56}
+                          height={56}
                           className="w-14 h-14 object-cover rounded-lg border border-outline-variant/15 shrink-0 bg-surface-container-low"
+                          unoptimized={isExternalUnoptimizedSrc(item.products.image_src)}
                         />
                       )}
                       <div className="flex-1 min-w-0">
@@ -167,7 +167,7 @@ export default async function AccountOrdersPage({
                         )}
                         <div className="flex items-center justify-between mt-1">
                           <p className="font-sans text-xs text-on-surface-variant">
-                            Qty {item.quantity}
+                            {t('qty', { count: item.quantity })}
                           </p>
                           <p className="font-sans text-xs text-on-surface tabular-nums">
                             €{((item.price * item.quantity) / 100).toFixed(2)}
@@ -175,7 +175,7 @@ export default async function AccountOrdersPage({
                         </div>
                         {item.tracking_number && (
                           <p className="font-sans text-xs text-secondary mt-1.5">
-                            Tracking:{' '}
+                            {t('tracking')}:{' '}
                             <span className="font-mono text-on-surface">{item.tracking_number}</span>
                           </p>
                         )}
@@ -184,10 +184,9 @@ export default async function AccountOrdersPage({
                   ))}
                 </div>
 
-                {/* Order timeline */}
                 <div className="px-5 border-t border-outline-variant/10 bg-surface-container-low/30">
                   <p className="font-sans text-[10px] uppercase tracking-[0.15em] text-on-surface-variant pt-4 pb-1">
-                    Order progress
+                    {t('progress')}
                   </p>
                   <OrderTimeline
                     status={order.status}

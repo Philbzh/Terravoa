@@ -9,8 +9,10 @@ import {
   getProducerBySlug,
   getRegionSlugByName,
 } from '@/lib/content'
+import { SITE_URL } from '@/lib/constants'
 import { getTranslations } from 'next-intl/server'
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 
 export const revalidate = 60
 
@@ -43,16 +45,42 @@ export default async function StoryPage({ params }: PageParams) {
     redirect(`/${locale}/producers/${story.producerSlug}`)
   }
 
-  const [producer, regionSlug, t] = await Promise.all([
+  const [producer, regionSlug, t, tNav] = await Promise.all([
     story.producerSlug ? getProducerBySlug(story.producerSlug) : Promise.resolve(null),
     getRegionSlugByName(story.region),
     getTranslations({ locale, namespace: 'stories' }),
+    getTranslations({ locale, namespace: 'nav' }),
   ])
 
   const paragraphs = story.body.split('\n\n')
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: story.title,
+    description: story.subtitle || story.excerpt?.slice(0, 160),
+    image: story.imageSrc.startsWith('http') ? story.imageSrc : undefined,
+    datePublished: story.date,
+    author: producer
+      ? { '@type': 'Organization', name: producer.name }
+      : { '@type': 'Organization', name: 'Terravoa' },
+    publisher: { '@type': 'Organization', name: 'Terravoa' },
+    url: `${SITE_URL}/stories/${story.slug}`,
+  }
+
   return (
     <div className="pt-24 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        items={[
+          { name: tNav('journal'), path: '/stories' },
+          { name: story.title, path: `/stories/${story.slug}` },
+        ]}
+      />
       {/* Breadcrumb */}
       <div className="px-6 md:px-16 max-w-3xl mx-auto mb-10">
         <Link

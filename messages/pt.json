@@ -134,18 +134,36 @@
       "title": "Como funciona a Terravoa",
       "subtitle": "Do produtor à sua porta — sem desvios",
       "steps": {
-        "discover": { "title": "Descobrir", "description": "Explore produtos selecionados dos melhores pequenos produtores europeus." },
-        "order": { "title": "Encomendar diretamente", "description": "A sua encomenda vai diretamente ao produtor — sem intermediários, sem armazéns." },
-        "delivered": { "title": "Entregue fresco", "description": "Enviado diretamente da fonte, carregando a alma da sua origem." }
+        "discover": {
+          "title": "Descobrir",
+          "description": "Explore produtos selecionados dos melhores pequenos produtores europeus."
+        },
+        "order": {
+          "title": "Encomendar diretamente",
+          "description": "A sua encomenda vai diretamente ao produtor — sem intermediários, sem armazéns."
+        },
+        "delivered": {
+          "title": "Entregue fresco",
+          "description": "Enviado diretamente da fonte, carregando a alma da sua origem."
+        }
       }
     },
     "curatorsPromise": {
       "title": "A promessa Terravoa",
       "learnMore": "Saiba mais sobre o nosso processo de seleção",
       "items": {
-        "origins": { "title": "Origens verificadas", "description": "Visitamos pessoalmente cada fazenda, oficina e estúdio. Sem intermediários — apenas relações diretas com os artesãos." },
-        "sustainable": { "title": "Alma sustentável", "description": "Priorizando métodos agrícolas e de produção tradicionais que respeitam o ecossistema local e a biodiversidade." },
-        "fair": { "title": "Compensação justa", "description": "Os produtores definem os seus próprios preços. Garantimos que recebam a maior parte do valor, preservando os meios de vida rurais." }
+        "origins": {
+          "title": "Origens verificadas",
+          "description": "Visitamos pessoalmente cada fazenda, oficina e estúdio. Sem intermediários — apenas relações diretas com os artesãos."
+        },
+        "sustainable": {
+          "title": "Alma sustentável",
+          "description": "Priorizando métodos agrícolas e de produção tradicionais que respeitam o ecossistema local e a biodiversidade."
+        },
+        "fair": {
+          "title": "Compensação justa",
+          "description": "Os produtores definem os seus próprios preços. Garantimos que recebam a maior parte do valor, preservando os meios de vida rurais."
+        }
       }
     },
     "producerCTA": {
@@ -428,6 +446,7 @@
     "sidebar": {
       "portalLabel": "Portal do produtor",
       "dashboard": "Painel",
+      "analytics": "Estatísticas",
       "orders": "Encomendas",
       "products": "Produtos",
       "payments": "Pagamentos",
@@ -542,7 +561,12 @@
       "saving": "A guardar",
       "clear": "Limpar",
       "savedConfirm": "Guardado. O estado da encomenda é atualizado quando todos os produtores adicionarem o tracking.",
-      "customer": "Cliente"
+      "customer": "Cliente",
+      "detailTitle": "Detalhe da encomenda",
+      "detailBack": "Todas as encomendas",
+      "detailSignIn": "Inicie sessão para ver esta encomenda.",
+      "detailSignInLink": "Entrada produtor",
+      "detailNetEarnings": "O seu rendimento líquido nesta encomenda:"
     },
     "profile": {
       "title": "Perfil público",
@@ -562,7 +586,13 @@
       "imageProfile": "Perfil",
       "imageHero": "Hero",
       "editNote": "As alterações ao perfil são coordenadas com a Terravoa para manter a coerência da coleção. Para solicitar alterações,",
-      "editNoteLink": "contacte-nos"
+      "editNoteLink": "contacte-nos",
+      "editTitle": "Editar perfil público",
+      "editIntro": "Atualize como os clientes veem a sua história no marketplace. Nome, slug, região e imagens são geridos pela Terravoa.",
+      "editSave": "Guardar perfil",
+      "editSaving": "A guardar…",
+      "editSaved": "Perfil guardado.",
+      "editNoteImages": "Para alterar nome, slug, região ou fotografias,"
     },
     "partnership": {
       "title": "Parceria & pagamentos",
@@ -574,13 +604,22 @@
       "requestAccess": "Solicitar acesso de produtor",
       "earningsTitle": "Ganhos & pagamentos",
       "earningsSubtitle": "O Stripe Connect irá gerir as divisões: comissão da Terravoa e depois pagamento líquido para a sua conta. Esta secção apresentará receitas, deduções e histórico de pagamentos.",
-      "noPayoutData": "Ainda sem dados de pagamento — integre o Stripe Connect para ativar.",
+      "noPayoutData": "Ainda sem vendas. Quando os clientes comprarem os seus produtos, os rendimentos e o estado dos pagamentos aparecerão aqui.",
       "planStarterTitle": "Starter",
       "planStarterDesc": "Adesão mensal mais baixa, comissão mais elevada por venda — ideal para volumes pequenos e primeiras listagens.",
       "planGrowthTitle": "Growth",
       "planGrowthDesc": "Adesão mais elevada, comissão reduzida — concebido para produtores que aumentam o volume na Terravoa.",
       "monthlyMembership": "Adesão mensal",
-      "commissionOnSale": "Comissão por venda"
+      "commissionOnSale": "Comissão por venda",
+      "payoutSignIn": "Inicie sessão com a sua conta de produtor para ver o histórico de pagamentos.",
+      "payoutTotalNet": "Rendimento líquido (todas as linhas)",
+      "payoutTotalCommission": "Comissão Terravoa",
+      "payoutColDate": "Data",
+      "payoutColProduct": "Produto / encomenda",
+      "payoutColGross": "Bruto",
+      "payoutColCommission": "Comissão",
+      "payoutColNet": "Líquido",
+      "payoutColStatus": "Estado do pagamento"
     },
     "shipping": {
       "title": "Configuração de envios",
@@ -703,5 +742,160 @@
     "paymentTitle": "Pagamento",
     "paymentDesc1": "Um único pagamento simples e centralizado — cartão de crédito, Apple Pay ou Google Pay. Todas as transações são processadas de forma segura através do Stripe. Paga uma única vez, independentemente de quantos produtores estejam incluídos na sua encomenda.",
     "paymentDesc2": "Os seus dados de pagamento nunca são armazenados nos nossos servidores. Todos os preços incluem IVA para o seu país de entrega."
+  },
+  "account": {
+    "title": "A minha conta",
+    "orders": "As minhas encomendas",
+    "ordersDesc": "Acompanhar e rever as suas compras",
+    "wishlist": "A minha lista de desejos",
+    "wishlistDesc": "Produtos guardados para mais tarde",
+    "signOut": "Terminar sessão"
+  },
+  "accountOrders": {
+    "title": "As minhas encomendas",
+    "back": "A minha conta",
+    "subtitle": "O seu histórico de compras na Terravoa.",
+    "emptyTitle": "Ainda sem encomendas",
+    "emptyDesc": "As suas compras aparecerão aqui após a primeira encomenda.",
+    "exploreCta": "Explorar a coleção",
+    "orderPrefix": "Encomenda",
+    "qty": "Qtd. {count}",
+    "tracking": "Rastreamento",
+    "progress": "Estado da encomenda",
+    "returnCta": "Devolução",
+    "statusNew": "Encomenda recebida",
+    "statusProcessing": "Em processamento",
+    "statusShipped": "Enviada",
+    "statusDelivered": "Entregue"
+  },
+  "accountWishlist": {
+    "title": "A minha lista de desejos",
+    "subtitle": "Artigos guardados para mais tarde",
+    "emptyTitle": "A sua lista está vazia",
+    "emptyDesc": "Descubra a coleção e guarde os seus favoritos para mais tarde.",
+    "discoverCta": "Descobrir a coleção"
+  },
+  "returnRequest": {
+    "title": "Pedir devolução",
+    "intro": "Os consumidores da UE têm um direito de livre resolução de 14 dias. Artigos danificados ou incorretos podem ser devolvidos a qualquer momento. Respondemos no prazo de 2 dias úteis.",
+    "back": "As minhas encomendas",
+    "orderId": "ID da encomenda",
+    "orderIdPlaceholder": "ex. 3fa85f64-5717-4562-…",
+    "orderIdHelpPrefix": "Encontre o ID da encomenda em",
+    "orderIdHelpLink": "As minhas encomendas",
+    "reason": "Motivo da devolução",
+    "selectReason": "Selecione um motivo",
+    "reasonWithdrawal": "Direito de livre resolução (14 dias)",
+    "reasonWithdrawalDesc": "Mudei de ideias nos 14 dias após a receção.",
+    "reasonDamaged": "Artigo chegou danificado",
+    "reasonDamagedDesc": "O produto estava danificado ou partido à chegada.",
+    "reasonWrongItem": "Artigo errado recebido",
+    "reasonWrongItemDesc": "Recebi um produto diferente do que encomendei.",
+    "reasonQuality": "Problema de qualidade",
+    "reasonQualityDesc": "O produto não cumpriu os padrões de qualidade esperados.",
+    "description": "Detalhes adicionais (opcional)",
+    "descriptionPlaceholder": "Conte-nos o que aconteceu…",
+    "submit": "Enviar pedido de devolução",
+    "submitting": "A enviar…",
+    "successTitle": "Pedido de devolução enviado",
+    "successDesc": "Recebemos o seu pedido e responderemos no prazo de 2 dias úteis.",
+    "referenceLabel": "Referência",
+    "backToOrders": "Voltar às minhas encomendas",
+    "returnPolicy": "Política de devoluções",
+    "errorOrderIdRequired": "Introduza o ID da encomenda.",
+    "errorReasonRequired": "Selecione um motivo.",
+    "errorConnection": "Não foi possível ligar. Verifique a sua ligação e tente novamente.",
+    "errorGeneric": "Algo correu mal. Tente novamente."
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Seja produtor, cliente ou simplesmente curioso — gostaríamos de ouvir de si.",
+    "emailTitle": "Email",
+    "emailValue": "hello@terravoa.com",
+    "locationTitle": "Localização",
+    "locationValue": "Com sede na Europa\nAprovisionamento em todo o continente",
+    "responseTitle": "Tempo de resposta",
+    "responseValue": "Respondemos normalmente no prazo de 24 horas em dias úteis.",
+    "firstName": "Nome",
+    "lastName": "Apelido",
+    "email": "Email",
+    "audience": "Sou…",
+    "audienceCustomer": "Cliente",
+    "audienceProducer": "Produtor interessado em aderir",
+    "audiencePress": "Imprensa / Media",
+    "audienceOther": "Outro",
+    "message": "Mensagem",
+    "send": "Enviar mensagem",
+    "sending": "A enviar…",
+    "successTitle": "Mensagem recebida",
+    "successDesc": "Obrigado — leremos a sua mensagem com atenção e responderemos o mais breve possível, normalmente num dia útil.",
+    "backHome": "Voltar ao início",
+    "browseShop": "Explorar a loja"
+  },
+  "savoirFaire": {
+    "kicker": "O nosso processo de seleção",
+    "title": "Savoir-Faire",
+    "intro": "O conceito francês de «savoir-faire» — o saber fazer — descreve o que procuramos em cada produtor: conhecimento profundo e prático transmitido de geração em geração. Eis como os encontramos e verificamos.",
+    "step1Title": "Descoberta",
+    "step1Desc": "Viajamos por regiões da Europa, visitamos mercados locais, falamos com comunidades e identificamos produtores com conhecimento tradicional genuíno.",
+    "step2Title": "Visita presencial",
+    "step2Desc": "Cada produtor é visitado pessoalmente. Percorremos os campos, observamos os métodos, provamos os produtos e compreendemos a história em primeira mão.",
+    "step3Title": "Verificação",
+    "step3Desc": "Verificamos a autenticidade: sem revendedores, sem produção em massa. Os produtos devem ser feitos com métodos tradicionais e ingredientes ou materiais locais.",
+    "step4Title": "Parceria",
+    "step4Desc": "Os produtores aceites definem os seus preços e mantêm controlo total da produção. Nós tratamos da plataforma, pagamentos e experiência do cliente.",
+    "ctaTitle": "É produtor?",
+    "ctaDesc": "Se fabrica produtos autênticos e tradicionais e quer chegar a clientes que valorizam qualidade e proveniência, conte-nos a sua história.",
+    "ctaButton": "Tornar-se produtor"
+  },
+  "regions": {
+    "kicker": "Origens",
+    "title": "Origens",
+    "subtitle": "Cada produto tem uma origem. Explore as regiões dos nossos produtores — terroir, tradições e cultura por trás do que chega à sua cozinha.",
+    "producers": "Produtores",
+    "products": "Produtos"
+  },
+  "giftMessaging": {
+    "isGift": "É um presente",
+    "recipientLabel": "Nome do destinatário",
+    "recipientPlaceholder": "ex. Sophie",
+    "messageLabel": "Mensagem ao destinatário",
+    "messagePlaceholder": "Uma nota pessoal a incluir com o presente…",
+    "giftWrap": "Incluir embrulho de presente",
+    "giftWrapPrice": "+3,50 €"
+  },
+  "couponField": {
+    "placeholder": "Código de cupão",
+    "apply": "Aplicar",
+    "remove": "Remover cupão",
+    "invalidDefault": "Cupão inválido.",
+    "networkError": "Não foi possível validar o cupão. Tente novamente."
+  },
+  "legalPages": {
+    "fallbackNotice": "Este texto legal ainda não está disponível no seu idioma. A versão em inglês é apresentada abaixo.",
+    "privacy": {
+      "title": "Política de privacidade",
+      "metaTitle": "Privacidade",
+      "metaDescription": "Como a Terravoa recolhe, utiliza e protege os seus dados pessoais (RGPD).",
+      "lastUpdated": "Última atualização: 12 de abril de 2026"
+    },
+    "terms": {
+      "title": "Termos e condições",
+      "metaTitle": "Termos e condições",
+      "metaDescription": "Termos de utilização da Terravoa e compras no marketplace.",
+      "lastUpdated": "Última atualização: 12 de abril de 2026"
+    },
+    "returns": {
+      "title": "Devoluções e reembolsos",
+      "metaTitle": "Devoluções e reembolsos",
+      "metaDescription": "Política de devoluções — direito de retractação UE, exceções para perecíveis.",
+      "lastUpdated": "Última atualização: 12 de abril de 2026"
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "metaTitle": "Cookies",
+      "metaDescription": "Como a Terravoa utiliza cookies e como pode controlá-los.",
+      "lastUpdated": "Última atualização: 12 de abril de 2026"
+    }
   }
 }

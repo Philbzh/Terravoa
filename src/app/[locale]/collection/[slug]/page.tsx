@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/Badge'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { ReviewsList } from '@/components/reviews/ReviewsList'
 import { ReviewForm } from '@/components/reviews/ReviewForm'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 
 export const revalidate = 60
 
@@ -42,12 +43,19 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>
+}) {
+  const { locale, slug } = await params
   const product = await getProductBySlug(slug)
   if (!product) notFound()
 
-  const tReviews = await getTranslations('reviews')
+  const [tReviews, tNav] = await Promise.all([
+    getTranslations('reviews'),
+    getTranslations('nav'),
+  ])
 
   const producer = await getProducerBySlug(product.producerSlug)
 
@@ -87,6 +95,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        items={[
+          { name: tNav('collection'), path: '/collection' },
+          { name: product.name, path: `/collection/${product.slug}` },
+        ]}
       />
       <div className="pt-24 pb-24">
         {/* Breadcrumb */}

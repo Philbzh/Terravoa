@@ -13,6 +13,7 @@ import {
   Truck,
   UserCircle,
   LifeBuoy,
+  BarChart3,
 } from 'lucide-react'
 
 export function ProducerSidebar() {
@@ -22,6 +23,7 @@ export function ProducerSidebar() {
 
   const links = [
     { href: '/producer', label: t('dashboard'), icon: LayoutDashboard, exact: true, tour: 'dashboard' },
+    { href: '/producer/analytics', label: t('analytics'), icon: BarChart3, tour: 'analytics' },
     { href: '/producer/orders', label: t('orders'), icon: ShoppingBag, tour: 'orders' },
     { href: '/producer/products', label: t('products'), icon: Package, tour: 'products' },
     { href: '/producer/plan', label: 'Plan & Billing', icon: ReceiptText, tour: 'plan' },

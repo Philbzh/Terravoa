@@ -3,6 +3,7 @@ import { getProducerForSession } from '@/lib/producer/server'
 import { getTranslations } from 'next-intl/server'
 import { OrderItemFulfillmentForm } from './OrderItemFulfillmentForm'
 import { Package } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 
 function formatShippingAddress(addr: Record<string, string> | null | undefined) {
   if (!addr || typeof addr !== 'object') return null
@@ -123,7 +124,12 @@ export default async function ProducerOrdersPage() {
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <p className="font-sans text-[10px] uppercase tracking-[0.12em] text-on-surface-variant mb-1">
-                        {t('orderLabel')} · {group[0].order_id.slice(0, 8)}…
+                        <Link
+                          href={`/producer/orders/${group[0].order_id}`}
+                          className="hover:text-secondary underline-offset-2 hover:underline"
+                        >
+                          {t('orderLabel')} · {group[0].order_id.slice(0, 8)}…
+                        </Link>
                       </p>
                       <p className="font-sans text-sm text-on-surface font-medium">
                         {order?.customer_name ?? t('customer')}

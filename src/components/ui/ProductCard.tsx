@@ -115,6 +115,8 @@ export function ProductCard({
               ? '(max-width: 640px) 160px, 180px'
               : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
           }
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNWUwIi8+PC9zdmc+"
           unoptimized={isExternalUnoptimizedSrc(imageSrc)}
         />
 
