@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Truck, Heart } from 'lucide-react'
 import { cn, isExternalUnoptimizedSrc } from '@/lib/utils'
 import { Badge, type BadgeVariant } from './Badge'
+import { useProductBadgeLabel } from '@/lib/i18n/collection-labels'
 import { useWishlist } from '@/lib/wishlist'
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -96,6 +97,8 @@ export function ProductCard({
   const t = useTranslations('ui')
   const { isInWishlist, toggle } = useWishlist()
   const inWishlist = slug ? isInWishlist(slug) : false
+  const translatedBadgeLabel = useProductBadgeLabel(badge?.label ?? '')
+  const badgeLabel = badge ? translatedBadgeLabel : undefined
 
   return (
     <div className={cn('group cursor-pointer w-full', compact && 'max-w-[200px] sm:max-w-[220px]')}>
@@ -131,12 +134,12 @@ export function ProductCard({
 
         {badge && !slug && (
           <div className="absolute top-4 right-4">
-            <Badge label={badge.label} variant={badge.variant} />
+            <Badge label={badgeLabel ?? badge.label} variant={badge.variant} />
           </div>
         )}
         {slug ? (
           <div className={cn('absolute flex flex-col items-end gap-2', compact ? 'top-2 right-2' : 'top-3 right-3')}>
-            {badge && <Badge label={badge.label} variant={badge.variant} />}
+            {badge && <Badge label={badgeLabel ?? badge.label} variant={badge.variant} />}
             <button
               type="button"
               aria-label={inWishlist ? t('removeFromWishlist') : t('addToWishlist')}

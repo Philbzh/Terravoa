@@ -9,6 +9,11 @@ import type { Product, Producer } from '@/data/demo'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { PageContainer } from '@/components/ui/PageContainer'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { useTranslations } from 'next-intl'
+import {
+  CATEGORY_TO_KEY,
+  REGION_NAME_TO_SLUG,
+} from '@/lib/i18n/collection-labels'
 import { cn } from '@/lib/utils'
 
 function regionLabel(p: Product, producers: Producer[]): string {
@@ -77,9 +82,27 @@ function buildSuggestions(products: Product[], q: string): Suggestion[] {
 }
 
 export function CollectionClient({ products, producers }: Props) {
+  const t = useTranslations('collectionPage')
+  const tCategories = useTranslations('collectionPage.categories')
+  const tRegionCatalog = useTranslations('regions.catalog')
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+
+  const labelCategory = (cat: string) => {
+    if (cat === 'All') return tCategories('all')
+    const key = CATEGORY_TO_KEY[cat]
+    if (key && tCategories.has(key)) return tCategories(key)
+    return cat
+  }
+
+  const labelRegion = (reg: string) => {
+    if (reg === 'All') return tCategories('all')
+    const slug = REGION_NAME_TO_SLUG[reg]
+    const nameKey = slug ? `${slug}.name` : ''
+    if (slug && tRegionCatalog.has(nameKey)) return tRegionCatalog(nameKey)
+    return reg
+  }
 
   const [activeCategory, setActiveCategory] = useState(() => searchParams.get('category') ?? 'All')
   const [activeRegion, setActiveRegion] = useState(() => searchParams.get('region') ?? 'All')
@@ -180,16 +203,16 @@ export function CollectionClient({ products, producers }: Props) {
   return (
     <PageContainer>
       <SectionHeader
-        kicker="Collection"
-        title="The Collection"
-        subtitle="Every item in our collection has been personally sourced from verified European producers. Search, filter by region or category, or browse freely."
+        kicker={t('kicker')}
+        title={t('title')}
+        subtitle={t('subtitle')}
       />
 
       <section className="rounded-2xl border border-outline-variant/20 bg-surface-container-lowest p-4 md:p-6 mb-8 md:mb-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 md:gap-5 items-start">
           <div ref={searchContainerRef} className="relative">
             <label htmlFor="collection-search" className="sr-only">
-              Search products
+              {t('searchLabel')}
             </label>
             <Search
               className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 pointer-events-none"
@@ -210,7 +233,7 @@ export function CollectionClient({ products, producers }: Props) {
                 if (search.trim().length >= 2 && suggestions.length > 0) setShowDropdown(true)
               }}
               onKeyDown={handleKeyDown}
-              placeholder="Search by product, producer, or origin"
+              placeholder={t('searchPlaceholder')}
               autoComplete="off"
               className="w-full rounded-full border border-outline-variant/25 bg-surface-container-low pl-11 pr-5 py-3 font-sans text-sm text-on-surface placeholder:text-on-surface-variant/55 focus:outline-none focus:ring-2 focus:ring-secondary/25 focus:border-secondary/30 transition-shadow"
             />
@@ -220,7 +243,7 @@ export function CollectionClient({ products, producers }: Props) {
                 {suggestions.some((s) => s.type === 'product') && (
                   <div className="px-4 pt-3 pb-1">
                     <p className="font-sans text-[10px] uppercase tracking-[0.14em] text-on-surface-variant/60">
-                      Products
+                      {t('suggestionsProducts')}
                     </p>
                   </div>
                 )}
@@ -232,7 +255,7 @@ export function CollectionClient({ products, producers }: Props) {
                       {showProducerHeader && suggestions.some((x) => x.type === 'product') && (
                         <div className="px-4 pt-3 pb-1">
                           <p className="font-sans text-[10px] uppercase tracking-[0.14em] text-on-surface-variant/60">
-                            Producers
+                            {t('suggestionsProducers')}
                           </p>
                         </div>
                       )}
@@ -264,11 +287,11 @@ export function CollectionClient({ products, producers }: Props) {
               className="inline-flex items-center gap-2 rounded-full border border-outline-variant/25 bg-surface px-4 py-2 font-sans text-xs uppercase tracking-[0.12em] text-on-surface-variant hover:text-primary hover:border-primary/35 transition-colors"
             >
               <SlidersHorizontal size={14} strokeWidth={1.6} />
-              More filters
+              {t('moreFilters')}
             </button>
             <div className="flex items-center gap-2">
               <label htmlFor="sort-select" className="font-sans text-xs text-on-surface-variant uppercase tracking-[0.1em]">
-                Sort
+                {t('sortLabel')}
               </label>
               <select
                 id="sort-select"
@@ -276,17 +299,17 @@ export function CollectionClient({ products, producers }: Props) {
                 onChange={(e) => { const s = e.target.value as SortKey; setSort(s); updateUrl({ category: activeCategory, region: activeRegion, q: search, sort: s }) }}
                 className="font-sans text-xs bg-surface border border-outline-variant/20 rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary/30 transition-colors"
               >
-                <option value="default">Newest</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="name-asc">Name: A → Z</option>
+                <option value="default">{t('sortNewest')}</option>
+                <option value="price-asc">{t('sortPriceAsc')}</option>
+                <option value="price-desc">{t('sortPriceDesc')}</option>
+                <option value="name-asc">{t('sortNameAsc')}</option>
               </select>
             </div>
           </div>
         </div>
 
         <div className="mt-5">
-          <p className="font-sans text-[11px] text-on-surface-variant mb-2">Category</p>
+          <p className="font-sans text-[11px] text-on-surface-variant mb-2">{t('categoryLabel')}</p>
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -300,7 +323,7 @@ export function CollectionClient({ products, producers }: Props) {
                     : 'bg-surface text-on-surface-variant hover:bg-surface-container-high border border-outline-variant/15',
                 )}
               >
-                {cat}
+                {labelCategory(cat)}
               </button>
             ))}
           </div>
@@ -308,7 +331,7 @@ export function CollectionClient({ products, producers }: Props) {
 
         {showAdvanced && (
           <div className="mt-4 pt-4 border-t border-outline-variant/15">
-            <p className="font-sans text-[11px] text-on-surface-variant mb-2">Region</p>
+            <p className="font-sans text-[11px] text-on-surface-variant mb-2">{t('regionLabel')}</p>
             <div className="flex flex-wrap gap-2">
               {regions.map((reg) => (
                 <button
@@ -322,7 +345,7 @@ export function CollectionClient({ products, producers }: Props) {
                       : 'bg-surface text-on-surface-variant hover:bg-surface-container-high border-outline-variant/15',
                   )}
                 >
-                  {reg}
+                  {labelRegion(reg)}
                 </button>
               ))}
             </div>
@@ -333,17 +356,17 @@ export function CollectionClient({ products, producers }: Props) {
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {search.trim() && (
               <span className="inline-flex items-center gap-1 rounded-full bg-surface border border-outline-variant/20 px-3 py-1.5 font-sans text-xs text-on-surface-variant">
-                Search: {search}
+                {t('activeSearch', { term: search })}
               </span>
             )}
             {activeCategory !== 'All' && (
               <span className="inline-flex items-center gap-1 rounded-full bg-surface border border-outline-variant/20 px-3 py-1.5 font-sans text-xs text-on-surface-variant">
-                Category: {activeCategory}
+                {t('activeCategory', { category: labelCategory(activeCategory) })}
               </span>
             )}
             {activeRegion !== 'All' && (
               <span className="inline-flex items-center gap-1 rounded-full bg-surface border border-outline-variant/20 px-3 py-1.5 font-sans text-xs text-on-surface-variant">
-                Region: {activeRegion}
+                {t('activeRegion', { region: labelRegion(activeRegion) })}
               </span>
             )}
             <button
@@ -359,7 +382,7 @@ export function CollectionClient({ products, producers }: Props) {
               className="inline-flex items-center gap-1 rounded-full border border-outline-variant/25 px-3 py-1.5 font-sans text-xs text-on-surface-variant hover:text-primary hover:border-primary/35 transition-colors"
             >
               <X size={12} strokeWidth={1.8} />
-              Reset filters
+              {t('resetFilters')}
             </button>
           </div>
         )}
@@ -367,9 +390,11 @@ export function CollectionClient({ products, producers }: Props) {
 
       <div className="flex items-center justify-between mb-8 border-b border-outline-variant/10 pb-4">
         <p className="font-sans text-xs text-on-surface-variant">
-          {filtered.length} {filtered.length === 1 ? 'product' : 'products'}
+          {filtered.length === 1
+            ? t('productCount', { count: filtered.length })
+            : t('productsCount', { count: filtered.length })}
         </p>
-        <p className="font-sans text-xs text-on-surface-variant">Refined results</p>
+        <p className="font-sans text-xs text-on-surface-variant">{t('refinedResults')}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
@@ -400,16 +425,16 @@ export function CollectionClient({ products, producers }: Props) {
 
       {filtered.length === 0 && (
         <div className="text-center py-24 space-y-4">
-          <p className="font-serif text-2xl text-primary/60">No products found</p>
+          <p className="font-serif text-2xl text-primary/60">{t('noProductsTitle')}</p>
           <p className="font-sans text-sm text-on-surface-variant max-w-xs mx-auto">
-            Try adjusting your filters or search term.
+            {t('noProductsHint')}
           </p>
           <button
             type="button"
             onClick={() => { setActiveCategory('All'); setActiveRegion('All'); setSearch(''); updateUrl({}) }}
             className="font-sans text-xs uppercase tracking-[0.15em] text-secondary hover:text-primary transition-colors underline underline-offset-4"
           >
-            Clear all filters
+            {t('clearAllFilters')}
           </button>
         </div>
       )}

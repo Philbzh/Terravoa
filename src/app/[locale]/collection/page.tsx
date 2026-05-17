@@ -1,13 +1,22 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { CollectionClient } from './CollectionClient'
 import { CollectionBreadcrumb } from './CollectionBreadcrumb'
 import { getAllProducts, getAllProducers } from '@/lib/content'
 
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: 'The Collection',
-  description: 'Browse our curated collection of artisan products, sourced directly from Europe\'s finest small-batch producers.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'collectionPage' })
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  }
 }
 
 export default async function CollectionPage({
