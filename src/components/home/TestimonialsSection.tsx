@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -79,6 +80,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function TestimonialsSection() {
+  const t = useTranslations('testimonials')
   const [offset, setOffset] = useState(0)
   const [paused, setPaused] = useState(false)
 
@@ -120,14 +122,14 @@ export function TestimonialsSection() {
             <div className="flex items-center gap-5 mb-5">
               <div className="h-px w-14 bg-secondary shrink-0" />
               <span className="font-sans text-[10px] uppercase tracking-[0.32em] text-secondary font-semibold">
-                Verified purchases
+                {t('kicker')}
               </span>
             </div>
             <h2
               className="font-serif text-primary leading-[0.92]"
               style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)' }}
             >
-              What our customers say
+              {t('title')}
             </h2>
           </div>
 
@@ -136,7 +138,7 @@ export function TestimonialsSection() {
             <button
               type="button"
               onClick={retreat}
-              aria-label="Previous testimonial"
+              aria-label={t('prevLabel')}
               className="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-colors"
             >
               <ChevronLeft size={18} />
@@ -144,7 +146,7 @@ export function TestimonialsSection() {
             <button
               type="button"
               onClick={advance}
-              aria-label="Next testimonial"
+              aria-label={t('nextLabel')}
               className="flex items-center justify-center w-10 h-10 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-colors"
             >
               <ChevronRight size={18} />

@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Send, Check, ArrowRight } from 'lucide-react'
 
 export function NewsletterCTA() {
+  const t = useTranslations('newsletterCTA')
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -26,7 +28,7 @@ export function NewsletterCTA() {
       setEmail('')
       setTimeout(() => setSubmitted(false), 4000)
     } catch {
-      setError('Something went wrong. Please try again.')
+      setError(t('error'))
     } finally {
       setIsLoading(false)
     }
@@ -47,19 +49,18 @@ export function NewsletterCTA() {
             <div className="flex items-center gap-4 mb-5">
               <div className="h-px w-10 bg-secondary shrink-0" />
               <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-secondary font-semibold">
-                Stay in touch
+                {t('kicker')}
               </span>
             </div>
             <h2
               className="font-serif text-primary leading-[0.95] mb-4"
               style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)' }}
             >
-              Stories from the{' '}
-              <span className="italic text-secondary">terroir</span>
+              {t('titlePre')}
+              <span className="italic text-secondary">{t('titleHighlight')}</span>
             </h2>
             <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
-              Exclusive offers, seasonal discoveries, and the stories behind the artisans who craft your food.
-              No spam — just what matters.
+              {t('description')}
             </p>
           </div>
 
@@ -70,7 +71,7 @@ export function NewsletterCTA() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address"
+                placeholder={t('placeholder')}
                 required
                 className="w-full rounded-xl border border-outline-variant/30 bg-surface-container-lowest px-5 py-3.5 font-sans text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
@@ -82,21 +83,21 @@ export function NewsletterCTA() {
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3.5 font-sans text-sm font-medium text-on-secondary shadow-md shadow-secondary/15 transition-all duration-300 hover:bg-secondary/90 disabled:opacity-80"
               >
                 {submitted ? (
-                  <><Check className="h-4 w-4" /> Thank you!</>
+                  <><Check className="h-4 w-4" /> {t('thankYou')}</>
                 ) : isLoading ? (
                   <span className="flex items-center gap-2">
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-on-secondary/70 border-t-on-secondary" />
-                    Sending&hellip;
+                    {t('sending')}
                   </span>
                 ) : (
-                  <><Send className="h-4 w-4" /> Subscribe</>
+                  <><Send className="h-4 w-4" /> {t('subscribe')}</>
                 )}
               </motion.button>
             </form>
 
             {error && <p className="mt-2 font-sans text-xs text-error">{error}</p>}
             <p className="mt-2 font-sans text-[11px] text-on-surface-variant/50 text-center">
-              Unsubscribe anytime. We respect your privacy.
+              {t('privacy')}
             </p>
           </div>
         </div>

@@ -38,6 +38,7 @@ export type AdminNavCounts = {
   pendingReviews: number
   pendingReturns: number
   pendingPlanRequests: number
+  pendingDiscoveries: number
 }
 
 type NavLink = {
@@ -66,6 +67,7 @@ const sections: NavSection[] = [
       { href: '/admin/products', label: 'Product approval', icon: Package, badgeKey: 'pendingProducts' },
       { href: '/admin/ratings', label: 'Producer ratings', icon: Star, badgeKey: 'ratingAlerts' },
       { href: '/admin/reviews', label: 'Admin comments', icon: MessageSquare, badgeKey: 'pendingReviews' },
+      { href: '/admin/discoveries', label: 'Discoveries', icon: MessageSquare, badgeKey: 'pendingDiscoveries' },
       { href: '/admin/plan-requests', label: 'Plan requests', icon: ClipboardList, badgeKey: 'pendingPlanRequests' },
     ],
   },
@@ -534,7 +536,7 @@ function isSectionAllowed(section: string, access: AdminAccess): boolean {
 
 function isLinkAllowed(href: string, access: AdminAccess): boolean {
   if (access.isRootAdmin) return true
-  if (href.startsWith('/admin/producers') || href.startsWith('/admin/applications') || href.startsWith('/admin/products') || href.startsWith('/admin/ratings') || href.startsWith('/admin/reviews') || href.startsWith('/admin/plan-requests')) {
+  if (href.startsWith('/admin/producers') || href.startsWith('/admin/applications') || href.startsWith('/admin/products') || href.startsWith('/admin/ratings') || href.startsWith('/admin/reviews') || href.startsWith('/admin/discoveries') || href.startsWith('/admin/plan-requests')) {
     return access.canSupplier
   }
   if (href.startsWith('/admin/orders') || href.startsWith('/admin/returns') || href.startsWith('/admin/customers')) {

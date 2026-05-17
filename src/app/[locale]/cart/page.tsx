@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { Minus, Plus, Trash2 } from 'lucide-react'
 import { PageContainer } from '@/components/ui/PageContainer'
@@ -13,6 +14,7 @@ import {
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
 
 export default function CartPage() {
+  const t = useTranslations('cart')
   const hydrated = useCartStore((s) => s.hydrated)
   const lines = useCartStore((s) => s.lines)
   const setQty = useCartStore((s) => s.setQty)
@@ -24,8 +26,8 @@ export default function CartPage() {
     return (
       <PageContainer>
         <div className="max-w-xl mx-auto text-center py-16">
-          <h1 className="font-serif text-primary mb-4" style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)' }}>Your cart</h1>
-          <p className="text-on-surface-variant font-sans">Loading your cart…</p>
+          <h1 className="font-serif text-primary mb-4" style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)' }}>{t('title')}</h1>
+          <p className="text-on-surface-variant font-sans">{t('loading')}</p>
         </div>
       </PageContainer>
     )
@@ -35,15 +37,15 @@ export default function CartPage() {
     return (
       <PageContainer>
         <div className="max-w-xl mx-auto text-center py-16">
-          <h1 className="font-serif text-primary mb-4" style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)' }}>Your cart</h1>
+          <h1 className="font-serif text-primary mb-4" style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)' }}>{t('title')}</h1>
           <p className="text-on-surface-variant font-sans mb-10">
-            Nothing here yet — explore the collection and add something wonderful.
+            {t('emptyMessage')}
           </p>
           <Link
             href="/collection"
             className="inline-flex items-center gap-2 bg-secondary text-on-secondary px-8 py-4 rounded-full font-sans text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-secondary-container transition-colors duration-300"
           >
-            Browse collection
+            {t('browseCollection')}
           </Link>
         </div>
       </PageContainer>
@@ -56,11 +58,10 @@ export default function CartPage() {
         className="font-serif text-primary mb-4 leading-[0.96]"
         style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)' }}
       >
-        Your cart
+        {t('title')}
       </h1>
       <p className="text-on-surface-variant font-sans text-sm mb-12 max-w-xl">
-        Items ship directly from each producer. If you order from more than one maker,
-        you may receive separate parcels.
+        {t('subtitle')}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-6xl">
@@ -69,6 +70,7 @@ export default function CartPage() {
             <CartRow
               key={line.slug}
               line={line}
+              t={t}
               onQty={(q) => setQty(line.slug, q)}
               onRemove={() => removeLine(line.slug)}
             />
@@ -77,26 +79,26 @@ export default function CartPage() {
 
         <div className="lg:col-span-1">
           <div className="sticky top-28 rounded-xl border border-outline-variant/20 bg-surface-container-low p-8">
-            <h2 className="font-serif text-xl text-primary mb-6">Summary</h2>
+            <h2 className="font-serif text-xl text-primary mb-6">{t('summary')}</h2>
             <div className="flex justify-between font-sans text-sm text-on-surface-variant mb-2">
-              <span>Subtotal</span>
+              <span>{t('subtotal')}</span>
               <span className="text-primary tabular-nums">
                 €{(total / 100).toFixed(2)}
               </span>
             </div>
             <p className="font-sans text-xs text-on-surface-variant/80 mb-6 leading-relaxed">
-              Shipping and taxes are calculated at checkout.
+              {t('shippingNote')}
             </p>
             <Link href="/checkout" className="block w-full">
               <Button variant="primary" className="w-full justify-center">
-                Checkout
+                {t('checkout')}
               </Button>
             </Link>
             <Link
               href="/collection"
               className="block text-center font-sans text-sm text-secondary mt-4 hover:underline underline-offset-4"
             >
-              Continue shopping
+              {t('continueShopping')}
             </Link>
           </div>
         </div>
@@ -107,10 +109,12 @@ export default function CartPage() {
 
 function CartRow({
   line,
+  t,
   onQty,
   onRemove,
 }: {
   line: CartLine
+  t: ReturnType<typeof useTranslations>
   onQty: (q: number) => void
   onRemove: () => void
 }) {
@@ -147,7 +151,7 @@ function CartRow({
             <button
               type="button"
               className="p-1 text-on-surface-variant hover:text-primary"
-              aria-label="Decrease quantity"
+              aria-label={t('decreaseQty')}
               onClick={() => onQty(line.quantity - 1)}
             >
               <Minus size={16} />
@@ -158,7 +162,7 @@ function CartRow({
             <button
               type="button"
               className="p-1 text-on-surface-variant hover:text-primary"
-              aria-label="Increase quantity"
+              aria-label={t('increaseQty')}
               onClick={() => onQty(line.quantity + 1)}
             >
               <Plus size={16} />
@@ -168,7 +172,7 @@ function CartRow({
             type="button"
             onClick={onRemove}
             className="p-2 text-on-surface-variant hover:text-error transition-colors"
-            aria-label="Remove from cart"
+            aria-label={t('removeItem')}
           >
             <Trash2 size={18} strokeWidth={1.5} />
           </button>

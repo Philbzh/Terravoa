@@ -7,7 +7,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export async function getAdminNavCounts() {
   const admin = createAdminClient() as any
 
-  const [applications, products, ratings, reviews, returns, planRequests] = await Promise.all([
+  const [applications, products, ratings, reviews, returns, planRequests, discoveries] = await Promise.all([
     admin
       .from('producer_applications')
       .select('id', { count: 'exact', head: true })
@@ -17,6 +17,7 @@ export async function getAdminNavCounts() {
     admin.from('product_reviews').select('id', { count: 'exact', head: true }).eq('approved', false),
     admin.from('return_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     admin.from('producer_plan_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+    admin.from('community_discoveries').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   return {
@@ -26,5 +27,6 @@ export async function getAdminNavCounts() {
     pendingReviews: reviews.count ?? 0,
     pendingReturns: returns.count ?? 0,
     pendingPlanRequests: planRequests.count ?? 0,
+    pendingDiscoveries: discoveries.count ?? 0,
   }
 }
