@@ -267,7 +267,10 @@
     "regionalArchives": {
       "title": "Regionale Archive",
       "subtitle": "Von der Atlantikküste bis ins Herz des Kontinents",
-      "viewAll": "Alle Regionen"
+      "viewAll": "Alle Regionen",
+      "scrollHint": "Horizontal scrollen, die Reihe ziehen oder die Pfeile nutzen, um mehr Regionen zu entdecken.",
+      "scrollPrevious": "Regionen nach links scrollen",
+      "scrollNext": "Regionen nach rechts scrollen"
     },
     "europeStrip": {
       "eyebrow": "Aus jeder Ecke Europas"

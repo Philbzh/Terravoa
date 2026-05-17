@@ -4,12 +4,15 @@ import { motion } from 'framer-motion'
 import { Link } from '@/i18n/navigation'
 import { RegionCard } from '@/components/ui/RegionCard'
 import { useTranslations } from 'next-intl'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { fadeInUp } from '@/lib/motion/variants'
 import { motionDurations, motionEase, motionViewport } from '@/lib/motion/tokens'
 import { useMotionConfig } from '@/lib/motion/use-motion-config'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Region } from '@/data/demo'
+
+const SCROLL_STEP_RATIO = 0.85
 
 /**
  * Homepage "Regional Archives" — horizontal snap rail with uniform card sizes.
@@ -17,6 +20,41 @@ import type { Region } from '@/data/demo'
 export function RegionalArchives({ regions }: { regions: Region[] }) {
   const t = useTranslations('home.regionalArchives')
   const { reduced, viewport } = useMotionConfig()
+  const railRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const updateScrollButtons = useCallback(() => {
+    const el = railRef.current
+    if (!el || reduced) {
+      setCanScrollLeft(false)
+      setCanScrollRight(false)
+      return
+    }
+    const { scrollLeft, scrollWidth, clientWidth } = el
+    setCanScrollLeft(scrollLeft > 8)
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 8)
+  }, [reduced])
+
+  useEffect(() => {
+    const el = railRef.current
+    if (!el) return
+    updateScrollButtons()
+    el.addEventListener('scroll', updateScrollButtons, { passive: true })
+    const ro = new ResizeObserver(updateScrollButtons)
+    ro.observe(el)
+    return () => {
+      el.removeEventListener('scroll', updateScrollButtons)
+      ro.disconnect()
+    }
+  }, [updateScrollButtons, regions.length])
+
+  const scrollRail = (direction: 'left' | 'right') => {
+    const el = railRef.current
+    if (!el) return
+    const delta = el.clientWidth * SCROLL_STEP_RATIO * (direction === 'left' ? -1 : 1)
+    el.scrollBy({ left: delta, behavior: reduced ? 'auto' : 'smooth' })
+  }
 
   if (regions.length === 0) return null
 
@@ -29,8 +67,8 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
         viewport={viewport}
         variants={fadeInUp}
       >
-        <div>
-          <div className="h-px w-12 bg-secondary mb-5" />
+        <motion.div>
+          <motion.div className="h-px w-12 bg-secondary mb-5" />
           <h2
             className="font-serif text-primary leading-[0.92]"
             style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4rem)' }}
@@ -40,7 +78,12 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           <p className="font-sans text-xs uppercase tracking-[0.2em] text-on-surface-variant mt-3">
             {t('subtitle')}
           </p>
-        </div>
+          {!reduced && regions.length > 3 && (
+            <p className="font-sans text-xs text-on-surface-variant/70 mt-2 hidden sm:block">
+              {t('scrollHint')}
+            </p>
+          )}
+        </motion.div>
         <Link
           href="/regions"
           className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-secondary font-semibold hover:gap-4 transition-all duration-300 shrink-0"
@@ -49,7 +92,7 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
         </Link>
       </motion.div>
 
-      <div className="relative">
+      <div className="relative group/rail">
         <div
           className={cn(
             'pointer-events-none absolute inset-y-0 left-0 z-10 w-10 md:w-16 region-rail-fade-left',
@@ -57,7 +100,7 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           )}
           aria-hidden
         />
-        <motion.div
+        <div
           className={cn(
             'pointer-events-none absolute inset-y-0 right-0 z-10 w-10 md:w-16 region-rail-fade-right',
             reduced && 'hidden',
@@ -65,16 +108,39 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           aria-hidden
         />
 
+        {!reduced && canScrollLeft && (
+          <button
+            type="button"
+            onClick={() => scrollRail('left')}
+            aria-label={t('scrollPrevious')}
+            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-outline-variant/30 bg-surface/95 backdrop-blur-sm shadow-md flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors opacity-0 group-hover/rail:opacity-100 focus:opacity-100"
+          >
+            <ChevronLeft size={20} strokeWidth={1.5} />
+          </button>
+        )}
+        {!reduced && canScrollRight && (
+          <button
+            type="button"
+            onClick={() => scrollRail('right')}
+            aria-label={t('scrollNext')}
+            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-outline-variant/30 bg-surface/95 backdrop-blur-sm shadow-md flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors opacity-0 group-hover/rail:opacity-100 focus:opacity-100 max-sm:opacity-100"
+          >
+            <ChevronRight size={20} strokeWidth={1.5} />
+          </button>
+        )}
+
         <motion.div
+          ref={railRef}
           className={cn(
             'flex gap-4 md:gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory',
-            'px-6 md:px-16 pb-2',
-            reduced ? 'flex-wrap' : '',
+            'px-6 md:px-16 pb-2 scroll-smooth',
+            reduced ? 'flex-wrap' : 'cursor-grab active:cursor-grabbing',
           )}
           initial={reduced ? false : { opacity: 0 }}
           whileInView={reduced ? undefined : { opacity: 1 }}
           viewport={viewport}
           transition={{ duration: motionDurations.slow, ease: motionEase.out }}
+          onScroll={updateScrollButtons}
         >
           {regions.map((region, i) => (
             <motion.div

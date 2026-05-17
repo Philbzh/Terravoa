@@ -290,7 +290,10 @@
     "regionalArchives": {
       "title": "Regional Archives",
       "subtitle": "From the Atlantic coast to the heart of the continent",
-      "viewAll": "All regions"
+      "viewAll": "All regions",
+      "scrollHint": "Scroll horizontally, drag the row, or use the arrows to explore more regions.",
+      "scrollPrevious": "Scroll regions left",
+      "scrollNext": "Scroll regions right"
     },
     "europeStrip": {
       "eyebrow": "From every corner of Europe"

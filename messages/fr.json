@@ -308,7 +308,10 @@
     "regionalArchives": {
       "title": "Archives régionales",
       "subtitle": "De la côte atlantique au cœur du continent",
-      "viewAll": "Toutes les régions"
+      "viewAll": "Toutes les régions",
+      "scrollHint": "Faites défiler horizontalement, glissez la rangée ou utilisez les flèches pour découvrir d'autres régions.",
+      "scrollPrevious": "Défiler les régions vers la gauche",
+      "scrollNext": "Défiler les régions vers la droite"
     },
     "europeStrip": {
       "eyebrow": "De tous les coins d'Europe"

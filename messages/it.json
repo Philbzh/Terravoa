@@ -267,7 +267,10 @@
     "regionalArchives": {
       "title": "Archivi regionali",
       "subtitle": "Dalla costa atlantica al cuore del continente",
-      "viewAll": "Tutte le regioni"
+      "viewAll": "Tutte le regioni",
+      "scrollHint": "Scorri in orizzontale, trascina la fila o usa le frecce per scoprire altre regioni.",
+      "scrollPrevious": "Scorri le regioni a sinistra",
+      "scrollNext": "Scorri le regioni a destra"
     },
     "europeStrip": {
       "eyebrow": "Da ogni angolo d'Europa"
