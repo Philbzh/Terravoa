@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { motionDurations, motionEase } from '@/lib/motion/tokens'
 import { useCartStore, cartItemCount } from '@/lib/store/cart-store'
 import { useSearchStore } from '@/lib/store/search-store'
 import { useThemeStore } from '@/lib/store/theme-store'
@@ -15,6 +16,11 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 const navHrefs = ['/collection', '/producers', '/regions', '/about'] as const
 const navKeys = ['shop', 'producers', 'origins', 'about'] as const
+
+function navIsActive(pathname: string, href: string) {
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
 
 export function Navbar() {
   const t = useTranslations('nav')
@@ -76,31 +82,48 @@ export function Navbar() {
   return (
     <motion.header
       animate={{ y: hidden ? '-100%' : '0%' }}
-      transition={{ duration: 0.38, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: motionDurations.base, ease: motionEase.smooth }}
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-500',
+        'fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500',
         onHero
           ? 'bg-transparent'
-          : 'bg-surface/94 backdrop-blur-md border-b border-outline-variant/20 shadow-sm',
+          : 'bg-surface/80 backdrop-blur-xl border-b border-outline-variant/15 shadow-[var(--shadow-sm)] supports-[backdrop-filter]:bg-surface/72',
       )}
     >
       {/* ── Desktop ── */}
       <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center px-10 py-2">
         <nav className="flex items-center gap-8">
-          {navHrefs.map((href, i) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                'font-sans text-xs uppercase tracking-[0.15em] font-medium transition-colors duration-300',
-                onHero
-                  ? 'text-white/75 hover:text-white'
-                  : 'text-primary/65 hover:text-primary',
-              )}
-            >
-              {t(navKeys[i])}
-            </Link>
-          ))}
+          {navHrefs.map((href, i) => {
+            const active = navIsActive(pathname, href)
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  'relative font-sans text-xs uppercase tracking-[0.15em] font-medium transition-colors duration-300 pb-1',
+                  onHero
+                    ? active
+                      ? 'text-white'
+                      : 'text-white/75 hover:text-white'
+                    : active
+                      ? 'text-primary'
+                      : 'text-primary/65 hover:text-primary',
+                )}
+              >
+                {t(navKeys[i])}
+                {active && (
+                  <motion.span
+                    layoutId="nav-active-indicator"
+                    className={cn(
+                      'absolute bottom-0 left-0 right-0 h-0.5 rounded-full',
+                      onHero ? 'bg-secondary' : 'bg-secondary',
+                    )}
+                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                  />
+                )}
+              </Link>
+            )
+          })}
         </nav>
 
         <Link href="/" className="flex justify-center px-8 py-1">
@@ -313,7 +336,10 @@ export function Navbar() {
                   <Link
                     href={href}
                     onClick={() => setMobileOpen(false)}
-                    className="text-primary/70 font-sans text-sm uppercase tracking-[0.15em] font-medium"
+                    className={cn(
+                      'font-sans text-sm uppercase tracking-[0.15em] font-medium',
+                      navIsActive(pathname, href) ? 'text-secondary' : 'text-primary/70',
+                    )}
                   >
                     {t(navKeys[i])}
                   </Link>

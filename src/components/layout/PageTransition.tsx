@@ -1,20 +1,30 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import { usePathname } from '@/i18n/navigation'
+import { motionDurations, motionEase } from '@/lib/motion/tokens'
 
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const reduced = useReducedMotion()
 
   return (
-    <motion.main
-      key={pathname}
-      className="min-h-screen"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, ease: [0.25, 0.46, 0.45, 0.94] }}
-    >
-      {children}
-    </motion.main>
+    <LayoutGroup>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={pathname}
+          className="min-h-screen"
+          initial={reduced ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduced ? undefined : { opacity: 0, y: -10 }}
+          transition={{
+            duration: reduced ? 0 : motionDurations.slow,
+            ease: motionEase.smooth,
+          }}
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
+    </LayoutGroup>
   )
 }

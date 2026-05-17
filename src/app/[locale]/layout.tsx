@@ -12,6 +12,7 @@ import { ScrollToTop } from '@/components/ui/ScrollToTop'
 import { CookieBanner } from '@/components/ui/CookieBanner'
 import { WishlistProvider } from '@/components/providers/WishlistProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { SmoothScroll } from '@/components/providers/SmoothScroll'
 import { PostHogProvider } from '@/components/providers/PostHogProvider'
 import { SiteJsonLd } from '@/components/seo/SiteJsonLd'
 import { routing } from '@/i18n/routing'
@@ -113,15 +114,17 @@ export default async function LocaleLayout({
       <SiteJsonLd locale={locale} />
       <PostHogProvider>
         <ThemeProvider>
-          <WishlistProvider>
-            <Navbar />
-            <PageTransition>{children}</PageTransition>
+          <SmoothScroll>
+            <WishlistProvider>
+              <Navbar />
+              <PageTransition>{children}</PageTransition>
             <Footer />
             <CookieBanner />
             <SearchModal />
             <CartFlyAnimation />
             <ScrollToTop />
-          </WishlistProvider>
+            </WishlistProvider>
+          </SmoothScroll>
         </ThemeProvider>
       </PostHogProvider>
     </NextIntlClientProvider>

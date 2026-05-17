@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { Truck, Heart } from 'lucide-react'
 import { cn, isExternalUnoptimizedSrc } from '@/lib/utils'
 import { Badge, type BadgeVariant } from './Badge'
@@ -114,20 +115,35 @@ export function ProductCard({
           compact ? 'aspect-square mb-3 max-h-[160px] w-[160px] sm:max-h-[180px] sm:w-[180px]' : 'aspect-square mb-6 w-full',
         )}
       >
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          fill
-          className="object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out"
-          sizes={
-            compact
-              ? '(max-width: 640px) 160px, 180px'
-              : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
-          }
-          placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNWUwIi8+PC9zdmc+"
-          unoptimized={isExternalUnoptimizedSrc(imageSrc)}
-        />
+        {slug && !compact ? (
+          <motion.div layoutId={`product-cover-${slug}`} className="absolute inset-0">
+            <Image
+              src={imageSrc}
+              alt={imageAlt}
+              fill
+              className="object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNWUwIi8+PC9zdmc+"
+              unoptimized={isExternalUnoptimizedSrc(imageSrc)}
+            />
+          </motion.div>
+        ) : (
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            className="object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out"
+            sizes={
+              compact
+                ? '(max-width: 640px) 160px, 180px'
+                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
+            }
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZThlNWUwIi8+PC9zdmc+"
+            unoptimized={isExternalUnoptimizedSrc(imageSrc)}
+          />
+        )}
 
         {/* Hover reveal overlay */}
         {!compact && (

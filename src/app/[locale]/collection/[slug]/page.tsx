@@ -122,7 +122,7 @@ export default async function ProductPage({
         {/* Gallery */}
         <div className="lg:sticky lg:top-24">
           <div className="relative">
-            <ProductImageGallery images={galleryImages} />
+            <ProductImageGallery images={galleryImages} productSlug={product.slug} />
             {product.badge && (
               <div className="absolute top-4 right-4 z-10">
                 <Badge label={product.badge.label} variant={product.badge.variant} />
