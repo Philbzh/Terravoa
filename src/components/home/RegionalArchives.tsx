@@ -52,7 +52,7 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           href="/regions"
           className="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.18em] text-secondary font-semibold hover:gap-4 transition-all duration-300 shrink-0"
         >
-          All regions <ArrowRight size={12} strokeWidth={2} />
+          {t('viewAll')} <ArrowRight size={12} strokeWidth={2} />
         </Link>
       </motion.div>
 
@@ -67,6 +67,7 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
           transition={{ duration: 0.8 }}
         >
           <RegionCard
+            slug={heroRegion.slug}
             name={heroRegion.name}
             specialty={heroRegion.specialty}
             imageSrc={heroRegion.imageSrc}
@@ -87,6 +88,7 @@ export function RegionalArchives({ regions }: { regions: Region[] }) {
             transition={{ duration: 0.6, delay: (i % 2) * 0.12 }}
           >
             <RegionCard
+              slug={region.slug}
               name={region.name}
               specialty={region.specialty}
               imageSrc={region.imageSrc}

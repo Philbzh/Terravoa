@@ -2,8 +2,10 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { ArrowRight } from 'lucide-react'
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
+import { useRegionLabels } from '@/lib/i18n/use-region-labels'
 
 interface RegionCardProps {
+  slug: string
   name: string
   specialty: string
   imageSrc: string
@@ -13,6 +15,7 @@ interface RegionCardProps {
 }
 
 export function RegionCard({
+  slug,
   name,
   specialty,
   imageSrc,
@@ -20,6 +23,7 @@ export function RegionCard({
   className,
   href,
 }: RegionCardProps) {
+  const labels = useRegionLabels(slug, { name, specialty })
   const inner = (
     <div className={`group relative overflow-hidden rounded-2xl cursor-pointer ${className ?? ''}`}>
       {/* Image with parallax-style scale on hover */}
@@ -40,7 +44,7 @@ export function RegionCard({
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-8">
         {/* Specialty — slides up slightly on hover */}
         <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-white/55 mb-2 translate-y-1 group-hover:translate-y-0 transition-transform duration-300">
-          {specialty}
+          {labels.specialty}
         </p>
 
         {/* Region name */}
@@ -49,7 +53,7 @@ export function RegionCard({
             className="font-serif text-white leading-tight"
             style={{ fontSize: 'clamp(1.4rem, 3vw, 1.9rem)' }}
           >
-            {name}
+            {labels.name}
           </h3>
 
           {/* Arrow — fades in on hover */}

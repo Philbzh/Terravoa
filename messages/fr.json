@@ -183,7 +183,8 @@
     },
     "regionalArchives": {
       "title": "Archives régionales",
-      "subtitle": "De la côte atlantique au cœur du continent"
+      "subtitle": "De la côte atlantique au cœur du continent",
+      "viewAll": "Toutes les régions"
     },
     "europeStrip": {
       "eyebrow": "De tous les coins d'Europe"
@@ -881,7 +882,37 @@
     "title": "Origines",
     "subtitle": "Chaque produit a une origine. Explorez les régions de nos producteurs — terroir, traditions et culture derrière ce qui arrive dans votre cuisine.",
     "producers": "Producteurs",
-    "products": "Produits"
+    "products": "Produits",
+    "catalog": {
+      "brittany": {
+        "name": "Bretagne",
+        "specialty": "Fleur de sel · Caramel au beurre salé · Biscuits bretons"
+      },
+      "tuscany": {
+        "name": "Toscane",
+        "specialty": "Huile d'olive · Truffes · Pâtes"
+      },
+      "black-forest": {
+        "name": "Forêt-Noire",
+        "specialty": "Miel de fleurs sauvages · Jambon fumé · Gâteaux épicés"
+      },
+      "andalusia": {
+        "name": "Andalousie",
+        "specialty": "Paprika · Safran · Conserves"
+      },
+      "alentejo": {
+        "name": "Alentejo",
+        "specialty": "Liège · Fromage de brebis · Huile d'olive"
+      },
+      "alsace": {
+        "name": "Alsace",
+        "specialty": "Charcuterie · Moutarde · Épices de Noël"
+      },
+      "provence": {
+        "name": "Provence",
+        "specialty": "Lavande · Huile d'olive · Herbes de Provence"
+      }
+    }
   },
   "giftMessaging": {
     "isGift": "C'est un cadeau",

@@ -183,7 +183,8 @@
     },
     "regionalArchives": {
       "title": "Archivos regionales",
-      "subtitle": "Desde la costa atlántica hasta el corazón del continente"
+      "subtitle": "Desde la costa atlántica hasta el corazón del continente",
+      "viewAll": "Todas las regiones"
     },
     "europeStrip": {
       "eyebrow": "De todos los rincones de Europa"
@@ -881,7 +882,16 @@
     "title": "Orígenes",
     "subtitle": "Cada producto tiene un origen. Explora las regiones de nuestros productores — terroir, tradiciones y cultura detrás de lo que llega a tu cocina.",
     "producers": "Productores",
-    "products": "Productos"
+    "products": "Productos",
+    "catalog": {
+      "brittany": { "name": "Bretaña", "specialty": "Flor de sal · Caramelo con mantequilla salada · Galletas" },
+      "tuscany": { "name": "Toscana", "specialty": "Aceite de oliva · Trufas · Pasta" },
+      "black-forest": { "name": "Selva Negra", "specialty": "Miel de flores silvestres · Jamón ahumado · Pasteles especiados" },
+      "andalusia": { "name": "Andalucía", "specialty": "Pimentón · Azafrán · Conservas" },
+      "alentejo": { "name": "Alentejo", "specialty": "Corcho · Queso de oveja · Aceite de oliva" },
+      "alsace": { "name": "Alsacia", "specialty": "Charcutería · Mostaza · Especias navideñas" },
+      "provence": { "name": "Provenza", "specialty": "Lavanda · Aceite de oliva · Hierbas" }
+    }
   },
   "giftMessaging": {
     "isGift": "Es un regalo",

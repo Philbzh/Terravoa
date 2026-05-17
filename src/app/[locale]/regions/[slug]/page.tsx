@@ -61,6 +61,9 @@ export default async function RegionPage({
   if (!region) notFound()
 
   const tRegions = await getTranslations({ locale, namespace: 'regions' })
+  const tCatalog = await getTranslations({ locale, namespace: 'regions.catalog' })
+  const regionNameKey = `${slug}.name`
+  const regionDisplayName = tCatalog.has(regionNameKey) ? tCatalog(regionNameKey) : region.name
 
   const [regionProducts, regionProducers, regionStories, communityDiscoveries] = await Promise.all([
     getProductsByRegion(region.name),
@@ -88,7 +91,7 @@ export default async function RegionPage({
         locale={locale}
         items={[
           { name: tRegions('title'), path: '/regions' },
-          { name: region.name, path: `/regions/${region.slug}` },
+          { name: regionDisplayName, path: `/regions/${region.slug}` },
         ]}
       />
       <RegionPageClient

@@ -4,7 +4,9 @@ import { useState, useTransition } from 'react'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, ArrowRight, MapPin, ExternalLink, Send, CheckCircle } from 'lucide-react'
+import { useRegionLabels } from '@/lib/i18n/use-region-labels'
 import { ProductCard } from '@/components/ui/ProductCard'
 import { Badge } from '@/components/ui/Badge'
 import { isExternalUnoptimizedSrc } from '@/lib/utils'
@@ -24,6 +26,11 @@ function SectionKicker({ label, className = '' }: { label: string; className?: s
 
 /* ─── Hero ─── */
 function RegionHero({ region }: { region: Region }) {
+  const tRegions = useTranslations('regions')
+  const labels = useRegionLabels(region.slug, {
+    name: region.name,
+    specialty: region.specialty,
+  })
   const paragraphs = region.longDescription.split('\n\n')
   const introParagraph = paragraphs[0]
 
@@ -50,7 +57,7 @@ function RegionHero({ region }: { region: Region }) {
             className="inline-flex items-center gap-2 text-white/60 hover:text-white font-sans text-xs uppercase tracking-[0.12em] transition-colors"
           >
             <ArrowLeft size={13} />
-            Origins
+            {tRegions('title')}
           </Link>
         </div>
 
@@ -64,14 +71,14 @@ function RegionHero({ region }: { region: Region }) {
           <div className="flex items-center gap-4 mb-4">
             <div className="h-px w-10 bg-secondary shrink-0" />
             <p className="text-white/55 font-sans text-[10px] uppercase tracking-[0.28em]">
-              {region.specialty}
+              {labels.specialty}
             </p>
           </div>
           <h1
             className="font-serif text-white leading-[0.9] max-w-3xl"
             style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
           >
-            {region.name}
+            {labels.name}
           </h1>
         </motion.div>
       </div>

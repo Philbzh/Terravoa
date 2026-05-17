@@ -165,7 +165,8 @@
     },
     "regionalArchives": {
       "title": "Regional Archives",
-      "subtitle": "From the Atlantic coast to the heart of the continent"
+      "subtitle": "From the Atlantic coast to the heart of the continent",
+      "viewAll": "All regions"
     },
     "europeStrip": {
       "eyebrow": "From every corner of Europe"
@@ -862,7 +863,37 @@
     "title": "Origins",
     "subtitle": "Every product begins somewhere. Explore the regions behind our producers — their terroir, traditions, and the culture that shapes what ends up in your kitchen.",
     "producers": "Producers",
-    "products": "Products"
+    "products": "Products",
+    "catalog": {
+      "brittany": {
+        "name": "Brittany",
+        "specialty": "Fleur de Sel · Salted Caramel · Butter Biscuits"
+      },
+      "tuscany": {
+        "name": "Tuscany",
+        "specialty": "Olive Oil · Truffles · Pasta"
+      },
+      "black-forest": {
+        "name": "Black Forest",
+        "specialty": "Wildflower Honey · Smoked Ham · Spiced Cakes"
+      },
+      "andalusia": {
+        "name": "Andalusia",
+        "specialty": "Paprika · Saffron · Preserves"
+      },
+      "alentejo": {
+        "name": "Alentejo",
+        "specialty": "Cork · Sheep Cheese · Olive Oil"
+      },
+      "alsace": {
+        "name": "Alsace",
+        "specialty": "Charcuterie · Mustard · Christmas Spices"
+      },
+      "provence": {
+        "name": "Provence",
+        "specialty": "Lavender · Olive Oil · Herbs"
+      }
+    }
   },
   "giftMessaging": {
     "isGift": "This is a gift",
