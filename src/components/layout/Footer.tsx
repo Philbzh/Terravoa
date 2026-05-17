@@ -173,15 +173,15 @@ export function Footer() {
             transition={{ duration: 0.7 }}
           >
             <p className="font-sans text-[10px] uppercase tracking-[0.35em] text-secondary mb-6">
-              Taste the Origin
+              {t('heroEyebrow')}
             </p>
             <h2
               className="font-serif text-on-primary leading-[0.9]"
               style={{ fontSize: 'clamp(2.8rem, 6vw, 5rem)' }}
             >
-              Connecting artisans
+              {t('heroTitle')}
               <br />
-              <span className="text-on-primary/45">to curious tables.</span>
+              <span className="text-on-primary/45">{t('heroTitleAccent')}</span>
             </h2>
           </motion.div>
 
@@ -196,7 +196,7 @@ export function Footer() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/logo/terravoa-wordmark.png"
-              alt={`${SITE_NAME} — Taste the Origin`}
+              alt={t('logoAlt', { siteName: SITE_NAME })}
               style={{
                 height: 80,
                 width: 'auto',

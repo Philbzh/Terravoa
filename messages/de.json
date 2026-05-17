@@ -38,7 +38,11 @@
     "terms": "AGB",
     "privacy": "Datenschutz",
     "cookies": "Cookies",
-    "imprint": "Impressum"
+    "imprint": "Impressum",
+    "heroEyebrow": "Den Geschmack der Herkunft",
+    "heroTitle": "Handwerker verbinden",
+    "heroTitleAccent": "mit neugierigen Tischen.",
+    "logoAlt": "{siteName} — Den Geschmack der Herkunft"
   },
   "stories": {
     "metaTitle": "Journal",
@@ -170,7 +174,12 @@
       "eyebrow": "Für Produzenten",
       "title": "Verkaufen Sie Ihre Produkte in ganz Europa",
       "body": "Kein eigener Online-Shop nötig. Wir kümmern uns um Zahlungen, Sichtbarkeit und das Kundenerlebnis — Sie konzentrieren sich auf Ihr Handwerk.",
-      "cta": "Produzent werden"
+      "cta": "Produzent werden",
+      "feature1": "Direkter Zugang zu über 50.000 kuratierten Käufern in ganz Europa",
+      "feature2": "Keine Vorabkosten — nur Umsatzbeteiligung",
+      "feature3": "Volle Logistikunterstützung und zertifizierte Verpackung",
+      "viewPlans": "Tarife ansehen →",
+      "decorativeJoin": "Mitmachen"
     },
     "regionalArchives": {
       "title": "Regionale Archive",

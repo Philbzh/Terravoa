@@ -38,7 +38,11 @@
     "terms": "Termini",
     "privacy": "Privacy",
     "cookies": "Cookie",
-    "imprint": "Note legali"
+    "imprint": "Note legali",
+    "heroEyebrow": "Il gusto dell'origine",
+    "heroTitle": "Colleghiamo gli artigiani",
+    "heroTitleAccent": "alle tavole curiose.",
+    "logoAlt": "{siteName} — Il gusto dell'origine"
   },
   "stories": {
     "metaTitle": "Diario",
@@ -170,7 +174,12 @@
       "eyebrow": "Per i produttori",
       "title": "Vendi i tuoi prodotti in tutta Europa",
       "body": "Non hai bisogno di un negozio online. Gestiamo i pagamenti, la visibilità e l'esperienza del cliente — tu ti concentri sul tuo mestiere.",
-      "cta": "Diventa produttore"
+      "cta": "Diventa produttore",
+      "feature1": "Accesso diretto a oltre 50.000 acquirenti selezionati in Europa",
+      "feature2": "Nessun costo iniziale — solo percentuale sulle vendite",
+      "feature3": "Supporto logistico completo e imballaggi certificati",
+      "viewPlans": "Vedi i piani →",
+      "decorativeJoin": "Unisciti"
     },
     "regionalArchives": {
       "title": "Archivi regionali",

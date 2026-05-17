@@ -38,7 +38,11 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "cookies": "Cookies",
-    "imprint": "Legal Notice"
+    "imprint": "Legal Notice",
+    "heroEyebrow": "Taste the Origin",
+    "heroTitle": "Connecting artisans",
+    "heroTitleAccent": "to curious tables.",
+    "logoAlt": "{siteName} — Taste the Origin"
   },
   "stories": {
     "metaTitle": "Journal",
@@ -152,7 +156,12 @@
       "eyebrow": "For Producers",
       "title": "Sell your products across Europe",
       "body": "No online store needed. We handle payments, visibility, and the customer experience — you focus on your craft.",
-      "cta": "Become a Producer"
+      "cta": "Become a Producer",
+      "feature1": "Direct access to 50,000+ curated buyers across Europe",
+      "feature2": "No upfront costs — revenue share only",
+      "feature3": "Full logistics support & certified packaging",
+      "viewPlans": "View plans →",
+      "decorativeJoin": "Join"
     },
     "regionalArchives": {
       "title": "Regional Archives",

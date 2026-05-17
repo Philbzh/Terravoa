@@ -5,14 +5,9 @@ import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-const features = [
-  'Direct access to 50,000+ curated buyers across Europe',
-  'No upfront costs — revenue share only',
-  'Full logistics support & certified packaging',
-]
-
 export function ProducerCTA() {
   const t = useTranslations('home.producerCTA')
+  const features = [t('feature1'), t('feature2'), t('feature3')] as const
 
   return (
     <section className="relative overflow-hidden bg-primary py-28 md:py-40 px-6 md:px-16">
@@ -25,7 +20,7 @@ export function ProducerCTA() {
           className="font-serif text-on-primary/[0.04] leading-none select-none pr-8 md:pr-20"
           style={{ fontSize: 'clamp(8rem, 22vw, 22rem)' }}
         >
-          Join
+          {t('decorativeJoin')}
         </span>
       </div>
 
@@ -102,7 +97,7 @@ export function ProducerCTA() {
               href="/for-producers#plans"
               className="font-sans text-xs uppercase tracking-[0.18em] text-on-primary/45 hover:text-on-primary/70 transition-colors underline underline-offset-4"
             >
-              View plans →
+              {t('viewPlans')}
             </Link>
           </div>
         </motion.div>

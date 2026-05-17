@@ -38,7 +38,11 @@
     "terms": "Términos",
     "privacy": "Privacidad",
     "cookies": "Cookies",
-    "imprint": "Aviso legal"
+    "imprint": "Aviso legal",
+    "heroEyebrow": "El sabor del origen",
+    "heroTitle": "Conectamos artesanos",
+    "heroTitleAccent": "con mesas curiosas.",
+    "logoAlt": "{siteName} — El sabor del origen"
   },
   "stories": {
     "metaTitle": "Crónica",
@@ -170,7 +174,12 @@
       "eyebrow": "Para productores",
       "title": "Vende tus productos en toda Europa",
       "body": "No necesitas tienda online. Gestionamos los pagos, la visibilidad y la experiencia del cliente — tú te centras en tu oficio.",
-      "cta": "Convertirse en productor"
+      "cta": "Convertirse en productor",
+      "feature1": "Acceso directo a más de 50.000 compradores seleccionados en Europa",
+      "feature2": "Sin costes iniciales — solo participación en ingresos",
+      "feature3": "Logística integral y envases certificados",
+      "viewPlans": "Ver planes →",
+      "decorativeJoin": "Únete"
     },
     "regionalArchives": {
       "title": "Archivos regionales",

@@ -38,7 +38,11 @@
     "terms": "Conditions",
     "privacy": "Confidentialité",
     "cookies": "Cookies",
-    "imprint": "Mentions légales"
+    "imprint": "Mentions légales",
+    "heroEyebrow": "Le goût de l'origine",
+    "heroTitle": "Relier les artisans",
+    "heroTitleAccent": "aux tables curieuses.",
+    "logoAlt": "{siteName} — Le goût de l'origine"
   },
   "stories": {
     "metaTitle": "Carnet",
@@ -170,7 +174,12 @@
       "eyebrow": "Pour les producteurs",
       "title": "Vendez vos produits dans toute l'Europe",
       "body": "Pas besoin de boutique en ligne. Nous gérons les paiements, la visibilité et l'expérience client — vous vous concentrez sur votre savoir-faire.",
-      "cta": "Devenir producteur"
+      "cta": "Devenir producteur",
+      "feature1": "Accès direct à plus de 50 000 acheteurs sélectionnés en Europe",
+      "feature2": "Aucun frais initial — uniquement une part sur les ventes",
+      "feature3": "Logistique complète et emballages certifiés",
+      "viewPlans": "Voir les offres →",
+      "decorativeJoin": "Rejoignez"
     },
     "regionalArchives": {
       "title": "Archives régionales",
