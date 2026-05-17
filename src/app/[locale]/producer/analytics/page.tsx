@@ -90,7 +90,10 @@ export default async function ProducerAnalyticsPage() {
   const session = await getProducerForSession()
   if (!session?.producer) redirect('/login/producer')
 
-  const t = await getTranslations('producerPortal')
+  const [t, tSidebar] = await Promise.all([
+    getTranslations('producerPortal.analytics'),
+    getTranslations('producerPortal.sidebar'),
+  ])
   const data = await getAnalytics(session.producer.id)
 
   function growthBadge(growth: number | null) {
@@ -106,17 +109,15 @@ export default async function ProducerAnalyticsPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-2xl text-primary mb-2">{t('sidebar.analytics')}</h1>
-      <p className="font-sans text-sm text-on-surface-variant mb-8">
-        Last 30 days performance overview.
-      </p>
+      <h1 className="font-serif text-2xl text-primary mb-2">{tSidebar('analytics')}</h1>
+      <p className="font-sans text-sm text-on-surface-variant mb-8">{t('subtitle')}</p>
 
       {/* KPI cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp size={16} className="text-secondary" />
-            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">Revenue</span>
+            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">{t('revenue')}</span>
           </div>
           <p className="font-serif text-2xl text-primary">€{(data.recentRevenue / 100).toFixed(0)}</p>
           {growthBadge(data.revenueGrowth)}
@@ -125,7 +126,7 @@ export default async function ProducerAnalyticsPage() {
         <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5">
           <div className="flex items-center gap-2 mb-2">
             <ShoppingBag size={16} className="text-secondary" />
-            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">Orders</span>
+            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">{t('orders')}</span>
           </div>
           <p className="font-serif text-2xl text-primary">{data.recentOrders}</p>
           {growthBadge(data.ordersGrowth)}
@@ -134,7 +135,7 @@ export default async function ProducerAnalyticsPage() {
         <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-5">
           <div className="flex items-center gap-2 mb-2">
             <Eye size={16} className="text-secondary" />
-            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">Product Views</span>
+            <span className="font-sans text-xs uppercase tracking-wider text-on-surface-variant">{t('productViews')}</span>
           </div>
           <p className="font-serif text-2xl text-primary">{data.productViews}</p>
         </div>
@@ -144,16 +145,16 @@ export default async function ProducerAnalyticsPage() {
       <div className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6">
         <div className="flex items-center gap-2 mb-4">
           <BarChart3 size={16} className="text-secondary" />
-          <h2 className="font-sans text-sm font-medium text-on-surface">Top Selling Products</h2>
+          <h2 className="font-sans text-sm font-medium text-on-surface">{t('topSelling')}</h2>
         </div>
         {data.topSelling.length === 0 ? (
-          <p className="font-sans text-sm text-on-surface-variant">No sales data yet for this period.</p>
+          <p className="font-sans text-sm text-on-surface-variant">{t('noSales')}</p>
         ) : (
           <div className="space-y-3">
             {data.topSelling.map((product, i) => (
               <div key={i} className="flex items-center justify-between">
                 <span className="font-sans text-sm text-on-surface">{product.name}</span>
-                <span className="font-mono text-xs text-on-surface-variant">{product.qty} sold</span>
+                <span className="font-mono text-xs text-on-surface-variant">{t('sold', { count: product.qty })}</span>
               </div>
             ))}
           </div>

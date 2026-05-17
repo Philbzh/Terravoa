@@ -10,6 +10,30 @@ when you tick it.
 
 ---
 
+## 0. Code complete (verify in repo — May 2026)
+
+These are implemented in the application; production still needs env, migrations, and QA.
+
+| Area | Status | Notes |
+|------|--------|--------|
+| Legal pages i18n (6 locales) | [x] | `src/content/legal/data/*` + `LegalSections` |
+| Producer profile self-edit | [x] | `ProducerProfileEditForm` + `updatePublicProfile` |
+| Producer payout history | [x] | `PayoutHistoryTable` on partnership page |
+| Producer order detail | [x] | `/producer/orders/[orderId]` |
+| BreadcrumbList JSON-LD | [x] | Collection, product, producers, regions, stories |
+| Product view analytics | [x] | `product_views` migration + `/api/analytics/product-view` |
+| Stripe Connect fields (UI) | [x] | DB columns + `StripeConnectStatus` — OAuth onboarding still manual |
+| SEO sitemap / robots | [x] | `src/app/sitemap.ts`, `robots.ts` — set `NEXT_PUBLIC_ROBOTS_INDEX=true` to go live |
+| Producer analytics i18n | [x] | `producerPortal.analytics` keys |
+
+**Apply new migrations on production** (if not yet):
+
+- `20260503140000_producer_application_company_vat.sql`
+- `20260517130000_product_views.sql`
+- `20260517130100_producer_stripe_connect.sql`
+
+---
+
 ## 1. Environment variables
 
 Target: every row in `.env.example` is either set in Vercel (all three

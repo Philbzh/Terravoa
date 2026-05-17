@@ -592,7 +592,8 @@
       "editSave": "Salva profilo",
       "editSaving": "Salvataggio…",
       "editSaved": "Profilo salvato.",
-      "editNoteImages": "Per modificare nome, slug, regione o foto,"
+      "editNoteImages": "Per modificare nome, slug, regione o foto,",
+      "featuredPlacementActive": "Posizionamento in evidenza attivo"
     },
     "partnership": {
       "title": "Partnership & pagamenti",
@@ -619,7 +620,16 @@
       "payoutColGross": "Lordo",
       "payoutColCommission": "Commissione",
       "payoutColNet": "Netto",
-      "payoutColStatus": "Stato pagamento"
+      "payoutColStatus": "Stato pagamento",
+      "stripeConnectTitle": "Pagamenti Stripe Connect",
+      "stripeConnectBody": "Riparti automatici e bonifici richiedono un account Stripe collegato. Terravoa collegherà il tuo account in fase di attivazione.",
+      "stripeConnectAccount": "Account Connect",
+      "stripeConnectLinked": "Collegato",
+      "stripeConnectNotLinked": "Non ancora collegato",
+      "stripeConnectPayouts": "Pagamenti",
+      "stripeConnectEnabled": "Attivo",
+      "stripeConnectPending": "Configurazione in sospeso",
+      "stripeConnectContact": "Contatta Terravoa per completare la configurazione"
     },
     "shipping": {
       "title": "Impostazioni di spedizione",
@@ -639,6 +649,15 @@
       "title": "Supporto",
       "subtitle": "Domande su ordini, annunci o pagamenti? Utilizzi il modulo di contatto — gestiamo le richieste dei produttori separatamente dal servizio clienti.",
       "contactLink": "Contatta Terravoa"
+    },
+    "analytics": {
+      "subtitle": "Panoramica delle prestazioni degli ultimi 30 giorni.",
+      "revenue": "Ricavi",
+      "orders": "Ordini",
+      "productViews": "Visualizzazioni prodotto",
+      "topSelling": "Prodotti più venduti",
+      "noSales": "Nessun dato di vendita per questo periodo.",
+      "sold": "{count} venduti"
     }
   },
   "producersPage": {

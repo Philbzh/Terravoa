@@ -20,6 +20,7 @@ import { ProductCard } from '@/components/ui/ProductCard'
 import { ReviewsList } from '@/components/reviews/ReviewsList'
 import { ReviewForm } from '@/components/reviews/ReviewForm'
 import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
+import { ProductViewBeacon } from '@/components/analytics/ProductViewBeacon'
 
 export const revalidate = 60
 
@@ -103,6 +104,7 @@ export default async function ProductPage({
           { name: product.name, path: `/collection/${product.slug}` },
         ]}
       />
+      <ProductViewBeacon productSlug={product.slug} />
       <div className="pt-24 pb-24">
         {/* Breadcrumb */}
       <div className="px-6 md:px-16 max-w-7xl mx-auto mb-10">

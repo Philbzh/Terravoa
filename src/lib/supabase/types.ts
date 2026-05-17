@@ -135,6 +135,10 @@ export type Database = {
           bank_iban: string | null
           bank_bic: string | null
           bank_account_name: string | null
+          stripe_connect_account_id: string | null
+          stripe_connect_charges_enabled: boolean
+          stripe_connect_payouts_enabled: boolean
+          stripe_connect_onboarded_at: string | null
         }
         Insert: Omit<Database['public']['Tables']['producers']['Row'], 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['producers']['Insert']>
@@ -170,6 +174,21 @@ export type Database = {
         Row: OrderItemsRow
         Insert: OrderItemsInsert
         Update: Partial<OrderItemsInsert>
+      }
+      product_views: {
+        Row: {
+          id: string
+          product_id: string
+          producer_id: string
+          created_at: string
+        }
+        Insert: {
+          product_id: string
+          producer_id: string
+          id?: string
+          created_at?: string
+        }
+        Update: Partial<Database['public']['Tables']['product_views']['Insert']>
       }
       contact_messages: {
         Row: ContactMessageRow

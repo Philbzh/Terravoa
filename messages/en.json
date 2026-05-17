@@ -573,7 +573,8 @@
       "editSaving": "Saving…",
       "editSaved": "Profile saved.",
       "editNoteImages": "To change your name, slug, region, or photos,",
-      "editNoteLink": "contact us"
+      "editNoteLink": "contact us",
+      "featuredPlacementActive": "Featured placement active"
     },
     "partnership": {
       "title": "Partnership & payouts",
@@ -600,7 +601,16 @@
       "planGrowthTitle": "Growth",
       "planGrowthDesc": "Higher membership, lower commission — designed for producers who scale volume on Terravoa.",
       "monthlyMembership": "Monthly membership",
-      "commissionOnSale": "Commission on sale"
+      "commissionOnSale": "Commission on sale",
+      "stripeConnectTitle": "Stripe Connect payouts",
+      "stripeConnectBody": "Automated splits and bank payouts require a connected Stripe account. Terravoa will link your account during onboarding.",
+      "stripeConnectAccount": "Connect account",
+      "stripeConnectLinked": "Linked",
+      "stripeConnectNotLinked": "Not linked yet",
+      "stripeConnectPayouts": "Payouts",
+      "stripeConnectEnabled": "Enabled",
+      "stripeConnectPending": "Pending setup",
+      "stripeConnectContact": "Contact Terravoa to complete setup"
     },
     "shipping": {
       "title": "Shipping settings",
@@ -620,6 +630,15 @@
       "title": "Support",
       "subtitle": "Questions about orders, listings, or payouts? Use the contact form — we route producer enquiries separately from customer concierge.",
       "contactLink": "Contact Terravoa"
+    },
+    "analytics": {
+      "subtitle": "Last 30 days performance overview.",
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "productViews": "Product views",
+      "topSelling": "Top selling products",
+      "noSales": "No sales data yet for this period.",
+      "sold": "{count} sold"
     }
   },
   "producersPage": {

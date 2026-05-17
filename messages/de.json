@@ -592,7 +592,8 @@
       "editSave": "Profil speichern",
       "editSaving": "Speichern…",
       "editSaved": "Profil gespeichert.",
-      "editNoteImages": "Für Änderungen an Name, Slug, Region oder Fotos"
+      "editNoteImages": "Für Änderungen an Name, Slug, Region oder Fotos",
+      "featuredPlacementActive": "Hervorgehobene Platzierung aktiv"
     },
     "partnership": {
       "title": "Partnerschaft & Auszahlungen",
@@ -619,7 +620,16 @@
       "payoutColGross": "Brutto",
       "payoutColCommission": "Provision",
       "payoutColNet": "Netto",
-      "payoutColStatus": "Auszahlungsstatus"
+      "payoutColStatus": "Auszahlungsstatus",
+      "stripeConnectTitle": "Stripe Connect Auszahlungen",
+      "stripeConnectBody": "Automatische Aufteilung und Bankauszahlungen erfordern ein verbundenes Stripe-Konto. Terravoa verknüpft Ihr Konto bei der Freischaltung.",
+      "stripeConnectAccount": "Connect-Konto",
+      "stripeConnectLinked": "Verknüpft",
+      "stripeConnectNotLinked": "Noch nicht verknüpft",
+      "stripeConnectPayouts": "Auszahlungen",
+      "stripeConnectEnabled": "Aktiv",
+      "stripeConnectPending": "Einrichtung ausstehend",
+      "stripeConnectContact": "Terravoa kontaktieren, um die Einrichtung abzuschließen"
     },
     "shipping": {
       "title": "Versandeinstellungen",
@@ -639,6 +649,15 @@
       "title": "Support",
       "subtitle": "Fragen zu Bestellungen, Angeboten oder Auszahlungen? Nutzen Sie das Kontaktformular — wir leiten Produzentenanfragen getrennt vom Kundenconcierge weiter.",
       "contactLink": "Terravoa kontaktieren"
+    },
+    "analytics": {
+      "subtitle": "Leistungsübersicht der letzten 30 Tage.",
+      "revenue": "Umsatz",
+      "orders": "Bestellungen",
+      "productViews": "Produktaufrufe",
+      "topSelling": "Meistverkaufte Produkte",
+      "noSales": "Noch keine Verkaufsdaten für diesen Zeitraum.",
+      "sold": "{count} verkauft"
     }
   },
   "producersPage": {

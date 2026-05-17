@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { canViewProducerCommercialTerms } from '@/lib/producer-dashboard-access'
 import { getPartnershipPlanRates } from '@/lib/partnership-plans'
 import { PayoutHistoryTable } from './PayoutHistoryTable'
+import { StripeConnectStatus } from './StripeConnectStatus'
 
 export default async function ProducerPartnershipPage() {
   const showRates = await canViewProducerCommercialTerms()
@@ -70,6 +71,8 @@ export default async function ProducerPartnershipPage() {
           />
         </div>
       )}
+
+      <StripeConnectStatus />
 
       <h2 className="font-serif text-xl text-primary mb-4">{t('earningsTitle')}</h2>
       <p className="text-on-surface-variant font-sans text-sm mb-6 max-w-xl">

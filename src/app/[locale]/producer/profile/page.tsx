@@ -55,7 +55,7 @@ export default async function ProducerProfilePage() {
         <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 border border-secondary/25 px-4 py-2 mb-6">
           <Star size={13} strokeWidth={1.8} className="text-secondary" />
           <span className="font-sans text-xs uppercase tracking-wider text-secondary">
-            Featured Placement Active
+            {t('featuredPlacementActive')}
           </span>
         </div>
       )}

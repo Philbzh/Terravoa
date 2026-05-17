@@ -592,7 +592,8 @@
       "editSave": "Enregistrer le profil",
       "editSaving": "Enregistrement…",
       "editSaved": "Profil enregistré.",
-      "editNoteImages": "Pour modifier nom, slug, région ou photos,"
+      "editNoteImages": "Pour modifier nom, slug, région ou photos,",
+      "featuredPlacementActive": "Mise en avant active"
     },
     "partnership": {
       "title": "Partenariat & versements",
@@ -619,7 +620,16 @@
       "payoutColGross": "Brut",
       "payoutColCommission": "Commission",
       "payoutColNet": "Net",
-      "payoutColStatus": "Statut de paiement"
+      "payoutColStatus": "Statut de paiement",
+      "stripeConnectTitle": "Paiements Stripe Connect",
+      "stripeConnectBody": "Les répartitions automatiques et les virements nécessitent un compte Stripe connecté. Terravoa liera votre compte lors de l’activation.",
+      "stripeConnectAccount": "Compte Connect",
+      "stripeConnectLinked": "Lié",
+      "stripeConnectNotLinked": "Pas encore lié",
+      "stripeConnectPayouts": "Versements",
+      "stripeConnectEnabled": "Activé",
+      "stripeConnectPending": "Configuration en attente",
+      "stripeConnectContact": "Contactez Terravoa pour finaliser la configuration"
     },
     "shipping": {
       "title": "Paramètres de livraison",
@@ -639,6 +649,15 @@
       "title": "Assistance",
       "subtitle": "Des questions sur les commandes, les offres ou les versements ? Utilisez le formulaire de contact — nous traitons les demandes des producteurs séparément du service client.",
       "contactLink": "Contacter Terravoa"
+    },
+    "analytics": {
+      "subtitle": "Aperçu des performances sur les 30 derniers jours.",
+      "revenue": "Chiffre d’affaires",
+      "orders": "Commandes",
+      "productViews": "Vues produit",
+      "topSelling": "Produits les plus vendus",
+      "noSales": "Pas encore de données de vente pour cette période.",
+      "sold": "{count} vendus"
     }
   },
   "producersPage": {
