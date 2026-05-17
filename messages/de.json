@@ -270,7 +270,57 @@
     ]
   },
   "aboutPage": {
-    "heroImageAlt": "Der Terravoa-Tisch — Olivenöl, Käse aus Handarbeit, Honig und frisches Brot vor einer toskanischen Landschaft."
+    "metaTitle": "Über Terravoa",
+    "metaDescription": "Terravoa entstand aus einer einfachen Überzeugung: wahrer Geschmack beginnt am Ursprung. Wir wählen Europas authentischste Produzenten aus und verbinden sie direkt mit denen, die Authentizität suchen.",
+    "kicker": "Unsere Geschichte",
+    "title": "Den Geschmack der Herkunft",
+    "subtitle": "Terravoa entstand aus einer einfachen Überzeugung: wahrer Geschmack beginnt am Ursprung.",
+    "intro": "In ganz Europa widmen Generationen von Landwirten und Handwerkern ihr Leben dem Bewahren von Tradition, dem Respekt vor der Natur und der Herstellung außergewöhnlicher Produkte. Das sind keine Industrieerzeugnisse. Sie sind Ausdruck von Land, Kultur und Zeit.",
+    "nameSection": {
+      "kicker": "Der Name",
+      "quote": "Der Weg vom Land zum verfeinerten Geschmack.",
+      "body": "Bei Terravoa wählen wir sorgfältig Produzenten aus, die diese Werte verkörpern, und verbinden sie direkt mit denen, die Authentizität suchen. Jedes Produkt erzählt eine Geschichte — von Boden, Klima, Erbe und Handwerk.",
+      "terraTitle": "Terra",
+      "terraDesc": "Erde, Land, Ursprung",
+      "voaTitle": "Voa",
+      "voaDesc": "Weg, Fluss, Verwandlung"
+    },
+    "marketplace": {
+      "title": "Nicht nur ein Marktplatz",
+      "p1": "Terravoa ist kein Marktplatz im herkömmlichen Sinn. Es ist eine kuratierte Reise zurück zum Ursprung des Geschmacks.",
+      "p2": "Wir besuchen jeden Produzenten in unserem Netzwerk persönlich. Wir gehen durch ihre Haine, kosten aus ihren Pressen und sitzen an ihren Tischen. Nur Produkte, die unsere Standards für Authentizität, Qualität und Nachhaltigkeit erfüllen, finden Aufnahme in unsere Kollektion.",
+      "p3": "Keine Wiederverkäufer. Keine Massenproduktion. Nur echte Handwerker, die ihr Erbe in jedes Produkt legen — und die Überzeugung, dass die Geschichte hinter einem Produkt genauso wichtig ist wie das Produkt selbst."
+    },
+    "heroImageAlt": "Der Terravoa-Tisch — Olivenöl, Käse aus Handarbeit, Honig und frisches Brot vor einer toskanischen Landschaft.",
+    "table": {
+      "title": "Der Terravoa-Tisch",
+      "caption": "Jedes Produkt erzählt eine Geschichte von Boden, Klima, Erbe und Handwerk — von Europas besten Produzenten zusammengetragen, an Ihren Tisch geliefert."
+    },
+    "positioning": {
+      "kicker": "Unsere Positionierung",
+      "title": "Premium-Kurator europäischer Lebensmittel",
+      "selectionLabel": "Eine kuratierte Auswahl",
+      "selectionDesc": "Nicht alles — nur das Beste, persönlich geprüft.",
+      "storyLabel": "Ein erzählerisches Erlebnis",
+      "storyDesc": "Jedes Produkt kommt mit Herkunft, Produzent und Handwerk.",
+      "connectionLabel": "Eine direkte Verbindung",
+      "connectionDesc": "Keine Zwischenhändler zwischen Produzent und Ihrem Tisch."
+    },
+    "valuesTitle": "Wofür wir stehen",
+    "values": {
+      "authenticity": { "title": "Authentizität", "description": "Echte Herkunft, echte Menschen. Wir besuchen jeden Hof und jede Werkstatt persönlich — keine Mittelsmänner, keine Abkürzungen, nur direkte Beziehungen zu den Machern." },
+      "craftsmanship": { "title": "Handwerk", "description": "Tradition und Expertise, über Generationen weitergegeben. Jedes Produkt spiegelt das angesammelte Wissen eines Ortes, eines Klimas und eines Volkes wider." },
+      "sustainability": { "title": "Nachhaltigkeit", "description": "Respekt vor Land und Tieren ist kein Trend — er ist die Grundlage echter Qualität. Wir bevorzugen Produzenten, die mit Gewissen wirtschaften." },
+      "transparency": { "title": "Transparenz", "description": "Sie wissen genau, woher Ihre Lebensmittel kommen. Produzenten setzen ihre eigenen Preise und erhalten den Großteil des Werts — ländliche Existenzgrundlagen bleiben erhalten." },
+      "excellence": { "title": "Exzellenz", "description": "Kein Kompromiss bei der Qualität. Nur Produkte, die unsere strengen Maßstäbe für Geschmack, Herkunft und Integrität erfüllen, finden Aufnahme in die Kollektion." },
+      "culturalPreservation": { "title": "Kulturerhalt", "description": "Indem wir einen Markt für traditionelle Produkte schaffen, helfen wir, alte Handwerke und Rezepte für künftige Generationen in Europa lebendig zu halten." }
+    },
+    "cta": {
+      "title": "Unserem Netzwerk beitreten?",
+      "body": "Wenn Sie ein europäischer Produzent sind, der authentische, traditionelle Produkte herstellt, freuen wir uns auf Ihre Nachricht.",
+      "becomeProducer": "Produzent werden",
+      "contact": "Allgemeine Anfragen"
+    }
   },
   "customerAuth": {
     "emailConfirmed": "Ihre E-Mail-Adresse wurde bestätigt. Sie können sich jetzt unten anmelden."

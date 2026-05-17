@@ -270,7 +270,57 @@
     ]
   },
   "aboutPage": {
-    "heroImageAlt": "Il tavolo Terravoa — olio d’oliva, formaggio artigianale, miele e pane fresco davanti a un paesaggio toscano."
+    "metaTitle": "Chi siamo — Terravoa",
+    "metaDescription": "Terravoa nasce da una convinzione semplice: il vero gusto inizia all'origine. Selezioniamo i produttori europei più autentici e li mettiamo in contatto diretto con chi cerca autenticità.",
+    "kicker": "La nostra storia",
+    "title": "Il gusto dell'origine",
+    "subtitle": "Terravoa nasce da una convinzione semplice: il vero gusto inizia all'origine.",
+    "intro": "In tutta Europa, generazioni di agricoltori e artigiani dedicano la vita a preservare le tradizioni, rispettare la natura e creare prodotti di qualità eccezionale. Non sono beni industriali. Sono espressioni di territorio, cultura e tempo.",
+    "nameSection": {
+      "kicker": "Il nome",
+      "quote": "Il percorso dalla terra al gusto raffinato.",
+      "body": "In Terravoa selezioniamo con cura i produttori che incarnano questi valori e li mettiamo in contatto diretto con chi cerca autenticità. Ogni prodotto racconta una storia — di suolo, clima, patrimonio e mestiere.",
+      "terraTitle": "Terra",
+      "terraDesc": "Terra, suolo, origine",
+      "voaTitle": "Voa",
+      "voaDesc": "Percorso, flusso, trasformazione"
+    },
+    "marketplace": {
+      "title": "Non solo un marketplace",
+      "p1": "Terravoa non è un marketplace nel senso tradizionale. È un viaggio curato verso l'origine del gusto.",
+      "p2": "Visitiamo personalmente ogni produttore della rete. Percorriamo i loro uliveti, assaggiamo dalle loro presse e ci sediamo alle loro tavole. Solo i prodotti che soddisfano i nostri standard di autenticità, qualità e sostenibilità entrano in collezione.",
+      "p3": "Nessun rivenditore. Nessuna produzione di massa. Solo veri artigiani che mettono la propria eredità in ogni prodotto — e la convinzione che la storia dietro un prodotto conta quanto il prodotto stesso."
+    },
+    "heroImageAlt": "Il tavolo Terravoa — olio d'oliva, formaggio artigianale, miele e pane fresco davanti a un paesaggio toscano.",
+    "table": {
+      "title": "Il tavolo Terravoa",
+      "caption": "Ogni prodotto racconta una storia di suolo, clima, patrimonio e mestiere — raccolta dai migliori produttori d'Europa, servita alla vostra tavola."
+    },
+    "positioning": {
+      "kicker": "Il nostro posizionamento",
+      "title": "Curatore premium del cibo europeo",
+      "selectionLabel": "Una selezione curata",
+      "selectionDesc": "Non tutto — solo il meglio, verificato di persona.",
+      "storyLabel": "Un'esperienza narrativa",
+      "storyDesc": "Ogni prodotto arriva con origine, produttore e mestiere.",
+      "connectionLabel": "Un legame diretto",
+      "connectionDesc": "Nessun intermediario tra produttore e la vostra tavola."
+    },
+    "valuesTitle": "Ciò per cui ci battiamo",
+    "values": {
+      "authenticity": { "title": "Autenticità", "description": "Origine reale, persone reali. Visitiamo ogni fattoria e laboratorio di persona — niente intermediari, niente scorciatoie, solo relazioni dirette con chi produce." },
+      "craftsmanship": { "title": "Mestiere", "description": "Tradizione ed esperienza tramandate per generazioni. Ogni prodotto riflette il sapere accumulato di un luogo, un clima e un popolo." },
+      "sustainability": { "title": "Sostenibilità", "description": "Il rispetto per la terra e gli animali non è una moda — è il fondamento della qualità autentica. Privilegiamo chi coltiva con coscienza." },
+      "transparency": { "title": "Trasparenza", "description": "Sapete esattamente da dove viene il vostro cibo. I produttori fissano i propri prezzi e ricevono la maggior parte del valore — preservando i mezzi di sussistenza rurali." },
+      "excellence": { "title": "Eccellenza", "description": "Nessun compromesso sulla qualità. Solo prodotti che soddisfano i nostri rigorosi standard di gusto, provenienza e integrità entrano in collezione." },
+      "culturalPreservation": { "title": "Preservazione culturale", "description": "Creando un mercato per i prodotti tradizionali, aiutiamo a mantenere vivi mestieri e ricette antiche per le generazioni future in Europa." }
+    },
+    "cta": {
+      "title": "Unirvi alla nostra rete?",
+      "body": "Se siete un produttore europeo che crea prodotti autentici e tradizionali, ci farebbe piacere sentirvi.",
+      "becomeProducer": "Diventare produttore",
+      "contact": "Richieste generali"
+    }
   },
   "customerAuth": {
     "emailConfirmed": "Il suo indirizzo email è confermato. Può accedere qui sotto."

@@ -252,7 +252,75 @@
     ]
   },
   "aboutPage": {
-    "heroImageAlt": "The Terravoa table — olive oil, artisan cheese, honey, and fresh bread arranged against a Tuscan landscape."
+    "metaTitle": "About Terravoa",
+    "metaDescription": "Terravoa was born from a simple belief: true taste begins at the origin. We carefully select Europe's most authentic producers and connect them directly with those who seek authenticity.",
+    "kicker": "Our Story",
+    "title": "Taste the Origin",
+    "subtitle": "Terravoa was born from a simple belief: true taste begins at the origin.",
+    "intro": "Across Europe, generations of farmers and artisans dedicate their lives to preserving tradition, respecting nature, and crafting products of exceptional quality. These are not industrial goods. They are expressions of land, culture, and time.",
+    "nameSection": {
+      "kicker": "The Name",
+      "quote": "The path from the land to refined taste.",
+      "body": "At Terravoa, we carefully select producers who embody these values and connect them directly with those who seek authenticity. Every product tells a story — of soil, climate, heritage, and craftsmanship.",
+      "terraTitle": "Terra",
+      "terraDesc": "Earth, land, origin",
+      "voaTitle": "Voa",
+      "voaDesc": "Path, flow, transformation"
+    },
+    "marketplace": {
+      "title": "Not Just a Marketplace",
+      "p1": "Terravoa is not a marketplace in the traditional sense. It is a curated journey back to the origin of taste.",
+      "p2": "We personally visit every producer in our network. We walk their groves, taste from their presses, and sit at their tables. Only products that meet our standards for authenticity, quality, and sustainability earn a place in our collection.",
+      "p3": "No resellers. No mass production. Just genuine artisans who pour their heritage into every product — and the conviction that the story behind a product is as important as the product itself."
+    },
+    "heroImageAlt": "The Terravoa table — olive oil, artisan cheese, honey, and fresh bread arranged against a Tuscan landscape.",
+    "table": {
+      "title": "The Terravoa Table",
+      "caption": "Every product tells a story of soil, climate, heritage, and craftsmanship — gathered from Europe's finest producers, delivered to your table."
+    },
+    "positioning": {
+      "kicker": "Our Positioning",
+      "title": "Premium European Food Curator",
+      "selectionLabel": "A curated selection",
+      "selectionDesc": "Not everything — only the best, personally verified.",
+      "storyLabel": "A story-driven experience",
+      "storyDesc": "Every product comes with its origin, producer, and craft.",
+      "connectionLabel": "A direct connection",
+      "connectionDesc": "No intermediaries between producer and your table."
+    },
+    "valuesTitle": "What We Stand For",
+    "values": {
+      "authenticity": {
+        "title": "Authenticity",
+        "description": "Real origin, real people. We visit every farm and workshop in person — no middlemen, no shortcuts, only direct relationships with the makers."
+      },
+      "craftsmanship": {
+        "title": "Craftsmanship",
+        "description": "Tradition and expertise passed down through generations. Every product reflects the accumulated knowledge of a place, a climate, and a people."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "Respect for the land and animals is not a trend — it is the foundation of genuine quality. We prioritise producers who farm with conscience."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "description": "You know exactly where your food comes from. Producers set their own prices and receive the majority of the value — preserving rural livelihoods."
+      },
+      "excellence": {
+        "title": "Excellence",
+        "description": "No compromise on quality. Only products that meet our rigorous standards for taste, provenance, and integrity earn a place in the collection."
+      },
+      "culturalPreservation": {
+        "title": "Cultural Preservation",
+        "description": "By creating a market for traditional products, we help keep ancient crafts and recipes alive for future generations across Europe."
+      }
+    },
+    "cta": {
+      "title": "Want to join our network?",
+      "body": "If you're a European producer crafting authentic, traditional products, we'd love to hear from you.",
+      "becomeProducer": "Become a producer",
+      "contact": "General enquiries"
+    }
   },
   "customerAuth": {
     "emailConfirmed": "Your email address is confirmed. You can sign in below."

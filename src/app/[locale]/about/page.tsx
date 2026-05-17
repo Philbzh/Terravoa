@@ -1,9 +1,18 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { AboutClient } from './AboutClient'
 
-export const metadata: Metadata = {
-  title: 'About Terravoa',
-  description: 'Terravoa was born from a simple belief: true taste begins at the origin. We carefully select Europe\'s most authentic producers and connect them directly with those who seek authenticity — products defined by soil, climate, heritage, and craftsmanship.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'aboutPage' })
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  }
 }
 
 export default function AboutPage() {
